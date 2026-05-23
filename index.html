@@ -1,536 +1,91 @@
 <!DOCTYPE html>
-<html lang="en" class="antialiased">
+<html>
 <head>
+    <title>Bigworld Agency</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <!-- SEO & Open Graph for Production (Vercel/Cloudflare) -->
-    <title>Bigworld | Creative Digital Agency</title>
-    <meta name="description" content="We craft digital platforms, brands, and experiences that blur the line between reality and the extraordinary.">
-    <meta property="og:title" content="Bigworld Agency">
-    <meta property="og:description" content="Awwwards-winning digital experience agency.">
-    <meta property="og:type" content="website">
-    
-    <!-- Premium Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Manrope', 'sans-serif'],
-                        display: ['Syne', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            dark: '#050505',
-                            light: '#f2f2f2',
-                            accent: '#ff3e00',
-                            gray: '#1a1a1a'
-                        }
-                    },
-                    transitionTimingFunction: {
-                        'expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
-                    }
-                }
-            }
-        }
-    </script>
-
     <style>
-        /* Base Resets for Smooth Scrolling */
-        body, html {
-            margin: 0;
-            padding: 0;
-            background-color: #050505;
-            color: #f2f2f2;
-            overflow-x: hidden;
-            scrollbar-width: none; 
-            -ms-overflow-style: none;
-            cursor: none !important; /* Hide default for custom cursor */
-        }
-        body::-webkit-scrollbar { display: none; }
-
-        /* Lenis */
-        html.lenis { height: auto; }
-        .lenis.lenis-smooth { scroll-behavior: auto; }
-        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-        .lenis.lenis-stopped { overflow: hidden; }
-
-        /* Cinematic Noise Overlay */
-        .noise-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 99999;
-            opacity: 0.04;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-
-        /* Premium "Difference" Cursor */
-        #cursor {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 12px;
-            height: 12px;
-            background-color: #fff;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 100000;
-            mix-blend-mode: difference;
-            transition: width 0.3s cubic-bezier(0.19, 1, 0.22, 1), height 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-            will-change: transform, width, height;
-        }
-
-        .cursor-hover {
-            width: 60px !important;
-            height: 60px !important;
-            background-color: rgba(255, 255, 255, 1);
-        }
-
-        /* Percentage Loader */
-        #loader {
-            position: fixed;
-            inset: 0;
-            background: #050505;
-            z-index: 99998;
-            display: flex;
-            justify-content: flex-end;
-            align-items: flex-end;
-            padding: 2rem;
-        }
-
-        /* Typography & Masks */
-        .text-outline {
-            color: transparent;
-            -webkit-text-stroke: 1px rgba(242, 242, 242, 0.2);
-            transition: -webkit-text-stroke 0.3s ease;
-        }
-        .text-outline:hover {
-            -webkit-text-stroke: 1px rgba(255, 62, 0, 1); /* Accent color on hover */
-        }
-        
-        .image-mask {
-            clip-path: inset(100% 0 0 0); /* Used for GSAP reveals */
-        }
-
-        /* Hover Image Reveal for Services */
-        .service-img-preview {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 300px;
-            height: 400px;
-            pointer-events: none;
-            z-index: 50;
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.8);
-            object-fit: cover;
-            border-radius: 8px;
-            will-change: transform, opacity;
-        }
-
+        body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+        .gradient-radial { background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 70%); }
+        .gradient-conic { background: conic-gradient(from 90deg, rgb(var(--color-1)), rgb(var(--color-2))); }
+        :root { --color-1: 125 211 252; --color-2: 59 130 246; }
     </style>
 </head>
-<body class="font-sans selection:bg-brand-accent selection:text-white">
-
-    <div class="noise-overlay"></div>
-    <div id="cursor"></div>
-
-    <div id="loader">
-        <div class="overflow-hidden">
-            <h1 id="loader-text" class="font-display text-[15vw] leading-none font-bold tracking-tighter translate-y-full">0%</h1>
-        </div>
-    </div>
-
-    <nav class="fixed top-0 left-0 w-full p-6 md:p-10 flex justify-between items-center z-50 mix-blend-difference">
-        <a href="#" class="magnetic font-display font-bold text-xl md:text-2xl tracking-tight hover-target px-4 py-2">BIGWORLD©</a>
-        <button class="magnetic font-sans text-sm tracking-widest uppercase hover-target flex items-center gap-3 px-4 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition-colors duration-300">
-            <span class="w-2 h-2 rounded-full bg-brand-accent"></span>
-            Menu
-        </button>
-    </nav>
-
-    <main id="main-container" class="opacity-0"> <!-- Hidden until loader finishes -->
+<body class="bg-white text-black dark:bg-black dark:text-white min-h-screen">
+    <main class="flex min-h-screen flex-col items-center justify-between p-8 md:p-24">
         
-        <section class="h-screen w-full flex flex-col justify-center items-center relative px-4">
-            <div class="z-10 w-full max-w-screen-2xl mx-auto flex flex-col justify-center h-full pt-20">
-                <div class="overflow-hidden mb-4">
-                    <p class="hero-text text-sm md:text-base tracking-[0.2em] uppercase text-gray-400 font-medium translate-y-full">A Digital Experience Agency</p>
-                </div>
-                
-                <h1 class="font-display text-[14vw] md:text-[11vw] font-bold leading-[0.85] tracking-tighter w-full flex flex-col uppercase">
-                    <div class="overflow-hidden"><span class="hero-text inline-block translate-y-full">Designing</span></div>
-                    <div class="overflow-hidden flex items-center gap-6">
-                        <span class="hero-text inline-block translate-y-full text-outline italic">Tomorrow's</span>
-                        <div class="hero-text w-24 md:w-48 h-[2px] bg-brand-accent hidden md:block scale-x-0 origin-left"></div>
-                    </div>
-                    <div class="overflow-hidden"><span class="hero-text inline-block translate-y-full">Internet</span></div>
-                </h1>
-            </div>
+        <!-- Header -->
+        <div class="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
+            <p class="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
+                Welcome to&nbsp;
+                <code class="font-mono font-bold">BigWorld Agency</code>
+            </p>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1] my-16 md:my-0 text-center">
+            <h1 class="text-4xl font-extrabold tracking-tight lg:text-5xl">
+                BigWorld Agency Website Coming Soon
+            </h1>
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left gap-4">
             
-            <div class="absolute bottom-10 right-10 text-xs tracking-widest uppercase font-sans text-gray-500 flex items-center gap-4 hero-text opacity-0">
-                <span>Scroll</span>
-                <div class="w-12 h-[1px] bg-gray-600 relative overflow-hidden">
-                    <div class="absolute top-0 left-0 h-full w-full bg-white origin-left animate-[scaleX_2s_ease-in-out_infinite]"></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="py-32 px-6 md:px-10 max-w-7xl mx-auto">
-            <h2 class="font-display text-3xl md:text-5xl lg:text-7xl leading-[1.1] font-medium reveal-text">
-                We bridge the gap between aesthetics and engineering. Crafting digital platforms that feel <span class="text-brand-accent italic">alive</span>, perform flawlessly, and scale globally.
-            </h2>
-        </section>
-
-        <section id="horizontal-scroll" class="h-screen w-full overflow-hidden bg-brand-gray relative">
-            
-            <div class="pin-wrap flex h-full w-[400vw]">
-                
-                <!-- Intro Panel -->
-                <div class="panel w-screen h-full flex flex-col justify-center p-10 md:p-20 relative">
-                    <p class="font-sans text-sm tracking-widest uppercase mb-4 text-brand-accent">01 // Archive</p>
-                    <h2 class="font-display text-[10vw] font-bold tracking-tighter leading-none z-10 whitespace-nowrap">SELECTED<br>WORKS</h2>
-                </div>
-
-                <!-- Project 1 -->
-                <div class="panel w-screen h-full flex items-center justify-center p-6 md:p-20 relative">
-                    <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-                        <div class="lg:col-span-5 order-2 lg:order-1 flex flex-col items-start">
-                            <span class="px-4 py-1 rounded-full border border-white/20 text-xs uppercase tracking-wider mb-6">E-Commerce</span>
-                            <h3 class="font-display text-5xl md:text-7xl font-bold mb-6 hover-target">Aura Skincare</h3>
-                            <p class="text-gray-400 text-lg mb-8 max-w-md">Redefining online luxury retail with WebGL immersive product explorers and headless architecture.</p>
-                            <a href="#" class="magnetic group flex items-center gap-4 text-sm uppercase tracking-widest hover-target">
-                                View Case <span class="group-hover:translate-x-2 transition-transform duration-300">→</span>
-                            </a>
-                        </div>
-                        <div class="lg:col-span-7 h-[50vh] md:h-[75vh] w-full relative overflow-hidden order-1 lg:order-2 img-reveal">
-                            <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2000&auto=format&fit=crop" alt="Project 1" class="absolute inset-0 w-full h-full object-cover scale-125 panel-img brightness-75 hover:brightness-100 transition-all duration-700">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 2 -->
-                <div class="panel w-screen h-full flex items-center justify-center p-6 md:p-20 relative">
-                    <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-                        <div class="lg:col-span-7 h-[50vh] md:h-[75vh] w-full relative overflow-hidden img-reveal">
-                            <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=2000&auto=format&fit=crop" alt="Project 2" class="absolute inset-0 w-full h-full object-cover scale-125 panel-img brightness-75 hover:brightness-100 transition-all duration-700">
-                        </div>
-                        <div class="lg:col-span-5 lg:pl-10 flex flex-col items-start">
-                            <span class="px-4 py-1 rounded-full border border-white/20 text-xs uppercase tracking-wider mb-6">Fintech</span>
-                            <h3 class="font-display text-5xl md:text-7xl font-bold mb-6 hover-target">Nexus Bank</h3>
-                            <p class="text-gray-400 text-lg mb-8 max-w-md">A brutalist yet trustworthy approach to modern decentralised banking interfaces and design systems.</p>
-                            <a href="#" class="magnetic group flex items-center gap-4 text-sm uppercase tracking-widest hover-target">
-                                View Case <span class="group-hover:translate-x-2 transition-transform duration-300">→</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 3 -->
-                <div class="panel w-screen h-full flex items-center justify-center p-6 md:p-20 relative">
-                    <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-                         <div class="lg:col-span-5 order-2 lg:order-1 flex flex-col items-start">
-                            <span class="px-4 py-1 rounded-full border border-white/20 text-xs uppercase tracking-wider mb-6">Web3</span>
-                            <h3 class="font-display text-5xl md:text-7xl font-bold mb-6 hover-target">Void Protocol</h3>
-                            <p class="text-gray-400 text-lg mb-8 max-w-md">An experimental gamified portal for a next-generation blockchain network featuring real-time 3D.</p>
-                            <a href="#" class="magnetic group flex items-center gap-4 text-sm uppercase tracking-widest hover-target">
-                                View Case <span class="group-hover:translate-x-2 transition-transform duration-300">→</span>
-                            </a>
-                        </div>
-                        <div class="lg:col-span-7 h-[50vh] md:h-[75vh] w-full relative overflow-hidden order-1 lg:order-2 img-reveal">
-                            <img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=2000&auto=format&fit=crop" alt="Project 3" class="absolute inset-0 w-full h-full object-cover scale-125 panel-img brightness-75 hover:brightness-100 transition-all duration-700">
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <section class="py-32 md:py-48 px-6 md:px-10 relative">
-            <!-- Hidden images that reveal on hover via JS -->
-            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop" class="service-img-preview" id="img-strat" alt="Strategy">
-            <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=800&auto=format&fit=crop" class="service-img-preview" id="img-dev" alt="Development">
-            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" class="service-img-preview" id="img-design" alt="Design">
-
-            <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-20">
-                <div class="w-full md:w-1/4">
-                    <p class="font-sans text-sm tracking-widest uppercase mb-4 text-brand-accent">02 // Expertise</p>
-                </div>
-                <div class="w-full md:w-3/4 flex flex-col border-t border-white/20 pt-10" id="services-list">
-                    
-                    <div class="service-item group py-10 border-b border-white/10 hover-target cursor-pointer relative" data-img="img-strat">
-                        <div class="flex justify-between items-end transition-transform duration-500 group-hover:-translate-y-2">
-                            <h3 class="text-4xl md:text-6xl font-display font-medium text-gray-400 group-hover:text-white transition-colors duration-300">Digital Strategy</h3>
-                            <span class="text-brand-accent text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">Brand Positioning</span>
-                        </div>
-                    </div>
-                    
-                    <div class="service-item group py-10 border-b border-white/10 hover-target cursor-pointer relative" data-img="img-dev">
-                        <div class="flex justify-between items-end transition-transform duration-500 group-hover:-translate-y-2">
-                            <h3 class="text-4xl md:text-6xl font-display font-medium text-gray-400 group-hover:text-white transition-colors duration-300">Creative Engineering</h3>
-                            <span class="text-brand-accent text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">WebGL & React</span>
-                        </div>
-                    </div>
-
-                    <div class="service-item group py-10 border-b border-white/10 hover-target cursor-pointer relative" data-img="img-design">
-                        <div class="flex justify-between items-end transition-transform duration-500 group-hover:-translate-y-2">
-                            <h3 class="text-4xl md:text-6xl font-display font-medium text-gray-400 group-hover:text-white transition-colors duration-300">Art Direction</h3>
-                            <span class="text-brand-accent text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">UX/UI & Motion</span>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <footer class="min-h-screen w-full bg-brand-light text-brand-dark flex flex-col justify-between p-6 md:p-10 relative overflow-hidden">
-            
-            <div class="mt-32 md:mt-48 flex flex-col items-center text-center">
-                <p class="font-sans text-sm md:text-base uppercase tracking-widest mb-8 font-semibold">Have an idea?</p>
-                <a href="mailto:hello@bigworld.agency" class="hover-target inline-block">
-                    <h2 class="font-display text-[16vw] leading-none font-bold tracking-tighter transition-all duration-500 hover:text-brand-accent hover:scale-105">
-                        LET'S TALK
-                    </h2>
-                </a>
+            <!-- About Us -->
+            <div class="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
+                <h2 class="mb-3 text-2xl font-semibold">
+                    About Us
+                    <span class="inline-block transition-transform group-hover:translate-x-1">
+                        →
+                    </span>
+                </h2>
+                <p class="m-0 max-w-[30ch] text-sm opacity-50 mx-auto lg:mx-0">
+                    Learn more about what we do at BigWorld Agency.
+                </p>
             </div>
 
-            <div class="flex flex-col md:flex-row justify-between items-end border-t border-black/10 pt-10 mt-20 gap-10">
-                <div class="flex flex-wrap gap-8 font-medium text-sm md:text-base uppercase tracking-wider">
-                    <a href="#" class="magnetic hover-target hover:text-brand-accent transition-colors">Instagram</a>
-                    <a href="#" class="magnetic hover-target hover:text-brand-accent transition-colors">Twitter</a>
-                    <a href="#" class="magnetic hover-target hover:text-brand-accent transition-colors">LinkedIn</a>
-                    <a href="#" class="magnetic hover-target hover:text-brand-accent transition-colors">Awwwards</a>
-                </div>
-                
-                <div class="text-left md:text-right text-sm">
-                    <p class="mb-1 text-black/60">© 2026 Bigworld Agency</p>
-                    <p class="text-black/60">New York, NY — Operating Globally</p>
-                </div>
+            <!-- Services -->
+            <div class="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
+                <h2 class="mb-3 text-2xl font-semibold">
+                    Services
+                    <span class="inline-block transition-transform group-hover:translate-x-1">
+                        →
+                    </span>
+                </h2>
+                <p class="m-0 max-w-[30ch] text-sm opacity-50 mx-auto lg:mx-0">
+                    Explore the services we offer to our clients.
+                </p>
             </div>
-        </footer>
 
+            <!-- Portfolio -->
+            <div class="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
+                <h2 class="mb-3 text-2xl font-semibold">
+                    Portfolio
+                    <span class="inline-block transition-transform group-hover:translate-x-1">
+                        →
+                    </span>
+                </h2>
+                <p class="m-0 max-w-[30ch] text-sm opacity-50 mx-auto lg:mx-0">
+                    View some of our past projects and success stories.
+                </p>
+            </div>
+
+            <!-- Contact -->
+            <div class="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
+                <h2 class="mb-3 text-2xl font-semibold">
+                    Contact
+                    <span class="inline-block transition-transform group-hover:translate-x-1">
+                        →
+                    </span>
+                </h2>
+                <p class="m-0 max-w-[30ch] text-sm opacity-50 text-balance mx-auto lg:mx-0">
+                    Get in touch with us to start your next project.
+                </p>
+            </div>
+
+        </div>
     </main>
-
-    <!-- External Libraries (CDN) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
-
-    <script>
-        gsap.registerPlugin(ScrollTrigger);
-
-        // --- 1. Custom Cinematic Cursor ---
-        const cursor = document.getElementById('cursor');
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-        let cursorX = mouseX;
-        let cursorY = mouseY;
-
-        // Track exact mouse position
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        // Linear Interpolation for buttery follow delay
-        function renderCursor() {
-            cursorX += (mouseX - cursorX) * 0.15;
-            cursorY += (mouseY - cursorY) * 0.15;
-            cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
-            requestAnimationFrame(renderCursor);
-        }
-        renderCursor();
-
-        // Cursor Hover States
-        document.querySelectorAll('.hover-target').forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
-        });
-
-        // --- 2. Magnetic Buttons Physics ---
-        // Pulls elements towards the mouse for a premium tactile feel
-        document.querySelectorAll('.magnetic').forEach(elem => {
-            elem.addEventListener('mousemove', (e) => {
-                const rect = elem.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                
-                // Move the button slightly towards the cursor
-                gsap.to(elem, { x: x * 0.4, y: y * 0.4, duration: 0.6, ease: "power3.out" });
-            });
-
-            elem.addEventListener('mouseleave', () => {
-                // Snap back
-                gsap.to(elem, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.3)" });
-            });
-        });
-
-        // --- 3. Hover Image Reveal (Services Section) ---
-        const serviceItems = document.querySelectorAll('.service-item');
-        let activeImage = null;
-
-        serviceItems.forEach(item => {
-            item.addEventListener('mouseenter', (e) => {
-                const targetImgId = item.getAttribute('data-img');
-                activeImage = document.getElementById(targetImgId);
-                
-                // Show Image
-                gsap.to(activeImage, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" });
-            });
-
-            item.addEventListener('mousemove', (e) => {
-                if(activeImage) {
-                    // Make image follow mouse within the section
-                    gsap.to(activeImage, { 
-                        x: e.clientX, 
-                        y: e.clientY, 
-                        duration: 0.8, 
-                        ease: "power3.out",
-                        overwrite: "auto"
-                    });
-                }
-            });
-
-            item.addEventListener('mouseleave', () => {
-                if(activeImage) {
-                    // Hide image
-                    gsap.to(activeImage, { opacity: 0, scale: 0.8, duration: 0.4, ease: "power2.inOut" });
-                    activeImage = null;
-                }
-            });
-        });
-
-        // --- 4. Initialization & Loader Sequence ---
-        window.onload = () => {
-            const loaderText = document.getElementById('loader-text');
-            let progress = 0;
-            
-            // Fake loading counter (0 to 100)
-            const interval = setInterval(() => {
-                progress += Math.floor(Math.random() * 10) + 1;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
-                    triggerIntro();
-                }
-                loaderText.innerText = progress + "%";
-            }, 50);
-
-            function triggerIntro() {
-                const tl = gsap.timeline();
-                
-                // Slide loader text down
-                tl.to(loaderText, { yPercent: 100, duration: 0.8, ease: "power4.inOut", delay: 0.2 })
-                  // Slide whole loader screen up
-                  .to('#loader', { yPercent: -100, duration: 1, ease: "power4.inOut" }, "-=0.3")
-                  // Make main content visible
-                  .set('#main-container', { opacity: 1 }, "-=1")
-                  // Animate Hero text up
-                  .to('.hero-text', { 
-                      y: 0, 
-                      opacity: 1,
-                      duration: 1.2, 
-                      stagger: 0.1, 
-                      ease: "power4.out" 
-                  }, "-=0.5")
-                  // Grow line
-                  .to('.hero-text.w-24', { scaleX: 1, duration: 1, ease: "power3.out"}, "-=1")
-                  .add(() => {
-                      // Hide loader div from DOM to prevent clicking issues
-                      document.getElementById('loader').style.display = 'none';
-                      initScrollAnimations();
-                  });
-            }
-        };
-
-        // --- 5. Scroll Animations (Lenis + ScrollTrigger) ---
-        function initScrollAnimations() {
-            // Setup Lenis Smooth Scroll
-            const lenis = new Lenis({
-                duration: 1.2, // Tighter feel than prototype
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-                smooth: true,
-            });
-
-            lenis.on('scroll', ScrollTrigger.update);
-            gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-            gsap.ticker.lagSmoothing(0, 0);
-
-            // Intro Text Reveal
-            gsap.from(".reveal-text", {
-                scrollTrigger: {
-                    trigger: ".reveal-text",
-                    start: "top 85%",
-                },
-                y: 50,
-                opacity: 0,
-                duration: 1.5,
-                ease: "power4.out"
-            });
-
-            // Image clipping reveals for standard images
-            gsap.utils.toArray('.img-reveal').forEach(container => {
-                gsap.fromTo(container, 
-                    { clipPath: 'inset(100% 0 0 0)' },
-                    { 
-                        clipPath: 'inset(0% 0 0 0)',
-                        ease: "power3.inOut",
-                        duration: 1.5,
-                        scrollTrigger: {
-                            trigger: container,
-                            start: "top 80%"
-                        }
-                    }
-                );
-            });
-
-            // --- THE HORIZONTAL SCROLL MECHANIC ---
-            const horizontalSection = document.querySelector("#horizontal-scroll");
-            const pinWrap = document.querySelector(".pin-wrap");
-            const panels = gsap.utils.toArray(".panel");
-
-            let scrollTween = gsap.to(panels, {
-                xPercent: -100 * (panels.length - 1),
-                ease: "none",
-                scrollTrigger: {
-                    trigger: horizontalSection,
-                    pin: true,
-                    scrub: 1, // Smooth scrubbing
-                    // Wide scroll area for slower, luxurious transition
-                    end: () => "+=" + (pinWrap.offsetWidth) 
-                }
-            });
-
-            // Parallax inside horizontal scroll
-            panels.forEach((panel, i) => {
-                const img = panel.querySelector(".panel-img");
-                if(img) {
-                    gsap.to(img, {
-                        xPercent: 20, // Subtle opposite movement
-                        ease: "none",
-                        scrollTrigger: {
-                            trigger: panel,
-                            containerAnimation: scrollTween,
-                            start: "left right",
-                            end: "right left",
-                            scrub: true
-                        }
-                    });
-                }
-            });
-        }
-    </script>
 </body>
 </html>
