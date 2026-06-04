@@ -98,15 +98,16 @@
             /* Hardware-accelerated transform only — avoids layout thrash */
             will-change: transform;
             transition:
-                width  0.4s var(--ease-out-expo),
-                height 0.4s var(--ease-out-expo),
-                background-color 0.4s var(--ease-out-expo),
-                backdrop-filter 0.4s var(--ease-out-expo);
+                width  0.3s cubic-bezier(0.25, 1, 0.5, 1),
+                height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+                background-color 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+                opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .cursor--hover {
             width: 60px !important;
             height: 60px !important;
-            background-color: rgba(255,255,255,1);
+            background-color: #fff;
+            opacity: 0.6;
         }
         .cursor--view {
             width: 85px !important;
@@ -1034,17 +1035,17 @@
                         <span class="text-[10px] md:text-xs font-sans tracking-[0.2em] uppercase mb-3 text-white/70 font-semibold">
                             2002 &mdash; 2026
                         </span>
-                        <h1 class="font-display text-[14vw] md:text-[8vw] lg:text-[7vw] leading-[0.85] font-bold tracking-tighter text-white uppercase relative">
+                        <h1 class="font-display text-[14vw] md:text-[8vw] lg:text-[7vw] leading-[0.85] font-bold tracking-tighter text-white uppercase relative pointer-events-auto magnetic hover-target transition-all duration-[800ms] hover:tracking-normal hover:scale-[1.02] origin-left">
                             Bigworld Agency
                         </h1>
-                        <p class="font-sans text-sm md:text-xl lg:text-2xl mt-4 md:mt-5 text-white/90 font-medium max-w-[80%]">
+                        <p class="font-sans text-sm md:text-xl lg:text-2xl mt-4 md:mt-5 text-white/90 font-medium max-w-[80%] pointer-events-auto magnetic hover-target transition-all duration-[600ms] hover:text-white/100">
                             Full-Service Marketing Agency for Consumer Brands
                         </p>
                     </div>
 
                     <!-- Bottom Right: Positioning Statement -->
-                    <div class="text-white md:max-w-[350px] lg:max-w-[450px]">
-                        <p class="font-sans text-xs md:text-sm lg:text-base leading-relaxed text-white/90 font-medium">
+                    <div class="text-white md:max-w-[350px] lg:max-w-[450px] pointer-events-auto magnetic hover-target">
+                        <p class="font-sans text-xs md:text-sm lg:text-base leading-relaxed text-white/90 font-medium transition-all duration-500 hover:text-white/100">
                             You bring the product we build the universe
                         </p>
                     </div>
@@ -1712,8 +1713,8 @@
                 const scrollContainer = document.getElementById('cs-scroll');
                 if (!scrollContainer) return;
                 
-                const step = window.innerHeight * 0.4;
-                if (!this._lbScrollTarget || !gsap.isTweening(scrollContainer)) {
+                const step = 250;
+                if (this._lbScrollTarget === undefined || !gsap.isTweening(scrollContainer)) {
                     this._lbScrollTarget = scrollContainer.scrollTop;
                 }
                 
@@ -1731,9 +1732,9 @@
                 
                 gsap.to(scrollContainer, { 
                     scrollTop: this._lbScrollTarget, 
-                    duration: 1.2, 
-                    ease: 'expo.out', 
-                    overwrite: 'auto' 
+                    duration: 0.35, 
+                    ease: 'power2.out', 
+                    overwrite: true 
                 });
                 return;
             }
@@ -1770,8 +1771,8 @@
             if (Context.isMobile) return;
 
             gsap.set(this._el, { xPercent: -50, yPercent: -50 });
-            this._xTo = gsap.quickTo(this._el, 'x', { duration: 0.25, ease: 'power3' });
-            this._yTo = gsap.quickTo(this._el, 'y', { duration: 0.25, ease: 'power3' });
+            this._xTo = gsap.quickTo(this._el, 'x', { duration: 0.1, ease: 'power4.out' });
+            this._yTo = gsap.quickTo(this._el, 'y', { duration: 0.1, ease: 'power4.out' });
 
             this._onMove = e => { this._xTo(e.clientX); this._yTo(e.clientY); };
             window.addEventListener('mousemove', this._onMove, { passive: true });
@@ -1781,7 +1782,7 @@
 
         setScale(val) {
             if (Context.isMobile || Context.reducedMotion) return;
-            gsap.to(this._el, { scale: val, duration: 0.3 });
+            gsap.to(this._el, { scale: val, duration: 0.2 });
         }
 
         setViewMode(active) {
@@ -1798,12 +1799,12 @@
                 el._mm = e => {
                     const r = el.getBoundingClientRect();
                     gsap.to(el, {
-                        x: (e.clientX - r.left - r.width  / 2) * 0.4,
-                        y: (e.clientY - r.top  - r.height / 2) * 0.4,
-                        duration: 0.6, ease: 'power3.out', overwrite: 'auto',
+                        x: (e.clientX - r.left - r.width  / 2) * 0.5,
+                        y: (e.clientY - r.top  - r.height / 2) * 0.5,
+                        duration: 0.4, ease: 'power3.out', overwrite: 'auto',
                     });
                 };
-                el._ml = () => gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1,0.3)', overwrite: 'auto' });
+                el._ml = () => gsap.to(el, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1,0.4)', overwrite: 'auto' });
                 el.addEventListener('mousemove',  el._mm);
                 el.addEventListener('mouseleave', el._ml);
             });
@@ -2645,22 +2646,22 @@
 
                 // ── Animate panel in
                 gsap.timeline()
-                    .fromTo(this._lightbox, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25, ease: 'power2.out',
+                    .fromTo(this._lightbox, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'power2.out',
                         onComplete: () => this._lightbox.classList.remove('pointer-events-none'),
                     })
                     // Hero image scale-up reveal
-                    .fromTo('#cs-hero-img',  { scale: 1.05 }, { scale: 1, duration: 1.2, ease: 'power2.out' }, '-=0.15')
+                    .fromTo('#cs-hero-img',  { scale: 1.05 }, { scale: 1, duration: 0.6, ease: 'power3.out' }, '-=0.1')
                     // Hero metadata slides up
-                    .fromTo('.cs-hero-meta', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }, '-=1.0');
+                    .fromTo('.cs-hero-meta', { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power2.out' }, '-=0.4');
 
                 // ── Scroll-triggered reveals for gallery rows
                 const revealObserver = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
                             gsap.to(entry.target, {
-                                opacity: 1, y: 0, duration: 0.9,
-                                ease: 'expo.out',
-                                delay: 0.05,
+                                opacity: 1, y: 0, duration: 0.5,
+                                ease: 'power3.out',
+                                delay: 0,
                             });
                             revealObserver.unobserve(entry.target);
                         }
@@ -2710,11 +2711,11 @@
             /* ── MENU ── */
             bus.on('MENU_ENTER', () => {
                 this._lockScroll();
-                gsap.to('#main-nav', { autoAlpha: 0, duration: 0.3 });
-                gsap.to('#menu-overlay', { autoAlpha: 1, duration: 0.6, ease: 'expo.inOut' });
+                gsap.to('#main-nav', { autoAlpha: 0, duration: 0.2 });
+                gsap.to('#menu-overlay', { autoAlpha: 1, duration: 0.4, ease: 'power3.inOut' });
                 gsap.fromTo('.menu-link-item',
-                    { y: 50, opacity: 0 },
-                    { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'expo.out', delay: 0.2 }
+                    { y: 30, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: 'power3.out', delay: 0.1 }
                 );
                 this._wrapper.setAttribute('inert', '');
                 this._trapFocus('menu-overlay');
@@ -2740,8 +2741,8 @@
                 moreBtn.setAttribute('aria-expanded', 'false');
 
                 gsap.fromTo('.reveal-elem-init',
-                    { y: 40, opacity: 0 },
-                    { y: 0, opacity: 1, duration: 1.0, ease: 'power3.out', delay: 0.3 }
+                    { y: 30, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out', delay: 0.15 }
                 );
                 this._wrapper.setAttribute('inert', '');
                 this._trapFocus('agency-overlay');
@@ -2773,8 +2774,8 @@
                     gsap.to(AppPhysics.intro, { scale: 0.0001, duration: 0.5, overwrite: 'auto' });
 
                     gsap.fromTo('.mobile-reel-item',
-                        { y: 60, opacity: 0 },
-                        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'expo.out', delay: 0.2 }
+                        { y: 40, opacity: 0 },
+                        { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: 'power3.out', delay: 0.1 }
                     );
 
                     this._wrapper.setAttribute('inert', '');
