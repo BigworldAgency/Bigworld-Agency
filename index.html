@@ -591,7 +591,7 @@
             </p>
         </div>
 
-        <div id="mobile-reel" data-lenis-prevent class="hidden absolute inset-0 w-full h-full z-40 overflow-y-auto pt-32 pb-24 px-6 pointer-events-auto bg-[#010204] overlay-panel">
+        <div id="mobile-reel" class="hidden absolute inset-0 w-full h-full z-40 overflow-y-auto pt-32 pb-24 px-6 pointer-events-auto bg-[#010204]">
             <div class="flex flex-col gap-16 w-full max-w-md mx-auto" id="mobile-reel-container">
                 <!-- populated by JS dynamically based on device -->
             </div>
@@ -1230,75 +1230,127 @@
     /* ── Project data ───────────────────────────────────────────── */
     const RAW_DATA = [
         {
-            t: 'Aesop', c: 'Product & Lifestyle', client: 'Aesop Skincare',
-            cover: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop',
+            t: 'CANON',
+            c: 'Photography · Campaign · Brand Storytelling',
+            client: 'Canon',
+            cover: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596573/Canon_01_fd6txv.jpg',
             shots: [
-                { src: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop', desc: 'Hero product staging. Organic textures mapping against the iconic amber apothecary bottles.' },
-                { src: 'https://images.unsplash.com/photo-1608248593855-ed4171092780?auto=format&fit=crop', desc: 'Product array alignment. Consistent studio lighting to standardize brand packaging.' },
-                { src: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop', desc: 'Contextual staging. Beautifully curated architectural bathroom environment emphasizing modern utility.' },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596573/Canon_01_fd6txv.jpg',
+                    desc: 'Hero campaign image. A large-format photography showcase celebrating the art of the captured moment — colour, light, and precision at the heart of the Canon brand.',
+                },
             ],
         },
         {
-            t: 'Byredo', c: 'E-Commerce Visuals', client: 'Byredo',
-            cover: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop',
+            t: 'Bang & Olufsen',
+            c: 'Luxury Product · Campaign · Art Direction',
+            client: 'Bang & Olufsen',
+            cover: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596038/Bang_01_wcwtco.jpg',
             shots: [
-                { src: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop', desc: 'Atmospheric hero. Capturing the warm glow of the wick against the minimalist typography.' },
-                { src: 'https://images.unsplash.com/photo-1582560475093-ba66accbc424?auto=format&fit=crop', desc: 'Still life composition. Neutral tones and stark shadows highlighting the stark brand identity.' },
-                { src: 'https://images.unsplash.com/photo-1602928321679-560bb463f03b?auto=format&fit=crop', desc: 'Macro texture pass. Extreme close-up on the hand-poured black wax and cotton wick.' },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596038/Bang_01_wcwtco.jpg',
+                    desc: 'Museum-quality luxury product presentation. Elegant negative space frames the hardware as sculptural art — the intersection of Scandinavian design and acoustic engineering.',
+                },
             ],
         },
         {
-            t: 'Leica', c: 'Product Launch', client: 'Leica Camera AG',
-            cover: 'https://images.unsplash.com/photo-1516961642265-531546e84af2?auto=format&fit=crop',
+            t: 'NETFLIX',
+            c: 'Entertainment · Streaming · Original Content',
+            client: 'Netflix',
+            cover: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596027/Chronos_01_frmre5.jpg',
             shots: [
-                { src: 'https://images.unsplash.com/photo-1516961642265-531546e84af2?auto=format&fit=crop', desc: 'Low-key hero profile. Single strip box catching the knurled metal dials and matte black finish.' },
-                { src: 'https://images.unsplash.com/photo-1516724562728-afc824a36e84?auto=format&fit=crop', desc: 'Lens macro detail. Ring flash illuminates the glass optics without blowing the aperture markings.' },
-                { src: 'https://images.unsplash.com/photo-1502920514313-ce39f00048d9?auto=format&fit=crop', desc: 'Lifestyle in-hand. Street context using natural overcast light to emphasise rugged utility.' },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596027/Chronos_01_frmre5.jpg',
+                    desc: 'Chronos — Key art for a speculative Netflix Original science-fiction series. Cinematic time-bending visuals with a bold editorial typographic treatment.',
+                },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596032/Interface_01_yswryw.jpg',
+                    desc: 'Interface — A near-future thriller campaign exploring the blurred boundary between human consciousness and digital architecture.',
+                },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596040/Aethelgard_01_vvynvm.jpg',
+                    desc: 'Æthelgard — Epic fantasy world-building campaign. Atmospheric key art evoking ancient civilisations reborn in a world of myth and shadow.',
+                },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596038/Aetheris_01_nwln9x.jpg',
+                    desc: 'Aetheris — A sweeping science-fiction original. Campaign imagery built around wonder, scale, and the emotional gravity of interstellar exploration.',
+                },
             ],
         },
         {
-            t: 'Bang', c: 'Motion & UI', client: 'Bang & Olufsen',
-            cover: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop',
+            t: 'NIKE',
+            c: 'Global Sports Campaign · Art Direction',
+            client: 'Nike HQ',
+            cover: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596033/Nike_Gravity_02_lacthu.jpg',
             shots: [
-                { src: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop', desc: 'Hero floating composition. Shadowless rim lighting to detach hardware from the warm background.' },
-                { src: 'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?auto=format&fit=crop', desc: 'Material contrast. Highlighting the intersection of cold brushed steel and warm premium leather.' },
-                { src: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop', desc: 'Lifestyle immersion. Soft window light illuminating the ergonomic fit in a home setting.' },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596033/Nike_Gravity_02_lacthu.jpg',
+                    desc: 'Nike Gravity — Campaign hero. Defying physics with a bold visual language built for athletes who refuse to be bound by limits. High-energy motion direction.',
+                },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596025/Nike_Gravity_01_soio0d.jpg',
+                    desc: 'Gravity Campaign — Secondary key visual. Raw power, kinetic motion, and iconic Nike brand typography converge in this global drop campaign storytelling sequence.',
+                },
             ],
         },
         {
-            t: 'Nike', c: 'Global Drop', client: 'Nike HQ',
-            cover: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop',
+            t: 'LUMINÆ',
+            c: 'Luxury Skincare · Packaging · Brand Identity',
+            client: 'Luminæ Skincare',
+            cover: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596033/LUMIN%C3%86_Luxury_Skin_Care._02_sslspl.jpg',
             shots: [
-                { src: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop', desc: 'Low-angle hero. Forced perspective using a 14 mm lens to exaggerate the dynamic silhouette.' },
-                { src: 'https://images.unsplash.com/photo-1605348532760-6753d2c43329?auto=format&fit=crop', desc: 'Material breakdown. Split-lighting emphasising the breathability of the upper mesh and vibrant colorway.' },
-                { src: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop', desc: 'On-foot action. Urban lifestyle shot capturing the shoe mid-stride on raw concrete.' },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596033/LUMIN%C3%86_Luxury_Skin_Care._02_sslspl.jpg',
+                    desc: 'Luminæ — Brand hero visual. A premium luxury skincare identity built on restraint, refinement, and the quiet confidence of world-class formulation.',
+                },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596033/Skincare_Luminae_02_pel9xl.jpg',
+                    desc: 'Luminæ Editorial — High-end beauty photography placing the product within an aspirational lifestyle narrative. Soft light, premium surfaces, intentional stillness.',
+                },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596024/LUMIN%C3%86_Luxury_Skin_Care._Macro_01_kxtrcv.jpg',
+                    desc: 'Luminæ Macro — Extreme close-up product detail photography. Texture, formulation, and craftsmanship made visible at the highest level of visual resolution.',
+                },
             ],
         },
         {
-            t: 'Chanel', c: 'CGI & Lighting', client: 'Chanel SA',
-            cover: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop',
+            t: 'APPLE',
+            c: 'Technology · Product Marketing · Lifestyle',
+            client: 'Apple Inc.',
+            cover: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596031/Lifestyle_shot_for_a_MacBook_202606041253_zz0869.jpg',
             shots: [
-                { src: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop', desc: 'Macro 100 mm. Low-key studio setup highlighting glass refraction and the amber hue of N°5.' },
-                { src: 'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop', desc: 'Backlit silhouette pass. Emphasizing the iconic architectural geometry of the bottle.' },
-                { src: 'https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?auto=format&fit=crop', desc: 'Lifestyle integration. Golden hour sunlight capturing a soft, natural aesthetic.' },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596031/Lifestyle_shot_for_a_MacBook_202606041253_zz0869.jpg',
+                    desc: 'MacBook Lifestyle — Keynote-quality product photography. Minimalist luxury staging communicates the intersection of performance and everyday elegance.',
+                },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596039/Apple_01_iym2rr.jpg',
+                    desc: 'Apple Campaign — Clean product storytelling at the highest standard. Precision lighting and compositional restraint in the Apple visual tradition.',
+                },
             ],
         },
         {
-            t: 'Herman', c: 'Interior Render', client: 'Herman Miller',
-            cover: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?auto=format&fit=crop',
+            t: 'COCA-COLA',
+            c: 'Global Campaign · Advertising · Brand Experience',
+            client: 'The Coca-Cola Company',
+            cover: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596025/Coca-Cola__The_Moment_01peg_mrcomv.jpg',
             shots: [
-                { src: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?auto=format&fit=crop', desc: 'Architectural context. Placing the iconic piece in a modern, light-filled space.' },
-                { src: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop', desc: 'Studio isolated product shot. Highlighting the ergonomic curves and premium upholstery.' },
-                { src: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop', desc: 'Material staging. A warm environment setting off the clean, mid-century modern lines.' },
-            ],
-        },
-        {
-            t: 'Apple', c: 'Tech Visuals', client: 'Apple Inc.',
-            cover: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop',
-            shots: [
-                { src: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop', desc: 'Precision macro. Emphasizing the seamless integration of glass and aerospace-grade metal.' },
-                { src: 'https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?auto=format&fit=crop', desc: 'Interface execution. Soft overhead lighting to showcase the OLED display depth and watch face.' },
-                { src: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop', desc: 'Lifestyle context. On-wrist application bridging the gap between fashion and high-technology.' },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596025/Coca-Cola__The_Moment_01peg_mrcomv.jpg',
+                    desc: 'The Moment — Campaign hero. An emotionally charged global Coca-Cola campaign celebrating human connection, nostalgia, and the shared joy of an iconic instant.',
+                },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596025/Coca_Cola_04_cvpq1k.jpg',
+                    desc: 'The Moment — Campaign visual No. 2. Billboard-quality advertising photography fusing product iconography with warm, universal emotional storytelling.',
+                },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596027/Coca-Cola__The_Moment__02_rd5z1j.jpg',
+                    desc: 'The Moment — Campaign visual No. 3. Cinematic depth and warm colour grading amplify the sense of togetherness at the core of this global campaign narrative.',
+                },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596032/Coca_Cola_03_a36bcg.jpg',
+                    desc: 'The Moment — Campaign visual No. 4. Closing chapter of the campaign story. The iconic red of Coca-Cola rendered with cinematic gravity and brand-world precision.',
+                },
             ],
         },
     ];
@@ -1552,7 +1604,9 @@
 
             RAW_DATA.forEach((data, i) => {
                 const angle = (i / RAW_DATA.length) * Math.PI * 2;
-                const tex   = this.assets.load(`card_${i}`, data.cover + suffix, true);
+                // Cloudinary URLs already have transformations baked in — don't append Unsplash query params
+                const coverUrl = data.cover.includes('cloudinary.com') ? data.cover : data.cover + suffix;
+                const tex   = this.assets.load(`card_${i}`, coverUrl, true);
 
                 const mat = new THREE.ShaderMaterial({
                     uniforms: {
@@ -2125,7 +2179,7 @@
                         el.className = 'mobile-reel-item flex flex-col gap-4 w-full cursor-pointer hover-target';
                         el.innerHTML = `
                             <div class="w-full aspect-[4/5] rounded-lg overflow-hidden relative shadow-[0_0_30px_rgba(0,0,0,0.8)] border border-white/10">
-                                <img src="${data.cover}&w=800&q=80" alt="${data.t}" class="absolute inset-0 w-full h-full object-cover">
+                                <img src="${data.cover.includes('cloudinary.com') ? data.cover : data.cover + '&w=800&q=80'}" alt="${data.t}" class="absolute inset-0 w-full h-full object-cover">
                             </div>
                             <div class="flex justify-between items-center text-white mt-2 px-1">
                                 <div class="flex flex-col">
@@ -2166,7 +2220,10 @@
                 const imgQ   = Context.isMobile ? '&w=1200&q=85' : '&w=2000&q=90';
                 const thumbQ = '&w=200&q=60';
 
-                mainImg.src    = userData.data.shots[0].src + imgQ;
+                // Helper: only append Unsplash-style query suffix for non-Cloudinary URLs
+                const buildSrc = (url, q) => url.includes('cloudinary.com') ? url : url + q;
+
+                mainImg.src    = buildSrc(userData.data.shots[0].src, imgQ);
                 mainImg.alt    = `${userData.data.t} — shot 1`;
                 descEl.textContent = userData.data.shots[0].desc;
 
@@ -2184,7 +2241,7 @@
                     btn.setAttribute('aria-label', `View shot ${idx + 1}`);
 
                     const img = document.createElement('img');
-                    img.src   = shot.src + thumbQ;
+                    img.src   = buildSrc(shot.src, thumbQ);
                     img.alt   = '';
                     img.className = 'w-full h-full object-cover pointer-events-none';
                     img.loading = 'lazy';
@@ -2205,7 +2262,7 @@
                         gsap.to(mainImg, {
                             opacity: 0, scale: 0.95, duration: 0.3,
                             onComplete: () => {
-                                mainImg.src = shot.src + imgQ;
+                                mainImg.src = buildSrc(shot.src, imgQ);
                                 mainImg.alt = `${userData.data.t} — shot ${idx + 1}`;
                                 descEl.textContent = shot.desc;
                                 gsap.to(mainImg, { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' });
@@ -2637,12 +2694,12 @@
                             AppPhysics.hasDragged = true;
 
                         const sx = Context.isMobile ? 0.15 : 0.10;
-                        const sy = Context.isMobile ? 0 : 0.08;
+                        const sy = Context.isMobile ? 0.12 : 0.08;
 
                         AppPhysics.physics.targetRotY      += dx * sx;
                         AppPhysics.physics.rotVelY          = dx * 0.004;
                         AppPhysics.physics.targetEarthRotX += dy * sy;
-                        AppPhysics.physics.rotEarthVelX     = dy * (Context.isMobile ? 0 : 0.002);
+                        AppPhysics.physics.rotEarthVelX     = dy * 0.002;
                     } else if (touchDirectionLocked === 'v') {
                         // Vertical — release drag so Lenis/native scroll takes over
                         AppPhysics.isDragging = false;
