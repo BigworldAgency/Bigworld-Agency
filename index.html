@@ -1018,11 +1018,12 @@
                     id="hero-video"
                     autoplay loop muted playsinline preload="auto"
                     poster="https://res.cloudinary.com/dsifab7ul/video/upload/so_0,f_jpg,q_auto,w_1920/Bigworld_Agency_Ad_byguwo.jpg"
-                    class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
+                    class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none will-change-transform [transform:translateZ(0)]"
                     aria-hidden="true"
                 >
                     <source src="https://res.cloudinary.com/dsifab7ul/video/upload/q_auto,f_auto,w_1920/Bigworld_Agency_Ad_byguwo.mp4" media="(min-width: 769px)" type="video/mp4">
-                    <source src="https://res.cloudinary.com/dsifab7ul/video/upload/q_auto,f_auto,w_1080/Bigworld_Agency_Ad_byguwo.mp4" type="video/mp4">
+                    <source src="https://res.cloudinary.com/dsifab7ul/video/upload/q_auto,vc_h264,w_800/Bigworld_Agency_Ad_byguwo.mp4" media="(max-width: 768px)" type="video/mp4">
+                    <source src="https://res.cloudinary.com/dsifab7ul/video/upload/q_auto,vc_h264,w_800/Bigworld_Agency_Ad_byguwo.mp4" type="video/mp4">
                 </video>
                 <div class="absolute inset-0 bg-black/30 z-0 pointer-events-none" aria-hidden="true"></div>
                 
@@ -1900,7 +1901,7 @@
             this.scene.add(this.group);
 
             this.cards      = [];
-            this.radius     = Context.isMobile ? 8.0 : 8.4;
+            this.radius     = Context.isMobile ? 9.2 : 8.4;
             this.raycaster  = new THREE.Raycaster();
             this._mouse     = new THREE.Vector2();
             this.hoveredCard = null;
@@ -1918,8 +1919,8 @@
 
         /* Build card meshes ──────────────────────────────────────── */
         _buildCards() {
-            const w = Context.isMobile ? 4.0 : 4.8;
-            const h = Context.isMobile ? 6.0 : 7.2;
+            const w = Context.isMobile ? 6.0 : 4.8;
+            const h = Context.isMobile ? 9.0 : 7.2;
             const geo = new THREE.PlaneGeometry(w, h, 32, 32);
             this._sharedGeo = geo; // kept for disposal
 
@@ -2375,6 +2376,9 @@
         }
 
         _resize() {
+            if (Context.isMobile && this._lastW === window.innerWidth && Math.abs((this._lastH || 0) - window.innerHeight) < 150) return;
+            this._lastW = window.innerWidth;
+            this._lastH = window.innerHeight;
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
             this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -2494,7 +2498,8 @@
         /* State bus wiring ─────────────────────────────────────── */
         _wireStateBus() {
             // Evaluate iOS Mobile once
-            const isIOSMobile = Context.isMobile && (/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+            // Force WebGL sphere for all mobile
+            const isIOSMobile = false;
 
             // Generate reel items if needed
             if (isIOSMobile) {
@@ -3027,6 +3032,14 @@
                 const offset = AppPhysics.physics.smoothedOffset;
 
                 const s = stateMachine.current;
+                
+                // Sphere background animation tied to scroll (desktop only)
+                let ty = 0;
+                if (!Context.isMobile && (!window.stateMachine || s === 'IDLE')) {
+                    ty = Math.max(-window.scrollY * 0.4, -window.innerHeight * 0.35);
+                    AppPhysics.intro.y += (ty - AppPhysics.intro.y) * 0.05;
+                }
+
                 if (s === 'IDLE' || s === 'WORK') {
                     const phys = AppPhysics.physics;
                     if (!AppPhysics.isDragging) {
