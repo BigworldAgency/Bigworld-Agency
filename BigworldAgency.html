@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="en" class="antialiased"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        /* ── Interactive areas ───────────────────────────────── */
+        button, a, .hover-target { touch-action: manipulation; }
+        #sticky-work, #work-interaction {
+            touch-action: none;
+            outline: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        /* Desktop: block all touch (we handle it) */
+        @media (pointer: fine) {
+            #sticky-work, #work-interaction { touch-action: none; }
+        }
+        /* Mobile: allow vertical pan so the page scrolls normally;
+           horizontal drags are captured in JS for carousel rotation */
+        @media (pointer: coarse), (hover: none) {
+            #sticky-work { touch-action: pan-y; }
+            #work-interaction { touch-action: none; } /* fullscreen overlay — scroll locked anyway */
+        }
+        /* ── Typography ──────────────────────────────────────── */
+        .text-fluid-hero { font-size: clamp(2.5rem, 8vw, 6rem); }
+            // Earth positioning — map CSS scroll to WebGL space
+            const visH = 2 * 20 * Math.tan(((45 * Math.PI) / 180) / 2);
+            const appR = Context.isMobile
+                ? window.innerWidth * 1.0
+                ? window.innerWidth * 1.4   /* bigger sphere radius on mobile */
+                : Math.max(window.innerWidth * 0.5, 800);
+            const webR  = ((appR / window.innerHeight) * visH * 0.96) / 6;
+            const scale = webR * intro.scale * phys.currentZoom;
+                const isDesktop = window.innerWidth > 768;
+                gsap.to(AppPhysics.intro, {
+                    scale: isDesktop ? 0.55 : 0.38,
+                    scale: isDesktop ? 0.55 : 0.52,
+                    x: 0, y: 0, rotY: 0, rotX: -15, spaceScale: 1, lightBlast: 0,
+                    duration: 1.5, ease: 'expo.out', overwrite: 'auto',
+                });
+                    // FALLBACK: When user closes the modal while parked in the active zones
+                    const desktop = window.innerWidth > 768;
+                    gsap.to(AppPhysics.intro, {
+                        scale: desktop ? 0.55 : 0.38,
+                        scale: desktop ? 0.55 : 0.52,
+                        x: desktop ? window.innerWidth * 0.15 : 0,
+                        y: desktop ? 0 : window.innerHeight * 0.2,
+                        y: desktop ? 0 : window.innerHeight * 0.18,
+                        rotY: 0, rotX: -15, spaceScale: 1, lightBlast: 0,
+                        duration: 1.5, ease: 'expo.out', overwrite: 'auto',
+                    });
+            ].filter(Boolean);
+            let lastX = 0, lastY = 0;
+            // Track initial touch direction to decide whether to intercept
+            let touchStartX = 0, touchStartY = 0;
+            let touchDirectionLocked = null; // 'h' | 'v' | null
+            const onDown = e => {
+                if (!this._canInteract() || AppPhysics.intro.scale < 0.2) return;
+                if (e.target.closest?.('.nav-trigger')) return;
+                gsap.killTweensOf(AppPhysics.physics);
+                AppPhysics.isDragging = true;
+                AppPhysics.hasDragged = false;
+                AppPhysics.startX = lastX = e.clientX ?? e.touches?.[0].clientX ?? 0;
+                AppPhysics.startY = lastY = e.clientY ?? e.touches?.[0].clientY ?? 0;
+                this.cursor.setScale(0.6);
+                touchDirectionLocked = null;
+                const cx = e.clientX ?? e.touches?.[0].clientX ?? 0;
+                const cy = e.clientY ?? e.touches?.[0].clientY ?? 0;
+                AppPhysics.startX = lastX = touchStartX = cx;
+                AppPhysics.startY = lastY = touchStartY = cy;
+                if (!Context.isMobile) this.cursor.setScale(0.6);
+            };
+            const onMove = e => {
+                if (!this._canInteract()) return;
+                const x = e.clientX ?? e.touches?.[0].clientX ?? lastX;
+                const y = e.clientY ?? e.touches?.[0].clientY ?? lastY;
+                const touch = e.touches?.[0];
+                const x = e.clientX ?? touch?.clientX ?? lastX;
+                const y = e.clientY ?? touch?.clientY ?? lastY;
+                AppPhysics.mouseX = x;
+                AppPhysics.mouseY = y;
+                if (AppPhysics.isDragging) {
+                    if (Math.abs(x - AppPhysics.startX) > 8 || Math.abs(y - AppPhysics.startY) > 8)
+                        AppPhysics.hasDragged = true;
+                    const dx = x - lastX;
+                    const dy = y - lastY;
+                    const sx = Context.isMobile ? 0.15 : 0.10;
+                    const sy = Context.isMobile ? 0.12 : 0.08;
+                    AppPhysics.physics.targetRotY    += dx * sx;
+                    AppPhysics.physics.rotVelY        = dx * 0.004;
+                    AppPhysics.physics.targetEarthRotX += dy * sy;
+                    AppPhysics.physics.rotEarthVelX   = dy * 0.002;
+                    if (Context.isMobile && touchDirectionLocked === null) {
+                        // Lock direction after first meaningful movement
+                        const totalDX = Math.abs(x - touchStartX);
+                        const totalDY = Math.abs(y - touchStartY);
+                        if (totalDX > 6 || totalDY > 6) {
+                            touchDirectionLocked = totalDX > totalDY * 1.2 ? 'h' : 'v';
+                        }
+                    }
+                    // On mobile, only rotate if horizontal drag confirmed
+                    const shouldRotate = !Context.isMobile || touchDirectionLocked === 'h';
+                    if (shouldRotate) {
+                        if (e.cancelable) e.preventDefault(); // prevent scroll only on horizontal drag
+                        if (Math.abs(x - AppPhysics.startX) > 8 || Math.abs(y - AppPhysics.startY) > 8)
+                            AppPhysics.hasDragged = true;
+                        const sx = Context.isMobile ? 0.15 : 0.10;
+                        const sy = Context.isMobile ? 0.12 : 0.08;
+                        AppPhysics.physics.targetRotY      += dx * sx;
+                        AppPhysics.physics.rotVelY          = dx * 0.004;
+                        AppPhysics.physics.targetEarthRotX += dy * sy;
+                        AppPhysics.physics.rotEarthVelX     = dy * 0.002;
+                    } else if (touchDirectionLocked === 'v') {
+                        // Vertical — release drag so Lenis/native scroll takes over
+                        AppPhysics.isDragging = false;
+                    }
+                }
+                lastX = x; lastY = y;
+            };
+            const onUp = () => {
+                if (!AppPhysics.isDragging) return;
+                AppPhysics.isDragging = false;
+                this.cursor.setScale(1);
+                touchDirectionLocked = null;
+                if (!Context.isMobile) this.cursor.setScale(1);
+            };
+            const onWheel = e => {
+            containers.forEach(el => {
+                el.addEventListener('mousedown',  onDown);
+                // passive: false so we can call preventDefault on horizontal swipes
+                el.addEventListener('touchstart', onDown,   { passive: true });
+                el.addEventListener('touchmove',  onMove,   { passive: false });
+                el.addEventListener('wheel',      onWheel,  { passive: false });
+            });
+            window.addEventListener('mousemove',  onMove,  { passive: true });
+            window.addEventListener('mouseup',    onUp);
+            window.addEventListener('touchmove',  onMove,  { passive: true });
+            window.addEventListener('touchend',   onUp);
+            window.addEventListener('touchend',   onUp,    { passive: true });
+        }
+        _canInteract() {
+                onEnter: () => {
+                    const desktop = window.innerWidth > 768;
+                    gsap.to(AppPhysics.intro, {
+                        scale: desktop ? 0.55 : 0.38,
+                        scale: desktop ? 0.55 : 0.52,
+                        x: desktop ? window.innerWidth * 0.15 : 0,
+                        y: desktop ? 0 : window.innerHeight * 0.2,
+                        y: desktop ? 0 : window.innerHeight * 0.18,
+                        rotY: 0, rotX: -15, spaceScale: 1, lightBlast: 0,
+                        duration: Context.reducedMotion ? 0.1 : 2.4,
+                        ease: 'expo.out', overwrite: 'auto',
+                onLeaveBack: () => {
+                    const desktop = window.innerWidth > 768;
+                    gsap.to(AppPhysics.intro, {
+                        scale: desktop ? 0.55 : 0.38, rotY: 0,
+                        scale: desktop ? 0.55 : 0.52, rotY: 0,
+                        duration: 2.0, ease: 'power4.out', overwrite: 'auto',
+                    });
+                    this.carousel.cards.forEach((m, i) =>
+        });
+    }());
+    </script></body></html>
