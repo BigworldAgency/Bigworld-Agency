@@ -184,31 +184,272 @@
             #sticky-work p.explore-text { bottom: calc(4rem + env(safe-area-inset-bottom)); }
         }
 
-        /* ── Mobile lightbox thumbs — move to bottom strip on phones ── */
-        @media (max-width: 767px) {
-            #lightbox-thumbs {
-                right: auto !important;
-                top: auto !important;
-                bottom: 6rem !important;
-                left: 50% !important;
-                transform: translateX(-50%) !important;
-                flex-direction: row !important;
-                gap: 0.5rem !important;
+        /* ══════════════════════════════════════════════════════════
+           PREMIUM CASE STUDY LIGHTBOX
+        ══════════════════════════════════════════════════════════ */
+
+        /* Scrollable case study panel */
+        #lightbox {
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+        #cs-scroll {
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: contain;
+            scrollbar-width: none;
+        }
+        #cs-scroll::-webkit-scrollbar { display: none; }
+
+        /* Hero image — full-bleed, cinematic */
+        .cs-hero {
+            position: relative;
+            width: 100%;
+            height: 100svh;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .cs-hero img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transform-origin: center center;
+        }
+        /* Cinematic letterbox gradient */
+        .cs-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0,0,0,0.55) 0%,
+                rgba(0,0,0,0) 35%,
+                rgba(0,0,0,0) 60%,
+                rgba(0,0,0,0.80) 100%
+            );
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Hero metadata — bottom-left corner */
+        .cs-hero-meta {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            z-index: 3;
+            padding: 2.5rem 2rem 2rem;
+        }
+        @media (min-width: 768px) {
+            .cs-hero-meta { padding: 4rem 4rem 3rem; }
+        }
+
+        /* Project number badge */
+        .cs-index {
+            font-family: inherit;
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        /* Giant hero title */
+        .cs-title {
+            font-size: clamp(3rem, 10vw, 9rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+            text-transform: uppercase;
+            color: #fff;
+            margin: 0 0 1.25rem;
+            font-family: var(--font-display, inherit);
+        }
+
+        /* Category pills row */
+        .cs-cats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .cs-cat-pill {
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 100px;
+            padding: 0.35em 0.85em;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Scroll hint */
+        .cs-scroll-hint {
+            font-size: 0.6rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .cs-scroll-hint::before {
+            content: '';
+            display: block;
+            width: 1.5rem;
+            height: 1px;
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* ── Body of case study ── */
+        .cs-body {
+            background: #090909;
+            padding: 0;
+        }
+
+        /* Section header — "Selected Works" */
+        .cs-section-header {
+            padding: 5rem 2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        @media (min-width: 768px) {
+            .cs-section-header { padding: 7rem 4rem 2.5rem; }
+        }
+        .cs-section-label {
+            font-size: 0.6rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+            font-weight: 700;
+        }
+        .cs-section-title {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: #fff;
+            line-height: 1;
+            font-family: var(--font-display, inherit);
+            text-transform: uppercase;
+        }
+
+        /* ── Gallery rows ── */
+        .cs-gallery {
+            padding: 0 0 6rem;
+        }
+
+        /* Full-width image row */
+        .cs-row-full {
+            width: 100%;
+            padding: 1.5rem 0;
+        }
+        @media (min-width: 768px) { .cs-row-full { padding: 2rem 0; } }
+        .cs-row-full img {
+            width: 100%;
+            height: clamp(50vw, 60vh, 85vh);
+            object-fit: cover;
+            display: block;
+        }
+        @media (min-width: 768px) {
+            .cs-row-full img { height: clamp(55vh, 70vh, 90vh); }
+        }
+
+        /* Two-column pair */
+        .cs-row-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            padding: 1.5rem 2rem;
+        }
+        @media (min-width: 768px) {
+            .cs-row-pair { gap: 1.25rem; padding: 2rem 4rem; }
+        }
+        .cs-row-pair img {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Feature: large + small */
+        .cs-row-feature {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            padding: 1.5rem 2rem;
+        }
+        @media (min-width: 768px) {
+            .cs-row-feature {
+                grid-template-columns: 2fr 1fr;
+                gap: 1.25rem;
+                padding: 2rem 4rem;
             }
-            #lightbox-thumbs button {
-                width: 44px !important;
-                height: 44px !important;
+        }
+        .cs-row-feature img { width: 100%; object-fit: cover; display: block; }
+        .cs-row-feature img:first-child {
+            aspect-ratio: 16 / 10;
+        }
+        @media (min-width: 768px) {
+            .cs-row-feature img:first-child { aspect-ratio: unset; height: 100%; }
+            .cs-row-feature img:last-child  { aspect-ratio: 3 / 4; }
+        }
+
+        /* Caption beneath images */
+        .cs-caption {
+            font-size: 0.62rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.28);
+            font-weight: 600;
+            padding: 0.75rem 2rem 0;
+            line-height: 1.6;
+        }
+        @media (min-width: 768px) { .cs-caption { padding: 0.75rem 4rem 0; } }
+
+        /* ── Closing credit strip ── */
+        .cs-credits {
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding: 3rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .cs-credits {
+                padding: 4rem;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 0;
             }
-            /* Lightbox media container — taller on phones */
-            .lightbox-media-container {
-                height: 45vh !important;
-            }
-            /* Lightbox details — stack more cleanly on phone */
-            .lightbox-details {
-                flex-direction: column !important;
-                gap: 1rem !important;
-                padding-bottom: env(safe-area-inset-bottom, 1rem) !important;
-            }
+        }
+        .cs-credit-block dt {
+            font-size: 0.55rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+        .cs-credit-block dd {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.8);
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        /* Reveal animation base state */
+        .cs-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            will-change: opacity, transform;
         }
 
         /* ── iOS Mobile Reel — force native momentum scroll ──────── */
@@ -1050,96 +1291,84 @@
         </main>
     </div>
 
+    <!-- ═══ PREMIUM CASE STUDY LIGHTBOX ════════════════════════════ -->
     <div
         id="lightbox"
         role="dialog"
         aria-modal="true"
-        aria-label="Project Details"
-        class="fixed inset-0 z-[9999999] pointer-events-none opacity-0 invisible
-               flex flex-col justify-between bg-black/60 backdrop-blur-md"
+        aria-label="Project Case Study"
+        class="fixed inset-0 z-[9999999] pointer-events-none opacity-0 invisible bg-[#090909] overflow-hidden"
     >
-        <h2
-            class="absolute inset-0 flex items-center justify-center overflow-hidden
-                   pointer-events-none select-none font-display font-extrabold uppercase
-                   tracking-tighter text-white/5 lightbox-bg-title whitespace-nowrap
-                   text-[25vw] leading-none translate-y-12"
-            aria-hidden="true"
-        ></h2>
-
-        <div class="w-full flex justify-between items-center px-5 md:px-10 pt-8 z-50">
-            <p class="font-sans text-[10px] md:text-xs tracking-[0.2em]
-                      text-brand-accent uppercase font-bold">Projects</p>
+        <!-- Fixed top bar: breadcrumb + close -->
+        <div id="cs-topbar"
+             class="fixed top-0 left-0 right-0 z-[99999999] flex justify-between items-center
+                    px-5 md:px-10 pt-6 pb-4 pointer-events-auto
+                    bg-gradient-to-b from-[#090909] via-[#090909]/80 to-transparent">
+            <p class="font-sans text-[9px] md:text-[10px] tracking-[0.3em] text-white/40 uppercase font-bold"
+               id="cs-breadcrumb">BigWorld Agency &mdash; Selected Works</p>
             <button
                 class="lightbox-close hover-target uppercase tracking-widest
-                       text-[10px] md:text-xs border border-white/20 rounded-full
-                       px-6 py-3 hover:bg-white hover:text-black transition-colors
-                       bg-black/90 pointer-events-auto drop-shadow-lg"
-                aria-label="Close project details"
-            >CLOSE</button>
+                       text-[10px] md:text-xs border border-white/15 rounded-full
+                       px-5 py-2.5 md:px-6 md:py-3
+                       hover:bg-white hover:text-black transition-all duration-300
+                       bg-black/70 backdrop-blur-md pointer-events-auto"
+                aria-label="Close project case study"
+            >Close</button>
         </div>
 
-        <div class="absolute inset-0 flex items-center justify-center
-                    pointer-events-none z-30 pt-10">
-            <div class="w-[85vw] md:w-[65vw] h-[55vh] md:h-[70vh] relative
-                        lightbox-media-container overflow-hidden rounded-md shadow-2xl">
-                <img
-                    src=""
-                    alt="Project visual"
-                    id="lightbox-main-img"
-                    class="absolute inset-0 w-full h-full object-cover"
-                >
+        <!-- Scrollable case study content -->
+        <div id="cs-scroll" class="absolute inset-0 overflow-y-scroll pointer-events-auto">
+
+            <!-- 1 · HERO IMAGE -->
+            <div class="cs-hero cs-reveal" id="cs-hero">
+                <img id="cs-hero-img" src="" alt="" loading="eager" decoding="async">
+                <div class="cs-hero-meta">
+                    <span class="cs-index" id="cs-index">01 &mdash; BigWorld Agency</span>
+                    <h2 class="cs-title" id="cs-proj-title"></h2>
+                    <div class="cs-cats" id="cs-cats"></div>
+                    <p class="cs-scroll-hint">Scroll to explore</p>
+                </div>
             </div>
-        </div>
 
-        <div
-            id="lightbox-thumbs"
-            class="absolute right-5 md:right-10 top-1/2 -translate-y-1/2
-                   flex flex-col gap-4 z-50 pointer-events-auto"
-            role="tablist"
-            aria-label="Project images"
-        ></div>
+            <!-- 2 · SELECTED WORKS HEADER -->
+            <div class="cs-section-header cs-reveal">
+                <div>
+                    <p class="cs-section-label">Campaign Work</p>
+                    <h3 class="cs-section-title">Selected Works</h3>
+                </div>
+                <dl class="font-sans text-right hidden md:block" style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:700;">
+                    <dt style="color:rgba(255,255,255,0.3);margin-bottom:0.25rem;">Client</dt>
+                    <dd style="color:rgba(255,255,255,0.75);" id="cs-client-name"></dd>
+                    <dt style="color:rgba(255,255,255,0.3);margin-top:0.75rem;margin-bottom:0.25rem;">Year</dt>
+                    <dd style="color:rgba(255,255,255,0.75);">2026</dd>
+                </dl>
+            </div>
 
-        <div
-            class="absolute bottom-0 left-0 w-full px-5 md:px-10 pb-8 z-40
-                   opacity-0 lightbox-details
-                   flex flex-col md:flex-row justify-between items-start md:items-end
-                   text-white gap-6 md:gap-0 pointer-events-auto drop-shadow-lg"
-        >
-            <dl class="flex gap-10 md:w-1/3 font-sans text-[9px] md:text-[10px]
-                       tracking-widest uppercase font-bold">
-                <dt class="text-white/60 space-y-2 flex flex-col gap-2">
-                    <span>Completed</span><span>Role</span><span>Client</span>
-                </dt>
-                <dd class="text-white space-y-2 flex flex-col gap-2">
-                    <span>2026</span>
-                    <span class="lightbox-role"></span>
-                    <span class="lightbox-client"></span>
-                </dd>
+            <!-- 3 · DYNAMIC GALLERY — built by JS -->
+            <div class="cs-gallery" id="cs-gallery"></div>
+
+            <!-- 4 · CLOSING CREDITS -->
+            <dl class="cs-credits cs-reveal" id="cs-credits">
+                <div class="cs-credit-block">
+                    <dt>Agency</dt>
+                    <dd>BigWorld Agency</dd>
+                </div>
+                <div class="cs-credit-block">
+                    <dt>Client</dt>
+                    <dd id="cs-credit-client"></dd>
+                </div>
+                <div class="cs-credit-block">
+                    <dt>Services</dt>
+                    <dd id="cs-credit-services"></dd>
+                </div>
+                <div class="cs-credit-block">
+                    <dt>Year</dt>
+                    <dd>2026</dd>
+                </div>
             </dl>
 
-            <div class="md:w-1/3 flex justify-start md:justify-center items-end">
-                <a
-                    href="#"
-                    class="font-sans text-[10px] md:text-xs tracking-[0.2em] uppercase
-                           hover-target hover:text-brand-accent transition-colors
-                           flex items-center gap-2 font-bold relative
-                           after:content-[''] after:absolute after:-bottom-2 after:left-0
-                           after:w-full after:h-px after:bg-brand-accent/30
-                           hover:after:bg-brand-accent"
-                    aria-label="View live project (opens in new tab)"
-                    target="_blank" rel="noopener noreferrer"
-                >
-                    View Live
-                    <span class="text-brand-accent text-lg leading-none block -rotate-45"
-                          aria-hidden="true">→</span>
-                </a>
-            </div>
-
-            <p class="font-sans text-[10px] md:text-[11px] text-white/90 leading-relaxed
-                      max-w-xs md:text-right font-medium md:w-1/3"
-               id="lightbox-desc"
-               aria-live="polite"
-            ></p>
+            <!-- bottom breathing room -->
+            <div style="height:6rem;"></div>
         </div>
     </div>
 
@@ -1255,6 +1484,14 @@
                     src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596573/Canon_01_fd6txv.jpg',
                     desc: 'Hero campaign image. A large-format photography showcase celebrating the art of the captured moment — colour, light, and precision at the heart of the Canon brand.',
                 },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780605197/Professional_photographer_capturing_wildlife_in_202606041513_m89ebb.jpg',
+                    desc: 'In the field — A Canon photographer in full pursuit of the decisive moment. Wildlife framing at the edge of the world, driven by instinct and optical precision.',
+                },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780605191/Professional_photographer_working_on_a_202606041515_k1iz7s.jpg',
+                    desc: 'Craft in practice — Behind the lens with Canon. The discipline of professional image-making, captured in the quiet confidence of a photographer at work.',
+                },
             ],
         },
         {
@@ -1266,6 +1503,14 @@
                 {
                     src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596038/Bang_01_wcwtco.jpg',
                     desc: 'Museum-quality luxury product presentation. Elegant negative space frames the hardware as sculptural art — the intersection of Scandinavian design and acoustic engineering.',
+                },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780605247/Dynamic_commercial_shot_of_BANG_202606041522_bkbhgk.jpg',
+                    desc: 'Dynamic commercial direction. Bang & Olufsen hardware in motion — the kinetic energy of premium sound meets the discipline of world-class campaign production.',
+                },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780605232/Lifestyle_advertising_shot_of_BANG_202606041522_skjwsb.jpg',
+                    desc: 'Lifestyle advertising — Bang & Olufsen placed within the aspirational world of its audience. Warmth, restraint, and the quiet luxury of the finest audio experience.',
                 },
             ],
         },
@@ -1307,6 +1552,14 @@
                     src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596025/Nike_Gravity_01_soio0d.jpg',
                     desc: 'Gravity Campaign — Secondary key visual. Raw power, kinetic motion, and iconic Nike brand typography converge in this global drop campaign storytelling sequence.',
                 },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780605203/Premium_Nike__GRAVITY__product_photography._202606041527_w4wlvb.jpg',
+                    desc: 'Gravity — Premium product photography. Studio-precision lighting isolates the footwear as a cultural object. Craft and technology rendered at the highest visual standard.',
+                },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780605186/Tactile_close-up_of_a_Nike_202606041529_gsk7s0.jpg',
+                    desc: 'Material story — Tactile close-up of the Nike Gravity upper. Every thread, texture, and engineered surface detail brought to life under campaign-grade studio lighting.',
+                },
             ],
         },
         {
@@ -1327,6 +1580,10 @@
                     src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596024/LUMIN%C3%86_Luxury_Skin_Care._Macro_01_kxtrcv.jpg',
                     desc: 'Luminæ Macro — Extreme close-up product detail photography. Texture, formulation, and craftsmanship made visible at the highest level of visual resolution.',
                 },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780605225/Extreme_close-up_of_the_charcoal_202606041512_qtbn15.jpg',
+                    desc: 'Ingredient story — An extreme macro of the activated charcoal formulation at the core of the Luminæ detox ritual. Raw texture and editorial precision in a single frame.',
+                },
             ],
         },
         {
@@ -1342,6 +1599,10 @@
                 {
                     src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596039/Apple_01_iym2rr.jpg',
                     desc: 'Apple Campaign — Clean product storytelling at the highest standard. Precision lighting and compositional restraint in the Apple visual tradition.',
+                },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780605242/2026_Apple_MacBook_Pro_global_202606041532_wewotq.jpg',
+                    desc: '2026 MacBook Pro — Global campaign visual. The next chapter of portable performance, staged with the quiet confidence of an Apple product launch at world scale.',
                 },
             ],
         },
@@ -2222,95 +2483,179 @@
                 gsap.to('#work-overlay', { autoAlpha: 0, duration: 0.3 });
                 this._wrapper.setAttribute('inert', '');
 
-                // Populate lightbox
-                const bgTitle = this._lightbox.querySelector('.lightbox-bg-title');
-                bgTitle.textContent = userData.data.t;
-                this._lightbox.querySelector('.lightbox-role').textContent   = userData.data.c;
-                this._lightbox.querySelector('.lightbox-client').textContent = userData.data.client;
+                const data   = userData.data;
+                const shots  = data.shots || [];
+                const scroll = document.getElementById('cs-scroll');
 
-                const mainImg = document.getElementById('lightbox-main-img');
-                const descEl  = document.getElementById('lightbox-desc');
-                const thumbsEl = document.getElementById('lightbox-thumbs');
-                thumbsEl.innerHTML = '';
-
-                const imgQ   = Context.isMobile ? '&w=1200&q=85' : '&w=2000&q=90';
-                const thumbQ = '&w=200&q=60';
-
-                // Helper: only append Unsplash-style query suffix for non-Cloudinary URLs
+                // Helper: Cloudinary URLs don't need Unsplash query params
                 const buildSrc = (url, q) => url.includes('cloudinary.com') ? url : url + q;
+                const imgQ = Context.isMobile ? '&w=1200&q=85' : '&w=2000&q=90';
 
-                mainImg.src    = buildSrc(userData.data.shots[0].src, imgQ);
-                mainImg.alt    = `${userData.data.t} — shot 1`;
-                descEl.textContent = userData.data.shots[0].desc;
+                // ── Reset scroll position
+                scroll.scrollTop = 0;
 
-                userData.data.shots.forEach((shot, idx) => {
-                    const btn = document.createElement('button');
-                    btn.className = [
-                        'w-12 h-12 md:w-16 md:h-16 rounded-md overflow-hidden border-2',
-                        'transition-all hover-target',
-                        idx === 0
-                            ? 'border-brand-accent scale-110'
-                            : 'border-transparent opacity-50 hover:opacity-100',
-                    ].join(' ');
-                    btn.setAttribute('role', 'tab');
-                    btn.setAttribute('aria-selected', idx === 0 ? 'true' : 'false');
-                    btn.setAttribute('aria-label', `View shot ${idx + 1}`);
+                // ── Populate hero
+                const heroImg = document.getElementById('cs-hero-img');
+                heroImg.src = buildSrc(shots[0]?.src || '', imgQ);
+                heroImg.alt = `${data.t} — hero image`;
 
-                    const img = document.createElement('img');
-                    img.src   = buildSrc(shot.src, thumbQ);
-                    img.alt   = '';
-                    img.className = 'w-full h-full object-cover pointer-events-none';
-                    img.loading = 'lazy';
-                    btn.appendChild(img);
+                // ── Index + title + cats
+                document.getElementById('cs-index').innerHTML =
+                    `<span style="color:rgba(255,255,255,0.25)">BigWorld Agency</span> &mdash; Selected Works`;
+                document.getElementById('cs-proj-title').textContent = data.t;
 
-                    btn.addEventListener('click', () => {
-                        thumbsEl.querySelectorAll('button').forEach(b => {
-                            b.classList.replace('border-brand-accent', 'border-transparent');
-                            b.classList.add('opacity-50');
-                            b.classList.remove('scale-110');
-                            b.setAttribute('aria-selected', 'false');
-                        });
-                        btn.classList.replace('border-transparent', 'border-brand-accent');
-                        btn.classList.remove('opacity-50');
-                        btn.classList.add('scale-110');
-                        btn.setAttribute('aria-selected', 'true');
-
-                        gsap.to(mainImg, {
-                            opacity: 0, scale: 0.95, duration: 0.3,
-                            onComplete: () => {
-                                mainImg.src = buildSrc(shot.src, imgQ);
-                                mainImg.alt = `${userData.data.t} — shot ${idx + 1}`;
-                                descEl.textContent = shot.desc;
-                                gsap.to(mainImg, { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' });
-                            },
-                        });
-                    });
-                    thumbsEl.appendChild(btn);
+                const catsEl = document.getElementById('cs-cats');
+                catsEl.innerHTML = '';
+                (data.c || '').split('·').forEach(cat => {
+                    const pill = document.createElement('span');
+                    pill.className = 'cs-cat-pill';
+                    pill.textContent = cat.trim();
+                    catsEl.appendChild(pill);
                 });
 
-                gsap.timeline()
-                    .fromTo(this._lightbox,             { autoAlpha: 0 },                        { autoAlpha: 1, duration: 0.6, ease: 'expo.inOut' })
-                    .fromTo('.lightbox-bg-title',        { opacity: 0, scale: 0.9 },             { opacity: 1, scale: 1, duration: 1.0, ease: 'expo.out' },         '-=0.2')
-                    .fromTo('.lightbox-media-container', { scale: 1.05, opacity: 0, y: 40 },     { scale: 1, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, '-=0.6')
-                    .fromTo('#lightbox-main-img',        { scale: 1.15 },                        { scale: 1, duration: 1.5, ease: 'expo.out' },                    '-=1.0')
-                    .fromTo('#lightbox-thumbs button',   { x: 20, opacity: 0 },                  { x: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: 'power2.out' }, '-=0.8')
-                    .fromTo('.lightbox-details',         { y: 20, opacity: 0 },                  { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out' },         '-=0.8');
+                // ── Client name in section header
+                document.getElementById('cs-client-name').textContent = data.client || data.t;
 
-                this._announce(`Viewing project: ${userData.data.t}`);
+                // ── Credits
+                document.getElementById('cs-credit-client').textContent = data.client || data.t;
+                document.getElementById('cs-credit-services').textContent =
+                    (data.c || '').split('·')[0].trim();
+
+                // ── Build editorial gallery from shots[1..]
+                const gallery = document.getElementById('cs-gallery');
+                gallery.innerHTML = '';
+                const remaining = shots.slice(1); // hero is shot[0], already shown above
+
+                /* Layout engine — vary layout based on position and count:
+                   0      → full-width
+                   1,2    → pair if two available, else full-width
+                   3      → feature (big + small)
+                   4+     → alternate full / pair
+                */
+                const addCaption = (parent, text) => {
+                    if (!text) return;
+                    const p = document.createElement('p');
+                    p.className = 'cs-caption cs-reveal';
+                    p.textContent = text;
+                    parent.appendChild(p);
+                };
+
+                const makeImg = (src, alt, loading = 'lazy') => {
+                    const img = document.createElement('img');
+                    img.src     = buildSrc(src, imgQ);
+                    img.alt     = alt || '';
+                    img.loading = loading;
+                    img.decoding = 'async';
+                    return img;
+                };
+
+                let i = 0;
+                while (i < remaining.length) {
+                    const shot = remaining[i];
+                    const next = remaining[i + 1];
+
+                    // First gallery image always gets the full-width hero treatment
+                    if (i === 0) {
+                        const row = document.createElement('div');
+                        row.className = 'cs-row-full cs-reveal';
+                        row.appendChild(makeImg(shot.src, shot.desc, 'eager'));
+                        gallery.appendChild(row);
+                        addCaption(gallery, shot.desc);
+                        i += 1;
+
+                    // If two remain and we're past the first, pair them
+                    } else if (next && remaining.length - i === 2) {
+                        const row = document.createElement('div');
+                        row.className = 'cs-row-pair cs-reveal';
+                        row.appendChild(makeImg(shot.src, shot.desc));
+                        row.appendChild(makeImg(next.src, next.desc));
+                        gallery.appendChild(row);
+                        addCaption(gallery, shot.desc);
+                        i += 2;
+
+                    // Feature layout: big + small, if next exists
+                    } else if (next && (i % 3 === 1)) {
+                        const row = document.createElement('div');
+                        row.className = 'cs-row-feature cs-reveal';
+                        row.appendChild(makeImg(shot.src, shot.desc));
+                        row.appendChild(makeImg(next.src, next.desc));
+                        gallery.appendChild(row);
+                        addCaption(gallery, next.desc);
+                        i += 2;
+
+                    // Default: full-width
+                    } else {
+                        const row = document.createElement('div');
+                        row.className = 'cs-row-full cs-reveal';
+                        row.appendChild(makeImg(shot.src, shot.desc));
+                        gallery.appendChild(row);
+                        addCaption(gallery, shot.desc);
+                        i += 1;
+                    }
+                }
+
+                // ── Animate panel in
+                gsap.timeline()
+                    .fromTo(this._lightbox, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5, ease: 'expo.inOut',
+                        onComplete: () => this._lightbox.classList.remove('pointer-events-none'),
+                    })
+                    // Hero image scale-up reveal
+                    .fromTo('#cs-hero-img',  { scale: 1.08 }, { scale: 1, duration: 2.0, ease: 'expo.out' }, '-=0.4')
+                    // Hero metadata slides up
+                    .fromTo('.cs-hero-meta', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1.0, ease: 'expo.out' }, '-=1.6');
+
+                // ── Scroll-triggered reveals for gallery rows
+                const revealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            gsap.to(entry.target, {
+                                opacity: 1, y: 0, duration: 0.9,
+                                ease: 'expo.out',
+                                delay: 0.05,
+                            });
+                            revealObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { root: scroll, rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+
+                // Small delay so DOM is painted before we observe
+                requestAnimationFrame(() => {
+                    this._lightbox.querySelectorAll('.cs-reveal').forEach(el => {
+                        // Hero is handled by GSAP timeline above — skip it
+                        if (el.id === 'cs-hero') {
+                            gsap.set(el, { opacity: 1, y: 0 });
+                            return;
+                        }
+                        revealObserver.observe(el);
+                    });
+                });
+
+                // Store observer reference so we can disconnect on leave
+                this._csObserver = revealObserver;
+
+                this._announce(`Viewing project: ${data.t}`);
                 this._trapFocus('lightbox');
             });
 
             bus.on('LIGHTBOX_LEAVE', () => {
+                // Disconnect scroll observer
+                this._csObserver?.disconnect();
+
                 gsap.timeline({
                     onComplete: () => {
                         gsap.set(this._lightbox, { autoAlpha: 0 });
-                        document.getElementById('lightbox-thumbs').innerHTML = '';
+                        this._lightbox.classList.add('pointer-events-none');
+                        // Reset gallery for next open
+                        const g = document.getElementById('cs-gallery');
+                        if (g) g.innerHTML = '';
+                        // Reset all reveal elements
+                        this._lightbox.querySelectorAll('.cs-reveal').forEach(el => {
+                            gsap.set(el, { opacity: 0, y: 40 });
+                        });
                     },
                 })
-                .to(['.lightbox-details', '#lightbox-thumbs button'], { opacity: 0, y: 10, duration: 0.4, stagger: 0.05, ease: 'power2.in' })
-                .to('.lightbox-media-container', { scale: 0.98, opacity: 0, duration: 0.5, ease: 'expo.inOut' }, '-=0.3')
-                .to('.lightbox-bg-title',        { opacity: 0, scale: 0.95, duration: 0.5, ease: 'power2.in' }, '-=0.4')
-                .to(this._lightbox,              { autoAlpha: 0, duration: 0.5 },                               '-=0.3');
+                .to('#cs-scroll',   { opacity: 0, duration: 0.4, ease: 'power2.in' })
+                .to(this._lightbox, { autoAlpha: 0, duration: 0.4, ease: 'expo.inOut' }, '-=0.2');
             });
 
             /* ── MENU ── */
