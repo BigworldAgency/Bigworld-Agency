@@ -1317,7 +1317,7 @@
         </div>
 
         <!-- Scrollable case study content -->
-        <div id="cs-scroll" class="absolute inset-0 overflow-y-scroll pointer-events-auto">
+        <div id="cs-scroll" data-lenis-prevent="true" class="absolute inset-0 overflow-y-scroll pointer-events-auto">
 
             <!-- 1 · HERO IMAGE -->
             <div class="cs-hero cs-reveal" id="cs-hero">
@@ -1492,6 +1492,10 @@
                     src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780605191/Professional_photographer_working_on_a_202606041515_k1iz7s.jpg',
                     desc: 'Craft in practice — Behind the lens with Canon. The discipline of professional image-making, captured in the quiet confidence of a photographer at work.',
                 },
+                {
+                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780605225/Extreme_close-up_of_the_charcoal_202606041512_qtbn15.jpg',
+                    desc: 'Hardware in detail — Extreme macro of the charcoal-finished camera body. Industrial design and tactile engineering rendered with editorial precision.',
+                },
             ],
         },
         {
@@ -1579,10 +1583,6 @@
                 {
                     src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780596024/LUMIN%C3%86_Luxury_Skin_Care._Macro_01_kxtrcv.jpg',
                     desc: 'Luminæ Macro — Extreme close-up product detail photography. Texture, formulation, and craftsmanship made visible at the highest level of visual resolution.',
-                },
-                {
-                    src: 'https://res.cloudinary.com/dsifab7ul/image/upload/q_auto/f_auto/v1780605225/Extreme_close-up_of_the_charcoal_202606041512_qtbn15.jpg',
-                    desc: 'Ingredient story — An extreme macro of the activated charcoal formulation at the core of the Luminæ detox ritual. Raw texture and editorial precision in a single frame.',
                 },
             ],
         },
@@ -2108,7 +2108,7 @@
             );
             this.camera.position.z = 20;
 
-            const dpr = Math.min(window.devicePixelRatio, 2);
+            const dpr = Math.min(window.devicePixelRatio, Context.isMobile ? 1.5 : 2);
             this.renderer = new THREE.WebGLRenderer({
                 /* VERY IMPORTANT: alpha: false explicitly stops the iOS mobile bug 
                    with UnrealBloomPass causing dark rendering boxes. */
@@ -2140,16 +2140,19 @@
             this.composer.addPass(new THREE.RenderPass(this.scene, this.camera));
 
             // SMAA (better quality anti-aliasing than FXAA for scene edges)
-            this.composer.addPass(
-                new THREE.SMAAPass(window.innerWidth * dpr, window.innerHeight * dpr)
-            );
+            if (!Context.isMobile) {
+                this.composer.addPass(
+                    new THREE.SMAAPass(window.innerWidth * dpr, window.innerHeight * dpr)
+                );
+            }
 
             // Bloom — tight threshold so only bright stellar regions glow
+            const bloomRes = Context.isMobile 
+                ? new THREE.Vector2(window.innerWidth * 0.5, window.innerHeight * 0.5)
+                : new THREE.Vector2(window.innerWidth, window.innerHeight);
+                
             this.composer.addPass(
-                new THREE.UnrealBloomPass(
-                    new THREE.Vector2(window.innerWidth, window.innerHeight),
-                    0.35, 0.2, 0.85
-                )
+                new THREE.UnrealBloomPass(bloomRes, 0.35, 0.2, 0.85)
             );
 
             // Film-look post pass
@@ -2491,8 +2494,9 @@
                 const buildSrc = (url, q) => url.includes('cloudinary.com') ? url : url + q;
                 const imgQ = Context.isMobile ? '&w=1200&q=85' : '&w=2000&q=90';
 
-                // ── Reset scroll position
+                // ── Reset scroll state
                 scroll.scrollTop = 0;
+                gsap.set(scroll, { opacity: 1 });
 
                 // ── Populate hero
                 const heroImg = document.getElementById('cs-hero-img');
