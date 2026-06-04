@@ -62,7 +62,9 @@
             scrollbar-width: none;
             -ms-overflow-style: none;
             width: 100vw;
-            overscroll-behavior: none;
+            /* none on desktop kills pull-to-refresh globally;
+               on mobile allow vertical overscroll so iOS rubber-band feels natural */
+            overscroll-behavior-x: none;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
@@ -146,15 +148,19 @@
             user-select: none;
             -webkit-user-select: none;
         }
-        /* Desktop: block all touch (we handle it) */
+
+        /* Desktop (mouse/trackpad): intercept all touch so JS handles drags */
         @media (pointer: fine) {
             #sticky-work, #work-interaction { touch-action: none; }
         }
-        /* Mobile: allow vertical pan so the page scrolls normally;
-           horizontal drags are captured in JS for carousel rotation */
+
+        /* Mobile/touch: allow native vertical pan — JS only intercepts horizontal swipes */
         @media (pointer: coarse), (hover: none) {
-            #sticky-work { touch-action: pan-y; }
-            #work-interaction { touch-action: none; } /* fullscreen overlay — scroll locked anyway */
+            #sticky-work { touch-action: pan-y !important; }
+            /* work-interaction is a fullscreen modal — scroll is already locked when open */
+            #work-interaction { touch-action: none; }
+            /* Hide grab cursor — not relevant on touch devices */
+            #sticky-work, #work-interaction { cursor: default !important; }
         }
 
         /* ── Typography ──────────────────────────────────────── */
@@ -162,8 +168,48 @@
         .text-fluid-h1   { font-size: clamp(3rem, 10vw, 12rem); }
 
         /* ── Overlay helper ──────────────────────────────────── */
-        .overlay-panel { scrollbar-width: none; }
+        .overlay-panel {
+            scrollbar-width: none;
+            /* Smooth momentum scrolling inside overlays on iOS */
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
         .overlay-panel::-webkit-scrollbar { display: none; }
+
+        /* ── Safe-area insets for notched iPhones (X/11/12/13/14/15) ── */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            #footer            { padding-bottom: calc(3rem + env(safe-area-inset-bottom)); }
+            #contact-overlay   { padding-bottom: calc(2rem + env(safe-area-inset-bottom)); }
+            #work-overlay .absolute.bottom-16 { bottom: calc(4rem + env(safe-area-inset-bottom)); }
+            #sticky-work p.explore-text { bottom: calc(4rem + env(safe-area-inset-bottom)); }
+        }
+
+        /* ── Mobile lightbox thumbs — move to bottom strip on phones ── */
+        @media (max-width: 767px) {
+            #lightbox-thumbs {
+                right: auto !important;
+                top: auto !important;
+                bottom: 6rem !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                flex-direction: row !important;
+                gap: 0.5rem !important;
+            }
+            #lightbox-thumbs button {
+                width: 44px !important;
+                height: 44px !important;
+            }
+            /* Lightbox media container — taller on phones */
+            .lightbox-media-container {
+                height: 45vh !important;
+            }
+            /* Lightbox details — stack more cleanly on phone */
+            .lightbox-details {
+                flex-direction: column !important;
+                gap: 1rem !important;
+                padding-bottom: env(safe-area-inset-bottom, 1rem) !important;
+            }
+        }
 
         /* ── Mini earth ──────────────────────────────────────── */
         .mini-earth {
@@ -531,17 +577,17 @@
         <div
             id="work-interaction"
             class="absolute inset-0 w-full h-full pointer-events-auto
-                   select-none cursor-grab active:cursor-grabbing z-[40]"
+                   select-none md:cursor-grab md:active:cursor-grabbing z-[40]"
             tabindex="0"
             role="region"
             aria-label="Interactive 3D Carousel. Drag to rotate, click or press Enter to view project, arrow keys to navigate."
         >
-            <p class="absolute bottom-16 md:bottom-12 left-1/2 -translate-x-1/2 w-max
+            <p class="absolute bottom-20 md:bottom-12 left-1/2 -translate-x-1/2 w-max
                       text-center pointer-events-none z-10 mix-blend-difference
                       work-explore-text opacity-0
                       font-sans text-[10px] md:text-xs tracking-[0.3em] uppercase
                       text-white/80 animate-pulse drop-shadow-md">
-                Drag or use arrows to explore
+                Swipe to explore
             </p>
         </div>
     </div>
@@ -571,11 +617,18 @@
                     justify-center flex-grow pointer-events-auto drop-shadow-2xl">
             <h2 class="font-display text-fluid-h1 leading-[0.8] font-bold tracking-tighter
                        text-white uppercase text-center mb-6 md:mb-10">Let's Talk</h2>
-            <a
-                href="mailto:hello@bigworld.agency"
-                class="hover-target magnetic font-sans text-xl md:text-3xl text-brand-accent
-                       tracking-widest uppercase font-medium hover:text-white transition-colors"
-            >hello@bigworld.agency</a>
+            <div class="flex flex-col items-center gap-4">
+                <a
+                    href="mailto:hello@bigworld.agency"
+                    class="hover-target magnetic font-sans text-xl md:text-3xl text-brand-accent
+                           tracking-widest uppercase font-medium hover:text-white transition-colors"
+                >hello@bigworld.agency</a>
+                <a
+                    href="tel:+13107215276"
+                    class="hover-target magnetic font-sans text-xl md:text-3xl text-brand-accent
+                           tracking-widest uppercase font-medium hover:text-white transition-colors"
+                >+1 310.721.5276</a>
+            </div>
         </div>
 
         <div class="w-full max-w-[1600px] mx-auto flex flex-col md:flex-row
@@ -585,6 +638,102 @@
                       text-white/80 text-center md:text-left font-bold">
                 Operating Globally<br>&copy; 2026 Bigworld Agency
             </p>
+        </div>
+    </div>
+
+    <div
+        id="privacy-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Privacy Policy"
+        class="fixed inset-0 z-[99995] opacity-0 invisible pointer-events-none
+               bg-[#010204]/95 backdrop-blur-xl overflow-y-auto overlay-panel"
+        data-lenis-prevent
+    >
+        <div class="sticky top-0 w-full flex justify-end p-5 md:p-10 z-50 pointer-events-none">
+            <button
+                class="nav-trigger hover-target uppercase tracking-widest text-[10px] md:text-xs
+                       border border-white/20 rounded-full px-6 py-3
+                       hover:bg-white hover:text-black transition-colors
+                       bg-black/50 backdrop-blur-md pointer-events-auto cursor-pointer"
+                aria-label="Close Privacy Policy"
+                data-target="IDLE"
+            >CLOSE</button>
+        </div>
+        <div class="w-full max-w-[900px] mx-auto px-6 md:px-16 pt-12 md:pt-20 pb-32 flex flex-col pointer-events-auto">
+            <p class="reveal-text font-sans text-[10px] md:text-xs tracking-[0.2em] text-brand-accent uppercase mb-6 font-bold">Legal</p>
+            <h2 class="reveal-text font-display text-4xl md:text-6xl leading-[0.9] font-bold tracking-tighter uppercase text-white mb-16 drop-shadow-2xl">Privacy Policy</h2>
+
+            <div class="reveal-text flex flex-col gap-12 font-sans text-sm md:text-base text-white/80 leading-relaxed tracking-wide">
+                <section>
+                    <h3 class="font-display text-xl font-bold uppercase tracking-tight text-white mb-4">1. Introduction</h3>
+                    <p>At Bigworld Agency, we respect the privacy of our clients, partners, and website visitors. This Privacy Policy describes how we collect, use, and protect your personal information when you engage with our digital platforms and creative services. By accessing our website, you agree to the collection and use of information in accordance with this policy.</p>
+                </section>
+                <section>
+                    <h3 class="font-display text-xl font-bold uppercase tracking-tight text-white mb-4">2. Information We Collect</h3>
+                    <p>We may collect personal identification information, such as your name, email address, phone number, and company details when you voluntarily submit inquiries or work with us. Additionally, we automatically collect non-personally identifiable data like IP addresses, browser types, and usage metrics to optimize our user experience.</p>
+                </section>
+                <section>
+                    <h3 class="font-display text-xl font-bold uppercase tracking-tight text-white mb-4">3. How We Use Your Data</h3>
+                    <p>We use the collected information to provide and maintain our services, respond to inquiries, improve our website functionality, and deliver relevant communications. We do not sell, rent, or trade your personal data to third parties. Data is only shared with trusted service providers who assist us in operating our business under strict confidentiality agreements.</p>
+                </section>
+                <section>
+                    <h3 class="font-display text-xl font-bold uppercase tracking-tight text-white mb-4">4. Cookies & Tracking</h3>
+                    <p>Our website utilizes cookies and similar tracking technologies to track activity on our platform and hold certain information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, some portions of our service may not function optimally.</p>
+                </section>
+                <section>
+                    <h3 class="font-display text-xl font-bold uppercase tracking-tight text-white mb-4">5. Contact Us</h3>
+                    <p>If you have any questions or concerns about this Privacy Policy, please contact our privacy team at <a href="mailto:privacy@bigworld.agency" class="text-brand-accent hover:text-white transition-colors underline underline-offset-4 cursor-pointer hover-target">privacy@bigworld.agency</a>.</p>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <div
+        id="terms-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Terms of Service"
+        class="fixed inset-0 z-[99995] opacity-0 invisible pointer-events-none
+               bg-[#010204]/95 backdrop-blur-xl overflow-y-auto overlay-panel"
+        data-lenis-prevent
+    >
+        <div class="sticky top-0 w-full flex justify-end p-5 md:p-10 z-50 pointer-events-none">
+            <button
+                class="nav-trigger hover-target uppercase tracking-widest text-[10px] md:text-xs
+                       border border-white/20 rounded-full px-6 py-3
+                       hover:bg-white hover:text-black transition-colors
+                       bg-black/50 backdrop-blur-md pointer-events-auto cursor-pointer"
+                aria-label="Close Terms of Service"
+                data-target="IDLE"
+            >CLOSE</button>
+        </div>
+        <div class="w-full max-w-[900px] mx-auto px-6 md:px-16 pt-12 md:pt-20 pb-32 flex flex-col pointer-events-auto">
+            <p class="reveal-text font-sans text-[10px] md:text-xs tracking-[0.2em] text-brand-accent uppercase mb-6 font-bold">Legal</p>
+            <h2 class="reveal-text font-display text-4xl md:text-6xl leading-[0.9] font-bold tracking-tighter uppercase text-white mb-16 drop-shadow-2xl">Terms of Service</h2>
+
+            <div class="reveal-text flex flex-col gap-12 font-sans text-sm md:text-base text-white/80 leading-relaxed tracking-wide">
+                <section>
+                    <h3 class="font-display text-xl font-bold uppercase tracking-tight text-white mb-4">1. Acceptance of Terms</h3>
+                    <p>By accessing or using the Bigworld Agency website and services, you agree to be bound by these Terms of Service. If you disagree with any part of these terms, you may not access our site or use our creative services.</p>
+                </section>
+                <section>
+                    <h3 class="font-display text-xl font-bold uppercase tracking-tight text-white mb-4">2. Intellectual Property</h3>
+                    <p>The website and its original content, features, functionalities, designs, and portfolio pieces are owned by Bigworld Agency and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws. No content may be reproduced or distributed without our explicit written consent.</p>
+                </section>
+                <section>
+                    <h3 class="font-display text-xl font-bold uppercase tracking-tight text-white mb-4">3. Use License</h3>
+                    <p>Permission is granted to temporarily download one copy of the materials on our website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title. You may not modify, copy, or use the materials for any commercial purpose or public display.</p>
+                </section>
+                <section>
+                    <h3 class="font-display text-xl font-bold uppercase tracking-tight text-white mb-4">4. Limitation of Liability</h3>
+                    <p>In no event shall Bigworld Agency, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of our services.</p>
+                </section>
+                <section>
+                    <h3 class="font-display text-xl font-bold uppercase tracking-tight text-white mb-4">5. Governing Law</h3>
+                    <p>These Terms shall be governed and construed in accordance with the laws of California, United States, without regard to its conflict of law provisions. Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights.</p>
+                </section>
+            </div>
         </div>
     </div>
 
@@ -768,17 +917,17 @@
                     <div
                         id="sticky-work"
                         class="absolute inset-0 w-full h-full pointer-events-auto
-                               select-none cursor-grab active:cursor-grabbing z-[50]"
+                               select-none md:cursor-grab md:active:cursor-grabbing z-[50]"
                         tabindex="0"
                         role="region"
                         aria-label="Interactive 3D Carousel. Drag to rotate, arrow keys to navigate, Enter to view."
                     >
-                        <p class="absolute bottom-16 md:bottom-12 left-1/2 md:left-[65%]
+                        <p class="absolute bottom-20 md:bottom-12 left-1/2 md:left-[65%]
                                   -translate-x-1/2 w-max text-center pointer-events-none
                                   z-10 mix-blend-difference explore-text opacity-0
                                   font-sans text-[10px] md:text-xs tracking-[0.3em]
                                   uppercase text-white/80 animate-pulse drop-shadow-md">
-                            Drag or use arrows to explore
+                            Swipe to explore
                         </p>
                     </div>
                 </div>
@@ -794,7 +943,7 @@
                             justify-between items-start gap-12 md:gap-0
                             border-t border-white/20 pt-16 drop-shadow-2xl">
 
-                    <div class="w-full md:w-1/2">
+                    <div class="w-full md:w-1/2 flex flex-col items-start gap-2">
                         <p class="font-display text-[15vw] md:text-[8vw] leading-[0.8]
                                   font-bold tracking-tighter text-white uppercase
                                   mb-4 md:mb-6 drop-shadow-lg"
@@ -805,6 +954,12 @@
                                    text-brand-accent tracking-widest uppercase font-medium
                                    hover:text-white transition-colors inline-block"
                         >hello@bigworld.agency</a>
+                        <a
+                            href="tel:+13107215276"
+                            class="hover-target magnetic font-sans text-lg md:text-2xl
+                                   text-brand-accent tracking-widest uppercase font-medium
+                                   hover:text-white transition-colors inline-block"
+                        >+1 310.721.5276</a>
                     </div>
 
                     <div class="w-full md:w-1/2 flex flex-wrap gap-12 md:gap-24
@@ -853,30 +1008,18 @@
                     </div>
                 </div>
 
-                <div class="max-w-[1600px] mx-auto mt-24 md:mt-32 flex flex-col md:flex-row
-                            justify-between items-center md:items-end gap-4 md:gap-0
-                            border-t border-white/20 pt-8">
+                <div class="max-w-[1600px] mx-auto mt-24 md:mt-32 flex flex-col md:flex-row justify-between
+                            items-center md:items-end gap-6 md:gap-0 border-t border-white/20 pt-8">
                     <p class="font-sans text-[9px] md:text-xs tracking-widest
-                              uppercase text-white/50 font-bold">&copy; 2026 Bigworld Agency. All Rights Reserved.</p>
-                    <nav aria-label="Legal" class="flex items-center gap-6">
-                        <a href="#privacy-policy"
-                           id="footer-privacy-link"
-                           class="font-sans text-[9px] md:text-xs tracking-widest uppercase
-                                  text-white/50 font-bold hover:text-white/80 transition-colors
-                                  hover-target"
-                           onclick="document.getElementById('privacy-overlay').classList.add('is-open'); return false;">
-                            Privacy Policy
-                        </a>
-                        <span class="text-white/20 text-[9px]" aria-hidden="true">·</span>
-                        <a href="#terms-of-service"
-                           id="footer-terms-link"
-                           class="font-sans text-[9px] md:text-xs tracking-widest uppercase
-                                  text-white/50 font-bold hover:text-white/80 transition-colors
-                                  hover-target"
-                           onclick="document.getElementById('terms-overlay').classList.add('is-open'); return false;">
-                            Terms of Service
-                        </a>
-                    </nav>
+                              uppercase text-white/50 font-bold">&copy; 2026 Bigworld Agency</p>
+
+                    <div class="flex gap-6 md:gap-12">
+                        <a href="#" class="font-sans text-[9px] md:text-xs tracking-widest uppercase text-white/50 hover:text-brand-accent hover-target transition-colors font-bold" data-target="PRIVACY">Privacy Policy</a>
+                        <a href="#" class="font-sans text-[9px] md:text-xs tracking-widest uppercase text-white/50 hover:text-brand-accent hover-target transition-colors font-bold" data-target="TERMS">Terms of Service</a>
+                    </div>
+
+                    <p class="font-sans text-[9px] md:text-xs tracking-widest
+                              uppercase text-white/50 font-bold">All Rights Reserved.</p>
                 </div>
             </footer>
         </main>
@@ -1077,39 +1220,21 @@
     /* ── Project data ───────────────────────────────────────────── */
     const RAW_DATA = [
         {
-            t: 'Chanel', c: 'CGI & Lighting', client: 'Chanel SA',
-            cover: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop',
+            t: 'Aesop', c: 'Product & Lifestyle', client: 'Aesop Skincare',
+            cover: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop',
             shots: [
-                { src: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop', desc: 'Macro 100 mm. Low-key studio setup highlighting glass refraction and the amber hue of N°5.' },
-                { src: 'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop', desc: 'Backlit silhouette pass. Emphasizing the iconic architectural geometry of the bottle.' },
-                { src: 'https://images.unsplash.com/photo-1616949755610-8c9bbc08f138?auto=format&fit=crop', desc: 'Caustics study. Directional hard light generating organic water-like refractions on a monolithic plinth.' },
+                { src: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop', desc: 'Hero product staging. Organic textures mapping against the iconic amber apothecary bottles.' },
+                { src: 'https://images.unsplash.com/photo-1608248593855-ed4171092780?auto=format&fit=crop', desc: 'Product array alignment. Consistent studio lighting to standardize brand packaging.' },
+                { src: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop', desc: 'Contextual staging. Beautifully curated architectural bathroom environment emphasizing modern utility.' },
             ],
         },
         {
-            t: 'Jack', c: 'Product Photography', client: "Jack Daniel's",
-            cover: 'https://images.unsplash.com/photo-1527281400683-1aae777175f8?auto=format&fit=crop',
+            t: 'Byredo', c: 'E-Commerce Visuals', client: 'Byredo',
+            cover: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop',
             shots: [
-                { src: 'https://images.unsplash.com/photo-1527281400683-1aae777175f8?auto=format&fit=crop', desc: 'High-speed sync. Freezing the liquid dynamics with a dual-strobe setup and amber gels.' },
-                { src: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop', desc: 'Lifestyle integration. Shallow depth of field using an 85 mm f/1.2 to isolate the rocks glass.' },
-                { src: 'https://images.unsplash.com/photo-1582222308710-1c08006d0bf7?auto=format&fit=crop', desc: 'Texture pass. Side-lighting to emphasize the embossed glass typography and condensation.' },
-            ],
-        },
-        {
-            t: 'Porsche', c: 'WebGL Configurator', client: 'Porsche AG',
-            cover: 'https://images.unsplash.com/photo-1503376713356-dd2ce20d3f23?auto=format&fit=crop',
-            shots: [
-                { src: 'https://images.unsplash.com/photo-1503376713356-dd2ce20d3f23?auto=format&fit=crop', desc: 'Front ¾ aggressive crop. Continuous softbox overhead to trace the aerodynamics of the front fascia.' },
-                { src: 'https://images.unsplash.com/photo-1611859328053-3cbc9e934ee0?auto=format&fit=crop', desc: 'Low angle rear. Accentuating the wide stance and LED light bar with specular rim lighting.' },
-                { src: 'https://images.unsplash.com/photo-1580274455191-1c62238fa333?auto=format&fit=crop', desc: 'Interior macro. Highlighting the carbon fibre weave and alcantara stitching via localised micro-LED panels.' },
-            ],
-        },
-        {
-            t: 'Fenty', c: 'Campaign Dev', client: 'Fenty Beauty',
-            cover: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop',
-            shots: [
-                { src: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop', desc: 'Top-down flatlay. High-key diffused lighting to ensure colour accuracy of the palette pigments.' },
-                { src: 'https://images.unsplash.com/photo-1629198688000-71f23e745b6e?auto=format&fit=crop', desc: 'Macro gloss study. Hard directional light creating sharp, specular highlights on the metallic applicator.' },
-                { src: 'https://images.unsplash.com/photo-1587941295254-9442a8b98eb6?auto=format&fit=crop', desc: 'Texture smear. Viscosity demonstration shot with an angled key light to reveal raw product density.' },
+                { src: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop', desc: 'Atmospheric hero. Capturing the warm glow of the wick against the minimalist typography.' },
+                { src: 'https://images.unsplash.com/photo-1582560475093-ba66accbc424?auto=format&fit=crop', desc: 'Still life composition. Neutral tones and stark shadows highlighting the stark brand identity.' },
+                { src: 'https://images.unsplash.com/photo-1602928321679-560bb463f03b?auto=format&fit=crop', desc: 'Macro texture pass. Extreme close-up on the hand-poured black wax and cotton wick.' },
             ],
         },
         {
@@ -1117,17 +1242,8 @@
             cover: 'https://images.unsplash.com/photo-1516961642265-531546e84af2?auto=format&fit=crop',
             shots: [
                 { src: 'https://images.unsplash.com/photo-1516961642265-531546e84af2?auto=format&fit=crop', desc: 'Low-key hero profile. Single strip box catching the knurled metal dials and matte black finish.' },
-                { src: 'https://images.unsplash.com/photo-1546188941-8664ec519c9b?auto=format&fit=crop', desc: 'Lens macro detail. Ring flash illuminates the glass optics without blowing the aperture markings.' },
+                { src: 'https://images.unsplash.com/photo-1516724562728-afc824a36e84?auto=format&fit=crop', desc: 'Lens macro detail. Ring flash illuminates the glass optics without blowing the aperture markings.' },
                 { src: 'https://images.unsplash.com/photo-1502920514313-ce39f00048d9?auto=format&fit=crop', desc: 'Lifestyle in-hand. Street context using natural overcast light to emphasise rugged utility.' },
-            ],
-        },
-        {
-            t: 'Rimowa', c: 'Brand Re-ID', client: 'Rimowa',
-            cover: 'https://images.unsplash.com/photo-1553531580-652231dae097?auto=format&fit=crop',
-            shots: [
-                { src: 'https://images.unsplash.com/photo-1553531580-652231dae097?auto=format&fit=crop', desc: 'Anodised aluminium study. Hard grid-spot lighting to pop the iconic grooved texture.' },
-                { src: 'https://images.unsplash.com/photo-1596522435572-c28308be7385?auto=format&fit=crop', desc: 'Detail macro. Extreme close-up on polycarbonate corner rivets, DoF crushed to f/2.8.' },
-                { src: 'https://images.unsplash.com/photo-1574259461148-5221b2d07520?auto=format&fit=crop', desc: 'Travel context. Desaturated lifestyle composite blurring terminal transit and studio polish.' },
             ],
         },
         {
@@ -1135,17 +1251,44 @@
             cover: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop',
             shots: [
                 { src: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop', desc: 'Hero floating composition. Shadowless rim lighting to detach hardware from the warm background.' },
-                { src: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop', desc: 'Material contrast. Highlighting the intersection of cold brushed steel and warm premium leather.' },
-                { src: 'https://images.unsplash.com/photo-1528148343865-51218c4a13e6?auto=format&fit=crop', desc: 'Acoustic visualisation. Slow-shutter motion blur used practically to imply sound waves.' },
+                { src: 'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?auto=format&fit=crop', desc: 'Material contrast. Highlighting the intersection of cold brushed steel and warm premium leather.' },
+                { src: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop', desc: 'Lifestyle immersion. Soft window light illuminating the ergonomic fit in a home setting.' },
             ],
         },
         {
             t: 'Nike', c: 'Global Drop', client: 'Nike HQ',
-            cover: 'https://images.unsplash.com/photo-1552346154-21d32810baa3?auto=format&fit=crop',
+            cover: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop',
             shots: [
-                { src: 'https://images.unsplash.com/photo-1552346154-21d32810baa3?auto=format&fit=crop', desc: 'Low-angle hero. Forced perspective using a 14 mm lens to exaggerate the Air Max heel unit.' },
-                { src: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop', desc: 'Material breakdown. Split-lighting emphasising the breathability of the Flyknit upper mesh.' },
-                { src: 'https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop', desc: 'Action composite. Stroboscopic sequence capturing the shoe mid-stride on raw concrete.' },
+                { src: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop', desc: 'Low-angle hero. Forced perspective using a 14 mm lens to exaggerate the dynamic silhouette.' },
+                { src: 'https://images.unsplash.com/photo-1605348532760-6753d2c43329?auto=format&fit=crop', desc: 'Material breakdown. Split-lighting emphasising the breathability of the upper mesh and vibrant colorway.' },
+                { src: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop', desc: 'On-foot action. Urban lifestyle shot capturing the shoe mid-stride on raw concrete.' },
+            ],
+        },
+        {
+            t: 'Chanel', c: 'CGI & Lighting', client: 'Chanel SA',
+            cover: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop',
+            shots: [
+                { src: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop', desc: 'Macro 100 mm. Low-key studio setup highlighting glass refraction and the amber hue of N°5.' },
+                { src: 'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop', desc: 'Backlit silhouette pass. Emphasizing the iconic architectural geometry of the bottle.' },
+                { src: 'https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?auto=format&fit=crop', desc: 'Lifestyle integration. Golden hour sunlight capturing a soft, natural aesthetic.' },
+            ],
+        },
+        {
+            t: 'Herman', c: 'Interior Render', client: 'Herman Miller',
+            cover: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?auto=format&fit=crop',
+            shots: [
+                { src: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?auto=format&fit=crop', desc: 'Architectural context. Placing the iconic piece in a modern, light-filled space.' },
+                { src: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop', desc: 'Studio isolated product shot. Highlighting the ergonomic curves and premium upholstery.' },
+                { src: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop', desc: 'Material staging. A warm environment setting off the clean, mid-century modern lines.' },
+            ],
+        },
+        {
+            t: 'Apple', c: 'Tech Visuals', client: 'Apple Inc.',
+            cover: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop',
+            shots: [
+                { src: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop', desc: 'Precision macro. Emphasizing the seamless integration of glass and aerospace-grade metal.' },
+                { src: 'https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?auto=format&fit=crop', desc: 'Interface execution. Soft overhead lighting to showcase the OLED display depth and watch face.' },
+                { src: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop', desc: 'Lifestyle context. On-wrist application bridging the gap between fashion and high-technology.' },
             ],
         },
     ];
@@ -1187,13 +1330,15 @@
     class Engine {
         constructor() {
             this.lenis = new Lenis({
-                duration: Context.reducedMotion ? 0.01 : 1.5,
+                duration: Context.reducedMotion ? 0.01 : (Context.isMobile ? 1.1 : 1.5),
                 easing: t => Math.min(1, 1.001 - 2 ** (-10 * t)),
                 direction: 'vertical',
                 gestureDirection: 'vertical',
                 smooth: !Context.reducedMotion,
-                smoothTouch: false,
-                touchMultiplier: 2,
+                smoothTouch: false,   /* let native iOS scroll handle touch — no jank */
+                touchMultiplier: Context.isMobile ? 1.5 : 2, /* tuned for phone momentum */
+                infinite: false,
+                syncTouch: false,
             });
 
             gsap.registerPlugin(ScrollTrigger);
@@ -1577,7 +1722,6 @@
                         gsap.to(this.hoveredCard.material.uniforms.uHover, { value: 0, duration: 0.4 });
                         gsap.to(this.hoveredCard.position, { y: 0, duration: 0.6, ease: 'power2.out' });
                         this.cursor.setViewMode(false);
-                        // Removing gsap.killTweensOf(phys) prevents freezing inertia abruptly
                     }
                     this.hoveredCard = hit;
                     if (hit) {
@@ -1585,8 +1729,6 @@
                         // Reduced Y pop from 0.8 to 0.4 to prevent raycast slipping
                         gsap.to(hit.position, { y: 0.4, duration: 0.6, ease: 'back.out(1.5)' });
                         this.cursor.setViewMode(true);
-
-                        // Removed erratic auto-rotation of the Earth when hovering a project to stop jitter
                     }
                 }
             }
@@ -2178,6 +2320,40 @@
                 gsap.to('#contact-overlay', { autoAlpha: 0, duration: 0.5, ease: 'expo.inOut' });
             });
 
+            /* ── PRIVACY ── */
+            bus.on('PRIVACY_ENTER', () => {
+                this._lockScroll();
+                gsap.to('#main-nav', { autoAlpha: 0, duration: 0.3 });
+                gsap.to('#privacy-overlay', { autoAlpha: 1, duration: 0.8, ease: 'expo.inOut' });
+                document.getElementById('privacy-overlay').scrollTop = 0;
+                gsap.fromTo('#privacy-overlay .reveal-text',
+                    { y: 30, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.8, stagger: 0.05, ease: 'power3.out', delay: 0.2 }
+                );
+                this._wrapper.setAttribute('inert', '');
+                this._trapFocus('privacy-overlay');
+            });
+            bus.on('PRIVACY_LEAVE', () => {
+                gsap.to('#privacy-overlay', { autoAlpha: 0, duration: 0.5, ease: 'expo.inOut' });
+            });
+
+            /* ── TERMS ── */
+            bus.on('TERMS_ENTER', () => {
+                this._lockScroll();
+                gsap.to('#main-nav', { autoAlpha: 0, duration: 0.3 });
+                gsap.to('#terms-overlay', { autoAlpha: 1, duration: 0.8, ease: 'expo.inOut' });
+                document.getElementById('terms-overlay').scrollTop = 0;
+                gsap.fromTo('#terms-overlay .reveal-text',
+                    { y: 30, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.8, stagger: 0.05, ease: 'power3.out', delay: 0.2 }
+                );
+                this._wrapper.setAttribute('inert', '');
+                this._trapFocus('terms-overlay');
+            });
+            bus.on('TERMS_LEAVE', () => {
+                gsap.to('#terms-overlay', { autoAlpha: 0, duration: 0.5, ease: 'expo.inOut' });
+            });
+
             /* ── IDLE (return home) ── */
             bus.on('IDLE_ENTER', () => {
                 const prev = stateMachine.history.at(-1);
@@ -2345,6 +2521,7 @@
                 const cy = e.clientY ?? e.touches?.[0].clientY ?? 0;
                 AppPhysics.startX = lastX = touchStartX = cx;
                 AppPhysics.startY = lastY = touchStartY = cy;
+
                 if (!Context.isMobile) this.cursor.setScale(0.6);
             };
 
@@ -2374,6 +2551,7 @@
 
                     if (shouldRotate) {
                         if (e.cancelable) e.preventDefault(); // prevent scroll only on horizontal drag
+
                         if (Math.abs(x - AppPhysics.startX) > 8 || Math.abs(y - AppPhysics.startY) > 8)
                             AppPhysics.hasDragged = true;
 
@@ -2549,284 +2727,4 @@
 
     // Boot on DOM ready
     document.addEventListener('DOMContentLoaded', () => { window.app = new App(); });
-    </script>
-
-    <!-- ── Privacy Policy Overlay ─────────────────────────────── -->
-    <div
-        id="privacy-overlay"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Privacy Policy"
-        class="fixed inset-0 z-[9999999] opacity-0 invisible pointer-events-none
-               flex flex-col bg-[#010204]/95 backdrop-blur-xl transition-all duration-500 overlay-panel"
-        data-lenis-prevent
-    >
-        <div class="sticky top-0 w-full flex justify-between items-center
-                    px-6 md:px-16 py-6 border-b border-white/10 bg-[#010204]/80
-                    backdrop-blur-md z-10">
-            <p class="font-display text-lg md:text-xl font-bold uppercase
-                      tracking-tighter text-white">Privacy Policy</p>
-            <button
-                id="privacy-close"
-                class="hover-target uppercase tracking-widest text-[10px] md:text-xs
-                       border border-white/20 rounded-full px-6 py-3
-                       hover:bg-white hover:text-black transition-colors
-                       bg-black/50 backdrop-blur-md cursor-pointer text-white"
-                aria-label="Close Privacy Policy"
-            >CLOSE</button>
-        </div>
-
-        <div class="flex-1 overflow-y-auto px-6 md:px-16 py-12 max-w-[900px] mx-auto w-full">
-            <p class="font-sans text-[10px] md:text-xs tracking-widest uppercase
-                      text-white/40 font-bold mb-8">Effective Date: January 1, 2026</p>
-
-            <div class="flex flex-col gap-10 font-sans text-sm md:text-base text-white/70
-                        leading-relaxed">
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Overview</h2>
-                    <p>Bigworld Agency ("Bigworld," "we," "us," or "our") operates this website
-                       at bigworld.agency. This Privacy Policy describes how we handle information
-                       in connection with your use of our website. We are committed to protecting
-                       your privacy. This site is a portfolio and contact destination — we do not
-                       collect, store, sell, or share any personal data.</p>
-                </section>
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Information We Do Not Collect</h2>
-                    <p>We do not use cookies, tracking pixels, analytics scripts, or any other
-                       technology to collect information about you or your device. We do not
-                       maintain user accounts or require registration to access this site.
-                       No personal data is gathered passively through your visit.</p>
-                </section>
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Contact Submissions</h2>
-                    <p>If you choose to contact us via our email address
-                       (hello@bigworld.agency), any information you voluntarily provide in
-                       that message — such as your name, email address, and project details —
-                       is used solely to respond to your inquiry. We do not store this
-                       information in any database and do not use it for marketing purposes.</p>
-                </section>
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Third-Party Links</h2>
-                    <p>This website may contain links to third-party platforms (such as
-                       Instagram, X/Twitter, and LinkedIn). Once you leave our site, this
-                       Privacy Policy no longer applies. We encourage you to review the privacy
-                       policies of any third-party services you visit.</p>
-                </section>
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Children's Privacy</h2>
-                    <p>This website is not directed to individuals under the age of 13. We do
-                       not knowingly collect any information from children.</p>
-                </section>
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Changes to This Policy</h2>
-                    <p>We may update this Privacy Policy from time to time. Any changes will
-                       be reflected on this page with a revised effective date. Continued use
-                       of the site following any changes constitutes your acceptance of the
-                       updated policy.</p>
-                </section>
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Contact</h2>
-                    <p>Questions about this Privacy Policy? Reach us at
-                       <a href="mailto:hello@bigworld.agency"
-                          class="text-brand-accent hover:text-white transition-colors">
-                           hello@bigworld.agency
-                       </a>.
-                    </p>
-                </section>
-
-            </div>
-
-            <p class="font-sans text-[9px] md:text-xs tracking-widest uppercase
-                      text-white/30 font-bold mt-16 pb-8">
-                &copy; 2026 Bigworld Agency. All Rights Reserved.
-            </p>
-        </div>
-    </div>
-
-    <!-- ── Terms of Service Overlay ───────────────────────────── -->
-    <div
-        id="terms-overlay"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Terms of Service"
-        class="fixed inset-0 z-[9999999] opacity-0 invisible pointer-events-none
-               flex flex-col bg-[#010204]/95 backdrop-blur-xl transition-all duration-500 overlay-panel"
-        data-lenis-prevent
-    >
-        <div class="sticky top-0 w-full flex justify-between items-center
-                    px-6 md:px-16 py-6 border-b border-white/10 bg-[#010204]/80
-                    backdrop-blur-md z-10">
-            <p class="font-display text-lg md:text-xl font-bold uppercase
-                      tracking-tighter text-white">Terms of Service</p>
-            <button
-                id="terms-close"
-                class="hover-target uppercase tracking-widest text-[10px] md:text-xs
-                       border border-white/20 rounded-full px-6 py-3
-                       hover:bg-white hover:text-black transition-colors
-                       bg-black/50 backdrop-blur-md cursor-pointer text-white"
-                aria-label="Close Terms of Service"
-            >CLOSE</button>
-        </div>
-
-        <div class="flex-1 overflow-y-auto px-6 md:px-16 py-12 max-w-[900px] mx-auto w-full">
-            <p class="font-sans text-[10px] md:text-xs tracking-widest uppercase
-                      text-white/40 font-bold mb-8">Effective Date: January 1, 2026</p>
-
-            <div class="flex flex-col gap-10 font-sans text-sm md:text-base text-white/70
-                        leading-relaxed">
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Acceptance of Terms</h2>
-                    <p>By accessing and using the Bigworld Agency website (bigworld.agency),
-                       you agree to be bound by these Terms of Service. If you do not agree
-                       with any part of these terms, please do not use this website.</p>
-                </section>
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Use of This Website</h2>
-                    <p>This website is provided for informational and portfolio purposes only.
-                       You agree to use this site only for lawful purposes and in a manner that
-                       does not infringe upon the rights of others. You may not use this site
-                       to transmit any harmful, offensive, or unlawful material.</p>
-                </section>
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Intellectual Property</h2>
-                    <p>All content on this website — including but not limited to text,
-                       graphics, logos, images, video, and design work — is the exclusive
-                       property of Bigworld Agency or its respective clients and is protected
-                       by applicable intellectual property laws. You may not reproduce,
-                       distribute, or create derivative works from any content on this site
-                       without our prior written consent.</p>
-                </section>
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Client Work & Portfolio</h2>
-                    <p>Work displayed in our portfolio is showcased with the permission of
-                       our clients or under the terms of our service agreements. Client names,
-                       trademarks, and brand identities remain the property of their respective
-                       owners and are used here solely for portfolio attribution purposes.</p>
-                </section>
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Disclaimer of Warranties</h2>
-                    <p>This website is provided on an "as is" and "as available" basis without
-                       warranties of any kind, express or implied. Bigworld Agency makes no
-                       representations regarding the accuracy, completeness, or reliability of
-                       any content on this site.</p>
-                </section>
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Limitation of Liability</h2>
-                    <p>To the fullest extent permitted by law, Bigworld Agency shall not be
-                       liable for any direct, indirect, incidental, special, or consequential
-                       damages arising out of your access to or use of (or inability to use)
-                       this website.</p>
-                </section>
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Third-Party Links</h2>
-                    <p>This site may link to external websites. Bigworld Agency has no control
-                       over the content or practices of third-party sites and assumes no
-                       responsibility for them.</p>
-                </section>
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Governing Law</h2>
-                    <p>These Terms of Service shall be governed by and construed in accordance
-                       with the laws of the State of California, United States, without regard
-                       to its conflict of law provisions.</p>
-                </section>
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Changes to These Terms</h2>
-                    <p>We reserve the right to modify these Terms of Service at any time.
-                       Changes take effect immediately upon posting to this page. Your continued
-                       use of the site following any modification constitutes acceptance of the
-                       updated terms.</p>
-                </section>
-
-                <section>
-                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
-                               tracking-tight text-white mb-4">Contact</h2>
-                    <p>Questions about these Terms? Contact us at
-                       <a href="mailto:hello@bigworld.agency"
-                          class="text-brand-accent hover:text-white transition-colors">
-                           hello@bigworld.agency
-                       </a>.
-                    </p>
-                </section>
-
-            </div>
-
-            <p class="font-sans text-[9px] md:text-xs tracking-widest uppercase
-                      text-white/30 font-bold mt-16 pb-8">
-                &copy; 2026 Bigworld Agency. All Rights Reserved.
-            </p>
-        </div>
-    </div>
-
-    <script>
-    /* ── Legal overlay open / close ──────────────────────────── */
-    (function () {
-        function openLegal(id) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            el.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
-            el.classList.add('opacity-100');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeLegal(id) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            el.classList.add('opacity-0', 'invisible', 'pointer-events-none');
-            el.classList.remove('opacity-100');
-            document.body.style.overflow = '';
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Open via footer links
-            var privacyLink = document.getElementById('footer-privacy-link');
-            var termsLink   = document.getElementById('footer-terms-link');
-            if (privacyLink) privacyLink.addEventListener('click', function (e) { e.preventDefault(); openLegal('privacy-overlay'); });
-            if (termsLink)   termsLink.addEventListener('click',   function (e) { e.preventDefault(); openLegal('terms-overlay'); });
-
-            // Close buttons
-            var privacyClose = document.getElementById('privacy-close');
-            var termsClose   = document.getElementById('terms-close');
-            if (privacyClose) privacyClose.addEventListener('click', function () { closeLegal('privacy-overlay'); });
-            if (termsClose)   termsClose.addEventListener('click',   function () { closeLegal('terms-overlay'); });
-
-            // Close on Escape
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape') {
-                    closeLegal('privacy-overlay');
-                    closeLegal('terms-overlay');
-                }
-            });
-        });
-    }());
     </script></body></html>
