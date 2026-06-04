@@ -355,12 +355,8 @@
         @media (min-width: 768px) { .cs-row-full { padding: 2rem 0; } }
         .cs-row-full img {
             width: 100%;
-            height: clamp(50vw, 60vh, 85vh);
-            object-fit: cover;
+            height: auto;
             display: block;
-        }
-        @media (min-width: 768px) {
-            .cs-row-full img { height: clamp(55vh, 70vh, 90vh); }
         }
 
         /* Two-column pair */
@@ -1013,9 +1009,9 @@
 
             <section
                 id="hero"
-                class="h-screen w-full relative overflow-hidden flex items-start
-                       pt-[20vh] bg-transparent z-[40] pointer-events-none"
-                aria-label="Hero — Hello, we are Bigworld"
+                class="h-[100svh] w-full relative overflow-hidden flex items-end
+                       pb-10 md:pb-16 bg-transparent z-[40] pointer-events-none"
+                aria-label="Hero — Bigworld Agency"
             >
                 <video
                     id="hero-video"
@@ -1028,13 +1024,30 @@
                     <source src="https://res.cloudinary.com/dsifab7ul/video/upload/q_auto,f_auto,w_1080/Bigworld_Agency_Ad_byguwo.mp4" type="video/mp4">
                 </video>
                 <div class="absolute inset-0 bg-black/30 z-0 pointer-events-none" aria-hidden="true"></div>
+                
+                <!-- Bottom Gradient for Text Legibility -->
+                <div class="absolute bottom-0 left-0 w-full h-[60vh] bg-gradient-to-t from-black/90 to-transparent z-0 pointer-events-none"></div>
 
-                <div class="relative z-10 w-full px-5 md:px-10 pointer-events-none drop-shadow-2xl">
-                    <h1 class="font-display text-fluid-hero leading-[0.9] font-bold
-                               tracking-tighter text-white uppercase"
-                        style="text-shadow:0 10px 40px rgba(0,0,0,0.8)">
-                        Hello, we are<br>Bigworld.
-                    </h1>
+                <div class="relative z-10 w-full px-5 md:px-12 flex flex-col md:flex-row justify-between items-end gap-8 pointer-events-none drop-shadow-2xl">
+                    <!-- Bottom Left: Title & Subtitle -->
+                    <div class="flex flex-col text-white flex-1">
+                        <span class="text-[10px] md:text-xs font-sans tracking-[0.2em] uppercase mb-3 text-white/70 font-semibold">
+                            2002 &mdash; 2026
+                        </span>
+                        <h1 class="font-display text-[14vw] md:text-[8vw] lg:text-[7vw] leading-[0.85] font-bold tracking-tighter text-white uppercase relative">
+                            Bigworld Agency<sup class="text-[0.35em] absolute top-[0.1em] ml-1">&reg;</sup>
+                        </h1>
+                        <p class="font-sans text-sm md:text-xl lg:text-2xl mt-4 md:mt-5 text-white/90 font-medium max-w-[80%]">
+                            Full-Service Marketing Agency for Consumer Brands
+                        </p>
+                    </div>
+
+                    <!-- Bottom Right: Positioning Statement -->
+                    <div class="text-white md:max-w-[350px] lg:max-w-[450px]">
+                        <p class="font-sans text-xs md:text-sm lg:text-base leading-relaxed text-white/90 font-medium">
+                            Consumer intelligence meets creative firepower. That's not a tagline. It's how we work.
+                        </p>
+                    </div>
                 </div>
             </section>
 
@@ -1645,6 +1658,13 @@
 
             this.manager.onError = url => console.warn('[AssetManager] Failed:', url);
             this.manager.onLoad  = ()  => bus.emit('ASSETS_LOADED');
+            window.addEventListener('keydown', e => {
+                if (document.body.style.overflow === 'hidden') return;
+                const s = this.phys.state;
+                const step = 200;
+                if (e.key === 'ArrowDown' && s === 'IDLE') { e.preventDefault(); this.lenis.scrollTo(window.scrollY + step, { duration: 1.2 }); }
+                if (e.key === 'ArrowUp'   && s === 'IDLE') { e.preventDefault(); this.lenis.scrollTo(window.scrollY - step, { duration: 1.2 }); }
+            });
         }
 
         load(key, url, sRGB = false) {
@@ -2600,13 +2620,13 @@
 
                 // ── Animate panel in
                 gsap.timeline()
-                    .fromTo(this._lightbox, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5, ease: 'expo.inOut',
+                    .fromTo(this._lightbox, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25, ease: 'power2.out',
                         onComplete: () => this._lightbox.classList.remove('pointer-events-none'),
                     })
                     // Hero image scale-up reveal
-                    .fromTo('#cs-hero-img',  { scale: 1.08 }, { scale: 1, duration: 2.0, ease: 'expo.out' }, '-=0.4')
+                    .fromTo('#cs-hero-img',  { scale: 1.05 }, { scale: 1, duration: 1.2, ease: 'power2.out' }, '-=0.15')
                     // Hero metadata slides up
-                    .fromTo('.cs-hero-meta', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1.0, ease: 'expo.out' }, '-=1.6');
+                    .fromTo('.cs-hero-meta', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }, '-=1.0');
 
                 // ── Scroll-triggered reveals for gallery rows
                 const revealObserver = new IntersectionObserver((entries) => {
@@ -2658,8 +2678,8 @@
                         });
                     },
                 })
-                .to('#cs-scroll',   { opacity: 0, duration: 0.4, ease: 'power2.in' })
-                .to(this._lightbox, { autoAlpha: 0, duration: 0.4, ease: 'expo.inOut' }, '-=0.2');
+                .to('#cs-scroll',   { opacity: 0, duration: 0.2, ease: 'power2.in' })
+                .to(this._lightbox, { autoAlpha: 0, duration: 0.2, ease: 'power2.inOut' }, '-=0.1');
             });
 
             /* ── MENU ── */
@@ -2708,10 +2728,10 @@
             /* ── WORK ── */
             bus.on('WORK_ENTER', () => {
                 this._lockScroll();
-                gsap.to('#main-nav', { autoAlpha: 0, duration: 0.3 });
-                gsap.to('#main-container', { autoAlpha: 0, duration: 0.6 });
-                gsap.to('#work-overlay',   { autoAlpha: 1, duration: 0.8, ease: 'expo.inOut' });
-                gsap.to('.reel-header-bar', { autoAlpha: 1, duration: 0.8, ease: 'expo.inOut' });
+                gsap.to('#main-nav', { autoAlpha: 0, duration: 0.2 });
+                gsap.to('#main-container', { autoAlpha: 0, duration: 0.3 });
+                gsap.to('#work-overlay',   { autoAlpha: 1, duration: 0.4, ease: 'power2.inOut' });
+                gsap.to('.reel-header-bar', { autoAlpha: 1, duration: 0.4, ease: 'power2.inOut' });
 
                 if (isIOSMobile) {
                     document.getElementById('work-interaction').style.display = 'none';
@@ -2744,30 +2764,30 @@
                     gsap.to(AppPhysics.intro, {
                         scale: isDesktop ? 0.55 : 0.52,
                         x: 0, y: 0, rotY: 0, rotX: -15, spaceScale: 1, lightBlast: 0,
-                        duration: 1.5, ease: 'expo.out', overwrite: 'auto',
+                        duration: 0.8, ease: 'power2.out', overwrite: 'auto',
                     });
 
                     app.carousel.cards.forEach((mesh, i) => {
                         gsap.to(mesh.userData.animState, {
                             progress: 1,
-                            duration: 1.6,
-                            delay: Context.reducedMotion ? 0 : 0.2 + i * 0.04,
-                            ease: 'expo.out',
+                            duration: 0.8,
+                            delay: Context.reducedMotion ? 0 : 0.1 + i * 0.02,
+                            ease: 'power2.out',
                             overwrite: 'auto',
                         });
                     });
 
-                    gsap.to('.work-explore-text', { opacity: 1, duration: 1, delay: 1.0 });
+                    gsap.to('.work-explore-text', { opacity: 1, duration: 0.5, delay: 0.5 });
                     this._wrapper.setAttribute('inert', '');
                     this._trapFocus('work-overlay');
                 }
             });
 
             bus.on('WORK_LEAVE', () => {
-                gsap.to('#work-overlay',   { autoAlpha: 0, duration: 0.5, ease: 'expo.inOut' });
-                gsap.to('.reel-header-bar', { autoAlpha: 0, duration: 0.3 });
-                gsap.to('.work-explore-text', { opacity: 0, duration: 0.3 });
-                gsap.to('#main-container', { autoAlpha: 1, duration: 0.6 });
+                gsap.to('#work-overlay',   { autoAlpha: 0, duration: 0.25, ease: 'power2.inOut' });
+                gsap.to('.reel-header-bar', { autoAlpha: 0, duration: 0.2 });
+                gsap.to('.work-explore-text', { opacity: 0, duration: 0.2 });
+                gsap.to('#main-container', { autoAlpha: 1, duration: 0.3 });
 
                 if (isIOSMobile) {
                     setTimeout(() => {
