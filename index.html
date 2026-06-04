@@ -1035,7 +1035,7 @@
                             2002 &mdash; 2026
                         </span>
                         <h1 class="font-display text-[14vw] md:text-[8vw] lg:text-[7vw] leading-[0.85] font-bold tracking-tighter text-white uppercase relative">
-                            Bigworld Agency<sup class="text-[0.35em] absolute top-[0.1em] ml-1">&reg;</sup>
+                            Bigworld Agency
                         </h1>
                         <p class="font-sans text-sm md:text-xl lg:text-2xl mt-4 md:mt-5 text-white/90 font-medium max-w-[80%]">
                             Full-Service Marketing Agency for Consumer Brands
@@ -1045,7 +1045,7 @@
                     <!-- Bottom Right: Positioning Statement -->
                     <div class="text-white md:max-w-[350px] lg:max-w-[450px]">
                         <p class="font-sans text-xs md:text-sm lg:text-base leading-relaxed text-white/90 font-medium">
-                            Consumer intelligence meets creative firepower. That's not a tagline. It's how we work.
+                            You bring the product we build the universe
                         </p>
                     </div>
                 </div>
@@ -1330,7 +1330,7 @@
         </div>
 
         <!-- Scrollable case study content -->
-        <div id="cs-scroll" data-lenis-prevent="true" class="absolute inset-0 overflow-y-scroll pointer-events-auto">
+        <div id="cs-scroll" data-lenis-prevent="true" class="absolute inset-0 overflow-y-scroll pointer-events-auto" tabindex="0" aria-label="Project Case Study" role="region">
 
             <!-- 1 · HERO IMAGE -->
             <div class="cs-hero cs-reveal" id="cs-hero">
@@ -1658,13 +1658,6 @@
 
             this.manager.onError = url => console.warn('[AssetManager] Failed:', url);
             this.manager.onLoad  = ()  => bus.emit('ASSETS_LOADED');
-            window.addEventListener('keydown', e => {
-                if (document.body.style.overflow === 'hidden') return;
-                const s = this.phys.state;
-                const step = 200;
-                if (e.key === 'ArrowDown' && s === 'IDLE') { e.preventDefault(); this.lenis.scrollTo(window.scrollY + step, { duration: 1.2 }); }
-                if (e.key === 'ArrowUp'   && s === 'IDLE') { e.preventDefault(); this.lenis.scrollTo(window.scrollY - step, { duration: 1.2 }); }
-            });
         }
 
         load(key, url, sRGB = false) {
@@ -1713,6 +1706,17 @@
 
         _handleKey(e) {
             const s = stateMachine.current;
+
+            // Route arrow keys to #cs-scroll if LIGHTBOX is open
+            if (s === 'LIGHTBOX') {
+                const scrollContainer = document.getElementById('cs-scroll');
+                if (!scrollContainer) return;
+                const step = 200;
+                if (e.key === 'ArrowDown') { e.preventDefault(); scrollContainer.scrollBy({ top: step, behavior: 'smooth' }); }
+                if (e.key === 'ArrowUp')   { e.preventDefault(); scrollContainer.scrollBy({ top: -step, behavior: 'smooth' }); }
+                return;
+            }
+
             if (s !== 'IDLE' && s !== 'WORK') return;
 
             const step = window.innerHeight * 0.3;
