@@ -1711,9 +1711,30 @@
             if (s === 'LIGHTBOX') {
                 const scrollContainer = document.getElementById('cs-scroll');
                 if (!scrollContainer) return;
-                const step = 200;
-                if (e.key === 'ArrowDown') { e.preventDefault(); scrollContainer.scrollBy({ top: step, behavior: 'smooth' }); }
-                if (e.key === 'ArrowUp')   { e.preventDefault(); scrollContainer.scrollBy({ top: -step, behavior: 'smooth' }); }
+                
+                const step = window.innerHeight * 0.4;
+                if (!this._lbScrollTarget || !gsap.isTweening(scrollContainer)) {
+                    this._lbScrollTarget = scrollContainer.scrollTop;
+                }
+                
+                if (e.key === 'ArrowDown') { 
+                    e.preventDefault(); 
+                    this._lbScrollTarget += step;
+                } else if (e.key === 'ArrowUp') { 
+                    e.preventDefault(); 
+                    this._lbScrollTarget -= step;
+                } else {
+                    return;
+                }
+                
+                this._lbScrollTarget = Math.max(0, Math.min(this._lbScrollTarget, scrollContainer.scrollHeight - scrollContainer.clientHeight));
+                
+                gsap.to(scrollContainer, { 
+                    scrollTop: this._lbScrollTarget, 
+                    duration: 1.2, 
+                    ease: 'expo.out', 
+                    overwrite: 'auto' 
+                });
                 return;
             }
 
