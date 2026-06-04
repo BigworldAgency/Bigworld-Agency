@@ -309,7 +309,7 @@
         role="dialog"
         aria-modal="true"
         aria-label="Global navigation"
-        class="fixed inset-0 z-[99998] opacity-0 invisible pointer-events-none
+        class="fixed inset-0 z-[99998] opacity-0 invisible
                bg-[#010204]/60 backdrop-blur-xl
                flex flex-col md:flex-row overflow-hidden overlay-panel"
     >
@@ -407,7 +407,7 @@
         role="dialog"
         aria-modal="true"
         aria-label="About Us"
-        class="fixed inset-0 z-[99995] opacity-0 invisible pointer-events-none
+        class="fixed inset-0 z-[99995] opacity-0 invisible
                bg-[#010204]/60 backdrop-blur-xl overflow-y-auto overlay-panel"
         data-lenis-prevent
     >
@@ -551,10 +551,10 @@
         role="dialog"
         aria-modal="true"
         aria-label="Selected Works — Interactive 3D Gallery"
-        class="fixed inset-0 z-[99995] opacity-0 invisible pointer-events-none
+        class="fixed inset-0 z-[99995] opacity-0 invisible
                flex flex-col overflow-hidden overlay-panel"
     >
-        <div class="absolute inset-0 bg-gradient-to-b from-[#010204]/80 via-transparent
+        <div class="absolute inset-0 bg-gradient-to-b from-[#010204]/80 via-[#010204]/0
                     to-[#010204]/80 pointer-events-none" aria-hidden="true"></div>
 
         <div class="w-full flex justify-between p-5 md:p-10 z-50 absolute top-0 pointer-events-none">
@@ -597,7 +597,7 @@
         role="dialog"
         aria-modal="true"
         aria-label="Contact Information"
-        class="fixed inset-0 z-[99995] opacity-0 invisible pointer-events-none
+        class="fixed inset-0 z-[99995] opacity-0 invisible
                flex flex-col justify-between pt-[15vh] pb-8 md:pb-10 px-6 md:px-10
                overflow-hidden bg-[#010204]/60 backdrop-blur-xl overlay-panel"
     >
@@ -646,7 +646,7 @@
         role="dialog"
         aria-modal="true"
         aria-label="Privacy Policy"
-        class="fixed inset-0 z-[99995] opacity-0 invisible pointer-events-none
+        class="fixed inset-0 z-[99995] opacity-0 invisible
                bg-[#010204]/95 backdrop-blur-xl overflow-y-auto overlay-panel"
         data-lenis-prevent
     >
@@ -694,7 +694,7 @@
         role="dialog"
         aria-modal="true"
         aria-label="Terms of Service"
-        class="fixed inset-0 z-[99995] opacity-0 invisible pointer-events-none
+        class="fixed inset-0 z-[99995] opacity-0 invisible
                bg-[#010204]/95 backdrop-blur-xl overflow-y-auto overlay-panel"
         data-lenis-prevent
     >
@@ -1214,6 +1214,7 @@
             friction: Context.isMobile ? 0.92 : 0.96,
             targetZoom: 0.75, // Updated default sphere zoom
             currentZoom: 0.75, // Updated default sphere zoom
+            smoothedOffset: 0,
         },
     };
 
@@ -1515,7 +1516,7 @@
             this.scene.add(this.group);
 
             this.cards      = [];
-            this.radius     = Context.isMobile ? 7.2 : 8.4;
+            this.radius     = Context.isMobile ? 8.0 : 8.4;
             this.raycaster  = new THREE.Raycaster();
             this._mouse     = new THREE.Vector2();
             this.hoveredCard = null;
@@ -1533,12 +1534,12 @@
 
         /* Build card meshes ──────────────────────────────────────── */
         _buildCards() {
-            const w = Context.isMobile ? 3.2 : 4.8;
-            const h = Context.isMobile ? 4.8 : 7.2;
+            const w = Context.isMobile ? 4.0 : 4.8;
+            const h = Context.isMobile ? 6.0 : 7.2;
             const geo = new THREE.PlaneGeometry(w, h, 32, 32);
             this._sharedGeo = geo; // kept for disposal
 
-            const suffix = Context.isMobile ? '&w=800&q=80' : '&w=1600&q=90';
+            const suffix = Context.isMobile ? '&w=1200&q=90' : '&w=1600&q=90';
 
             RAW_DATA.forEach((data, i) => {
                 const angle = (i / RAW_DATA.length) * Math.PI * 2;
@@ -2468,7 +2469,10 @@
             gsap.ticker.add(time => {
                 const stickyEl = document.getElementById('sticky-work');
                 const rawOffset = stickyEl?.getBoundingClientRect().top ?? 0;
-                const offset    = stateMachine.current === 'WORK' ? 0 : rawOffset;
+                const targetOffset = stateMachine.current === 'WORK' ? 0 : rawOffset;
+                
+                AppPhysics.physics.smoothedOffset += (targetOffset - AppPhysics.physics.smoothedOffset) * 0.15;
+                const offset = AppPhysics.physics.smoothedOffset;
 
                 const s = stateMachine.current;
                 if (s === 'IDLE' || s === 'WORK') {
