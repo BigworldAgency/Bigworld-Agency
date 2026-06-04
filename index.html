@@ -591,7 +591,7 @@
             </p>
         </div>
 
-        <div id="mobile-reel" class="hidden absolute inset-0 w-full h-full z-40 overflow-y-auto pt-32 pb-24 px-6 pointer-events-auto bg-[#010204]">
+        <div id="mobile-reel" data-lenis-prevent class="hidden absolute inset-0 w-full h-full z-40 overflow-y-auto pt-32 pb-24 px-6 pointer-events-auto bg-[#010204] overlay-panel">
             <div class="flex flex-col gap-16 w-full max-w-md mx-auto" id="mobile-reel-container">
                 <!-- populated by JS dynamically based on device -->
             </div>
@@ -2637,12 +2637,12 @@
                             AppPhysics.hasDragged = true;
 
                         const sx = Context.isMobile ? 0.15 : 0.10;
-                        const sy = Context.isMobile ? 0.12 : 0.08;
+                        const sy = Context.isMobile ? 0 : 0.08;
 
                         AppPhysics.physics.targetRotY      += dx * sx;
                         AppPhysics.physics.rotVelY          = dx * 0.004;
                         AppPhysics.physics.targetEarthRotX += dy * sy;
-                        AppPhysics.physics.rotEarthVelX     = dy * 0.002;
+                        AppPhysics.physics.rotEarthVelX     = dy * (Context.isMobile ? 0 : 0.002);
                     } else if (touchDirectionLocked === 'v') {
                         // Vertical — release drag so Lenis/native scroll takes over
                         AppPhysics.isDragging = false;
