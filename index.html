@@ -1,3 +1,4 @@
+``html
 <!DOCTYPE html><html lang="en" class="antialiased"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -48,7 +49,7 @@
             --radius-btn: 9999px;
         }
 
-        /* ── Resets ─────────────────────────────────────────── */
+        /* ââ Resets âââââââââââââââââââââââââââââââââââââââââââ */
         *, *::before, *::after {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
@@ -70,13 +71,13 @@
         }
         body::-webkit-scrollbar { display: none; }
 
-        /* Remove all focus rings — handled via JS / custom cursor */
+        /* Remove all focus rings â handled via JS / custom cursor */
         *:focus, *:focus-visible {
             outline: none !important;
             box-shadow: none !important;
         }
 
-        /* ── Custom Cursor (pointer-capable devices only) ───── */
+        /* ââ Custom Cursor (pointer-capable devices only) âââââ */
         @media (pointer: fine) { body, html { cursor: none !important; } }
         @media (pointer: coarse), (hover: none) {
             body, html { cursor: auto !important; }
@@ -90,12 +91,12 @@
             background-color: #fff;
             border-radius: 50%;
             pointer-events: none;
-            z-index: 2147483647; /* max int — always on top */
+            z-index: 2147483647; /* max int â always on top */
             mix-blend-mode: difference;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Hardware-accelerated transform only — avoids layout thrash */
+            /* Hardware-accelerated transform only â avoids layout thrash */
             will-change: transform;
             transition:
                 width  0.4s var(--ease-out-expo),
@@ -135,13 +136,13 @@
         .cursor--view #cursor-text { opacity: 1; color: white; }
         .cursor--lens #cursor-text { opacity: 0 !important; }
 
-        /* ── Lenis ───────────────────────────────────────────── */
+        /* ââ Lenis âââââââââââââââââââââââââââââââââââââââââââââ */
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto; }
         .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
         .lenis.lenis-stopped { overflow: hidden; }
 
-        /* ── Interactive areas ───────────────────────────────── */
+        /* ââ Interactive areas âââââââââââââââââââââââââââââââââ */
         button, a, .hover-target { touch-action: manipulation; }
         #sticky-work, #work-interaction {
             outline: none;
@@ -154,20 +155,20 @@
             #sticky-work, #work-interaction { touch-action: none; }
         }
 
-        /* Mobile/touch: allow native vertical pan — JS only intercepts horizontal swipes */
+        /* Mobile/touch: allow native vertical pan â JS only intercepts horizontal swipes */
         @media (pointer: coarse), (hover: none) {
             #sticky-work { touch-action: pan-y !important; }
-            /* work-interaction is a fullscreen modal — scroll is already locked when open */
+            /* work-interaction is a fullscreen modal â scroll is already locked when open */
             #work-interaction { touch-action: none; }
-            /* Hide grab cursor — not relevant on touch devices */
+            /* Hide grab cursor â not relevant on touch devices */
             #sticky-work, #work-interaction { cursor: default !important; }
         }
 
-        /* ── Typography ──────────────────────────────────────── */
+        /* ââ Typography ââââââââââââââââââââââââââââââââââââââââ */
         .text-fluid-hero { font-size: clamp(2.5rem, 8vw, 6rem); }
         .text-fluid-h1   { font-size: clamp(3rem, 10vw, 12rem); }
 
-        /* ── Overlay helper ──────────────────────────────────── */
+        /* ââ Overlay helper ââââââââââââââââââââââââââââââââââââ */
         .overlay-panel {
             scrollbar-width: none;
             /* Smooth momentum scrolling inside overlays on iOS */
@@ -176,7 +177,7 @@
         }
         .overlay-panel::-webkit-scrollbar { display: none; }
 
-        /* ── Safe-area insets for notched iPhones (X/11/12/13/14/15) ── */
+        /* ââ Safe-area insets for notched iPhones (X/11/12/13/14/15) ââ */
         @supports (padding-bottom: env(safe-area-inset-bottom)) {
             #footer            { padding-bottom: calc(3rem + env(safe-area-inset-bottom)); }
             #contact-overlay   { padding-bottom: calc(2rem + env(safe-area-inset-bottom)); }
@@ -184,7 +185,7 @@
             #sticky-work p.explore-text { bottom: calc(4rem + env(safe-area-inset-bottom)); }
         }
 
-        /* ── Mobile lightbox thumbs — move to bottom strip on phones ── */
+        /* ââ Mobile lightbox thumbs â move to bottom strip on phones ââ */
         @media (max-width: 767px) {
             #lightbox-thumbs {
                 right: auto !important;
@@ -199,11 +200,11 @@
                 width: 44px !important;
                 height: 44px !important;
             }
-            /* Lightbox media container — taller on phones */
+            /* Lightbox media container â taller on phones */
             .lightbox-media-container {
                 height: 45vh !important;
             }
-            /* Lightbox details — stack more cleanly on phone */
+            /* Lightbox details â stack more cleanly on phone */
             .lightbox-details {
                 flex-direction: column !important;
                 gap: 1rem !important;
@@ -211,7 +212,7 @@
             }
         }
 
-        /* ── Mini earth ──────────────────────────────────────── */
+        /* ââ Mini earth ââââââââââââââââââââââââââââââââââââââââ */
         .mini-earth {
             width: 36px; height: 36px;
             border-radius: 50%;
@@ -242,7 +243,7 @@
             to   { background-position: 200% center; }
         }
 
-        /* ── Award logos ─────────────────────────────────────── */
+        /* ââ Award logos âââââââââââââââââââââââââââââââââââââââ */
         .award-logo svg,
         .award-logo img {
             width: 100%; height: 100%;
@@ -258,7 +259,7 @@
             transform: scale(1.08) translateY(-4px);
         }
 
-        /* ── Reduced-motion ──────────────────────────────────── */
+        /* ââ Reduced-motion ââââââââââââââââââââââââââââââââââââ */
         @media (prefers-reduced-motion: reduce) {
             *, ::before, ::after {
                 animation-duration: 0.01ms !important;
@@ -287,7 +288,7 @@
                    pointer-events-auto mix-blend-difference text-white"
             aria-label="About Bigworld Agency"
             data-target="AGENCY"
-        >BIGWORLD©</button>
+        >BIGWORLDÂ©</button>
 
         <div class="menu-toggle-wrapper pointer-events-auto">
             <button
@@ -466,7 +467,7 @@
                     <h3 class="font-display text-4xl md:text-5xl font-bold uppercase
                                tracking-tighter mb-8">What We Do</h3>
                     <p class="font-sans text-base md:text-lg text-white/80 leading-relaxed max-w-4xl mb-12">
-                        We’re a brand management agency that helps companies build stronger, more recognizable brands. Our work covers everything from creative development and strategy to production and execution. Over the years, we’ve partnered with brands across entertainment, food and beverage, sports, gaming, and consumer products, giving us experience in a wide range of industries. That diverse background allows us to bring fresh perspectives, proven ideas, and creative solutions from different markets to create campaigns that connect with people and help brands stand out.
+                        Weâre a brand management agency that helps companies build stronger, more recognizable brands. Our work covers everything from creative development and strategy to production and execution. Over the years, weâve partnered with brands across entertainment, food and beverage, sports, gaming, and consumer products, giving us experience in a wide range of industries. That diverse background allows us to bring fresh perspectives, proven ideas, and creative solutions from different markets to create campaigns that connect with people and help brands stand out.
                     </p>
                     <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-6 gap-x-8">
                         <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Research & Auditing</li>
@@ -550,7 +551,7 @@
         id="work-overlay"
         role="dialog"
         aria-modal="true"
-        aria-label="Selected Works — Interactive 3D Gallery"
+        aria-label="Selected Works â Interactive 3D Gallery"
         class="fixed inset-0 z-[99995] opacity-0 invisible
                flex flex-col overflow-hidden overlay-panel"
     >
@@ -752,7 +753,7 @@
                 id="hero"
                 class="h-screen w-full relative overflow-hidden flex items-start
                        pt-[20vh] bg-transparent z-[40] pointer-events-none"
-                aria-label="Hero — Hello, we are Bigworld"
+                aria-label="Hero â Hello, we are Bigworld"
             >
                 <video
                     id="hero-video"
@@ -803,7 +804,7 @@
                             aria-label="View all projects"
                         >
                             ALL PROJECTS
-                            <span class="text-brand-accent text-lg leading-none" aria-hidden="true">→</span>
+                            <span class="text-brand-accent text-lg leading-none" aria-hidden="true">â</span>
                         </button>
                     </div>
 
@@ -817,7 +818,7 @@
                                      loading="lazy" width="64" height="64">
                             </div>
                             <p class="font-sans text-[8px] md:text-[9px] tracking-widest uppercase
-                                      font-bold text-white leading-relaxed">Emmy® Award<br>Winner</p>
+                                      font-bold text-white leading-relaxed">EmmyÂ® Award<br>Winner</p>
                         </li>
                         <li class="flex flex-col items-center gap-4 award-logo w-full">
                             <div class="w-16 h-16 flex justify-center items-center" aria-hidden="true">
@@ -1109,7 +1110,7 @@
                 >
                     View Live
                     <span class="text-brand-accent text-lg leading-none block -rotate-45"
-                          aria-hidden="true">→</span>
+                          aria-hidden="true">â</span>
                 </a>
             </div>
 
@@ -1137,9 +1138,9 @@
     <script>
     'use strict';
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
        UTILITIES
-    ═══════════════════════════════════════════════════════════════ */
+    âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
     /** Minimal publish-subscribe event bus. */
     class EventEmitter {
@@ -1175,7 +1176,7 @@
     }
     const stateMachine = new StateMachine();
 
-    /* ── Device / preference detection ────────────────────────── */
+    /* ââ Device / preference detection ââââââââââââââââââââââââââ */
     const isTouchDevice = () =>
         window.innerWidth <= 768 ||
         'ontouchstart' in window ||
@@ -1189,7 +1190,7 @@
         reducedMotion: prefersReducedMotion,
     });
 
-    /* ── Shared physics state ───────────────────────────────────── */
+    /* ââ Shared physics state âââââââââââââââââââââââââââââââââââââ */
     const AppPhysics = {
         isDragging: false,
         hasDragged:  false,
@@ -1221,7 +1222,7 @@
         },
     };
 
-    /* ── Project data ───────────────────────────────────────────── */
+    /* ââ Project data âââââââââââââââââââââââââââââââââââââââââââââ */
     const RAW_DATA = [
         {
             t: 'Aesop', c: 'Product & Lifestyle', client: 'Aesop Skincare',
@@ -1272,7 +1273,7 @@
             t: 'Chanel', c: 'CGI & Lighting', client: 'Chanel SA',
             cover: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop',
             shots: [
-                { src: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop', desc: 'Macro 100 mm. Low-key studio setup highlighting glass refraction and the amber hue of N°5.' },
+                { src: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop', desc: 'Macro 100 mm. Low-key studio setup highlighting glass refraction and the amber hue of NÂ°5.' },
                 { src: 'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop', desc: 'Backlit silhouette pass. Emphasizing the iconic architectural geometry of the bottle.' },
                 { src: 'https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?auto=format&fit=crop', desc: 'Lifestyle integration. Golden hour sunlight capturing a soft, natural aesthetic.' },
             ],
@@ -1297,9 +1298,9 @@
         },
     ];
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
        ASSET MANAGER
-    ═══════════════════════════════════════════════════════════════ */
+    âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
     class AssetManager {
         #textures = new Map();
 
@@ -1328,9 +1329,9 @@
         }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
        ENGINE (Lenis + GSAP ScrollTrigger + keyboard)
-    ═══════════════════════════════════════════════════════════════ */
+    âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
     class Engine {
         constructor() {
             this.lenis = new Lenis({
@@ -1339,7 +1340,7 @@
                 direction: 'vertical',
                 gestureDirection: 'vertical',
                 smooth: !Context.reducedMotion,
-                smoothTouch: false,   /* let native iOS scroll handle touch — no jank */
+                smoothTouch: false,   /* let native iOS scroll handle touch â no jank */
                 touchMultiplier: Context.isMobile ? 1.5 : 2, /* tuned for phone momentum */
                 infinite: false,
                 syncTouch: false,
@@ -1381,9 +1382,9 @@
         }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
        CURSOR MANAGER
-    ═══════════════════════════════════════════════════════════════ */
+    âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
     class CursorManager {
         constructor() {
             this._el = document.getElementById('cursor');
@@ -1452,10 +1453,10 @@
         }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
        CUSTOM POST-PROCESSING: CINEMATIC SHADER
        (chromatic aberration + filmic grain + shadow tint)
-    ═══════════════════════════════════════════════════════════════ */
+    âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
     const CinematicShader = {
         uniforms: {
             tDiffuse: { value: null },
@@ -1483,7 +1484,7 @@
                 vec2 uv = vUv;
                 vec2 offset = uAmount * (uv - 0.5);
 
-                /* Chromatic aberration — split R/B channels */
+                /* Chromatic aberration â split R/B channels */
                 float r = texture2D(tDiffuse, uv + offset).r;
                 float g = texture2D(tDiffuse, uv).g;
                 float b = texture2D(tDiffuse, uv - offset).b;
@@ -1505,9 +1506,9 @@
         `,
     };
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
        WEBGL CAROUSEL
-    ═══════════════════════════════════════════════════════════════ */
+    âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
     class WebGLCarousel {
         constructor(scene, cursor, assets, camera) {
             this.scene  = scene;
@@ -1535,7 +1536,7 @@
             this._unsubOpen = bus.on('OPEN_CENTER_CARD', () => this._openFrontCard());
         }
 
-        /* Build card meshes ──────────────────────────────────────── */
+        /* Build card meshes ââââââââââââââââââââââââââââââââââââââââ */
         _buildCards() {
             const w = Context.isMobile ? 4.0 : 4.8;
             const h = Context.isMobile ? 6.0 : 7.2;
@@ -1606,7 +1607,7 @@
             });
         }
 
-        /* Pointer events ─────────────────────────────────────────── */
+        /* Pointer events âââââââââââââââââââââââââââââââââââââââââââ */
         _bindPointer() {
             const targets = [
                 document.getElementById('sticky-work'),
@@ -1672,7 +1673,7 @@
             if (best && maxZ > 0.8) this._handleClick(best);
         }
 
-        /* Per-frame update ───────────────────────────────────────── */
+        /* Per-frame update âââââââââââââââââââââââââââââââââââââââââ */
         update(camera, phys, intro, time, earthMesh) {
             if (!earthMesh) return;
 
@@ -1756,9 +1757,9 @@
         }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
        CINEMATIC PIPELINE (Three.js + post-processing)
-    ═══════════════════════════════════════════════════════════════ */
+    âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
     class CinematicPipeline {
         constructor(assets) {
             this.assets    = assets;
@@ -1807,7 +1808,7 @@
                 new THREE.SMAAPass(window.innerWidth * dpr, window.innerHeight * dpr)
             );
 
-            // Bloom — tight threshold so only bright stellar regions glow
+            // Bloom â tight threshold so only bright stellar regions glow
             this.composer.addPass(
                 new THREE.UnrealBloomPass(
                     new THREE.Vector2(window.innerWidth, window.innerHeight),
@@ -1825,7 +1826,7 @@
                 ? 1
                 : this.renderer.capabilities.getMaxAnisotropy();
 
-            /* GPU particle galaxy ─────────────────────────────────── */
+            /* GPU particle galaxy âââââââââââââââââââââââââââââââââââ */
             const count  = Context.isMobile ? 6_000 : 15_000;
             const pos    = new Float32Array(count * 3);
             const cols   = new Float32Array(count * 3);
@@ -1897,7 +1898,7 @@
             this._spaceGroup.add(new THREE.Points(geo, this._starsMat));
             this.scene.add(this._spaceGroup);
 
-            /* Physically-based Earth ─────────────────────────────── */
+            /* Physically-based Earth âââââââââââââââââââââââââââââââ */
             const segs = Context.isMobile ? 128 : 256;
 
             const setTexOpts = tex => {
@@ -2010,7 +2011,7 @@
             // Cloud drift
             this._cloudMesh.rotation.y += Context.reducedMotion ? 0.0001 : 0.0004;
 
-            // Earth positioning — map CSS scroll to WebGL space
+            // Earth positioning â map CSS scroll to WebGL space
             const visH = 2 * 20 * Math.tan(((45 * Math.PI) / 180) / 2);
             const appR = Context.isMobile
                 ? window.innerWidth * 1.4   /* bigger sphere radius on mobile */
@@ -2047,9 +2048,9 @@
         }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
        UI MANAGER
-    ═══════════════════════════════════════════════════════════════ */
+    âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
     class UIManager {
         constructor(engine) {
             this.engine     = engine;
@@ -2064,7 +2065,7 @@
             this._bindLightboxClose();
         }
 
-        /* Accessibility helpers ─────────────────────────────────── */
+        /* Accessibility helpers âââââââââââââââââââââââââââââââââââ */
         _announce(msg) {
             if (this._announcer) this._announcer.textContent = msg;
         }
@@ -2105,9 +2106,9 @@
         _lockScroll() { this.engine.lenis.stop(); }
         _unlockScroll() { this.engine.lenis.start(); }
 
-        /* State bus wiring ─────────────────────────────────────── */
+        /* State bus wiring âââââââââââââââââââââââââââââââââââââââ */
         _wireStateBus() {
-            /* ── LIGHTBOX ── */
+            /* ââ LIGHTBOX ââ */
             bus.on('OPEN_LIGHTBOX', userData => stateMachine.transition('LIGHTBOX', userData));
 
             bus.on('LIGHTBOX_ENTER', userData => {
@@ -2131,7 +2132,7 @@
                 const thumbQ = '&w=200&q=60';
 
                 mainImg.src    = userData.data.shots[0].src + imgQ;
-                mainImg.alt    = `${userData.data.t} — shot 1`;
+                mainImg.alt    = `${userData.data.t} â shot 1`;
                 descEl.textContent = userData.data.shots[0].desc;
 
                 userData.data.shots.forEach((shot, idx) => {
@@ -2170,7 +2171,7 @@
                             opacity: 0, scale: 0.95, duration: 0.3,
                             onComplete: () => {
                                 mainImg.src = shot.src + imgQ;
-                                mainImg.alt = `${userData.data.t} — shot ${idx + 1}`;
+                                mainImg.alt = `${userData.data.t} â shot ${idx + 1}`;
                                 descEl.textContent = shot.desc;
                                 gsap.to(mainImg, { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' });
                             },
@@ -2192,6 +2193,9 @@
             });
 
             bus.on('LIGHTBOX_LEAVE', () => {
+                // Return to default zoom safely when leaving lightbox
+                gsap.to(AppPhysics.physics, { targetZoom: 0.75, currentZoom: 0.75, duration: 1.0, ease: 'power2.out' });
+                
                 gsap.timeline({
                     onComplete: () => {
                         gsap.set(this._lightbox, { autoAlpha: 0 });
@@ -2204,7 +2208,7 @@
                 .to(this._lightbox,              { autoAlpha: 0, duration: 0.5 },                               '-=0.3');
             });
 
-            /* ── MENU ── */
+            /* ââ MENU ââ */
             bus.on('MENU_ENTER', () => {
                 this._lockScroll();
                 gsap.to('#main-nav', { autoAlpha: 0, duration: 0.3 });
@@ -2220,7 +2224,7 @@
                 gsap.to('#menu-overlay', { autoAlpha: 0, duration: 0.5, ease: 'expo.inOut' });
             });
 
-            /* ── AGENCY ── */
+            /* ââ AGENCY ââ */
             bus.on('AGENCY_ENTER', () => {
                 this._lockScroll();
                 gsap.to('#main-nav',      { autoAlpha: 0, duration: 0.3 });
@@ -2247,12 +2251,15 @@
                 gsap.to('#agency-overlay', { autoAlpha: 0, duration: 0.5, ease: 'expo.inOut' });
             });
 
-            /* ── WORK ── */
+            /* ââ WORK ââ */
             bus.on('WORK_ENTER', () => {
                 this._lockScroll();
                 gsap.to('#main-nav', { autoAlpha: 0, duration: 0.3 });
                 gsap.to('#main-container', { autoAlpha: 0, duration: 0.6 });
                 gsap.to('#work-overlay',   { autoAlpha: 1, duration: 0.8, ease: 'expo.inOut' });
+
+                // Safe reset of zoom when entering work
+                gsap.to(AppPhysics.physics, { targetZoom: 0.75, currentZoom: 0.75, duration: 1.5, ease: 'expo.out' });
 
                 const isDesktop = window.innerWidth > 768;
                 gsap.to(AppPhysics.intro, {
@@ -2277,6 +2284,9 @@
             });
 
             bus.on('WORK_LEAVE', () => {
+                // Force zoom back to default sizes upon exiting
+                gsap.to(AppPhysics.physics, { targetZoom: 0.75, currentZoom: 0.75, duration: 1.0, ease: 'power3.inOut' });
+
                 gsap.to('#work-overlay',   { autoAlpha: 0, duration: 0.5, ease: 'expo.inOut' });
                 gsap.to('.work-explore-text', { opacity: 0, duration: 0.3 });
                 gsap.to('#main-container', { autoAlpha: 1, duration: 0.6 });
@@ -2320,7 +2330,7 @@
                 }, 100);
             });
 
-            /* ── CONTACT ── */
+            /* ââ CONTACT ââ */
             bus.on('CONTACT_ENTER', () => {
                 this._lockScroll();
                 gsap.to('#main-nav',        { autoAlpha: 0, duration: 0.3 });
@@ -2332,7 +2342,7 @@
                 gsap.to('#contact-overlay', { autoAlpha: 0, duration: 0.5, ease: 'expo.inOut' });
             });
 
-            /* ── PRIVACY ── */
+            /* ââ PRIVACY ââ */
             bus.on('PRIVACY_ENTER', () => {
                 this._lockScroll();
                 gsap.to('#main-nav', { autoAlpha: 0, duration: 0.3 });
@@ -2349,7 +2359,7 @@
                 gsap.to('#privacy-overlay', { autoAlpha: 0, duration: 0.5, ease: 'expo.inOut' });
             });
 
-            /* ── TERMS ── */
+            /* ââ TERMS ââ */
             bus.on('TERMS_ENTER', () => {
                 this._lockScroll();
                 gsap.to('#main-nav', { autoAlpha: 0, duration: 0.3 });
@@ -2366,7 +2376,7 @@
                 gsap.to('#terms-overlay', { autoAlpha: 0, duration: 0.5, ease: 'expo.inOut' });
             });
 
-            /* ── IDLE (return home) ── */
+            /* ââ IDLE (return home) ââ */
             bus.on('IDLE_ENTER', () => {
                 const prev = stateMachine.history.at(-1);
                 if (prev !== 'WORK') this._unlockScroll();
@@ -2374,12 +2384,12 @@
                 gsap.to('.global-ui', { autoAlpha: 1, duration: 0.4, delay: 0.3 });
                 gsap.to('#main-nav',  { autoAlpha: 1, duration: 0.4, delay: 0.3 });
 
-                // Restore interactivity carefully — LIGHTBOX→WORK edge case
+                // Restore interactivity carefully â LIGHTBOXâWORK edge case
                 const prevPrev = stateMachine.history.at(-2);
                 if (prev !== 'LIGHTBOX' || prevPrev !== 'WORK') {
                     this._wrapper.removeAttribute('inert');
                 } else {
-                    // Was: LIGHTBOX on top of WORK — keep wrapper inert (WORK handles it)
+                    // Was: LIGHTBOX on top of WORK â keep wrapper inert (WORK handles it)
                     this._wrapper.setAttribute('inert', '');
                 }
 
@@ -2387,7 +2397,7 @@
             });
         }
 
-        /* Nav button wiring ────────────────────────────────────── */
+        /* Nav button wiring ââââââââââââââââââââââââââââââââââââââ */
         _bindNavigation() {
             document.querySelectorAll('.nav-trigger').forEach(btn => {
                 btn.addEventListener('click', e => {
@@ -2436,7 +2446,7 @@
             });
         }
 
-        /* Lightbox close ───────────────────────────────────────── */
+        /* Lightbox close âââââââââââââââââââââââââââââââââââââââââ */
         _bindLightboxClose() {
             const closeBtn = this._lightbox.querySelector('.lightbox-close');
 
@@ -2453,9 +2463,9 @@
         }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
-       APP — entry point, wires everything together
-    ═══════════════════════════════════════════════════════════════ */
+    /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+       APP â entry point, wires everything together
+    âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
     class App {
         constructor() {
             this.assets   = new AssetManager();
@@ -2480,12 +2490,16 @@
             gsap.ticker.add(time => {
                 const stickyEl = document.getElementById('sticky-work');
                 const rawOffset = stickyEl?.getBoundingClientRect().top ?? 0;
-                const targetOffset = stateMachine.current === 'WORK' ? 0 : rawOffset;
+                
+                // CRITICAL FIX: Ensure targetOffset stays 0 when navigating from WORK to LIGHTBOX. 
+                // Previously, LIGHTBOX reverted to using DOM tracking, causing it to fly off-screen.
+                const s = stateMachine.current;
+                const isOverlayActive = s === 'WORK' || s === 'LIGHTBOX';
+                const targetOffset = isOverlayActive ? 0 : rawOffset;
                 
                 AppPhysics.physics.smoothedOffset += (targetOffset - AppPhysics.physics.smoothedOffset) * 0.15;
                 const offset = AppPhysics.physics.smoothedOffset;
 
-                const s = stateMachine.current;
                 if (s === 'IDLE' || s === 'WORK') {
                     const phys = AppPhysics.physics;
                     if (!AppPhysics.isDragging) {
@@ -2521,16 +2535,32 @@
             let lastX = 0, lastY = 0;
             // Track initial touch direction to decide whether to intercept
             let touchStartX = 0, touchStartY = 0;
-            let touchDirectionLocked = null; // 'h' | 'v' | null
+            let touchDirectionLocked = null; // 'h' | 'v' | 'pinch' | null
+            
+            // Track 2-finger zoom to ensure zooming doesn't break iOS
+            let initialPinchDist = null;
+            let initialZoom = 1;
 
             const onDown = e => {
                 if (!this._canInteract() || AppPhysics.intro.scale < 0.2) return;
                 if (e.target.closest?.('.nav-trigger')) return;
 
+                // Native Pinch zooming implementation for iOS Touch Screens 
+                if (e.touches && e.touches.length === 2) {
+                    const dx = e.touches[0].clientX - e.touches[1].clientX;
+                    const dy = e.touches[0].clientY - e.touches[1].clientY;
+                    initialPinchDist = Math.hypot(dx, dy);
+                    initialZoom = AppPhysics.physics.targetZoom;
+                    touchDirectionLocked = 'pinch';
+                    AppPhysics.isDragging = false;
+                    return;
+                }
+
                 gsap.killTweensOf(AppPhysics.physics);
                 AppPhysics.isDragging = true;
                 AppPhysics.hasDragged = false;
                 touchDirectionLocked = null;
+                initialPinchDist = null;
 
                 const cx = e.clientX ?? e.touches?.[0].clientX ?? 0;
                 const cy = e.clientY ?? e.touches?.[0].clientY ?? 0;
@@ -2542,13 +2572,29 @@
 
             const onMove = e => {
                 if (!this._canInteract()) return;
+
+                // Execute custom pinch-zoom safely for mobile
+                if (e.touches && e.touches.length === 2) {
+                    if (e.cancelable) e.preventDefault(); // Stop native iOS body zoom
+                    if (initialPinchDist) {
+                        const dx = e.touches[0].clientX - e.touches[1].clientX;
+                        const dy = e.touches[0].clientY - e.touches[1].clientY;
+                        const dist = Math.hypot(dx, dy);
+                        const ratio = dist / initialPinchDist;
+                        gsap.killTweensOf(AppPhysics.physics);
+                        // Multiply targetZoom by ratio: separate fingers = >1 = zoom in.
+                        AppPhysics.physics.targetZoom = Math.max(0.4, Math.min(2.5, initialZoom * ratio));
+                    }
+                    return;
+                }
+
                 const touch = e.touches?.[0];
                 const x = e.clientX ?? touch?.clientX ?? lastX;
                 const y = e.clientY ?? touch?.clientY ?? lastY;
                 AppPhysics.mouseX = x;
                 AppPhysics.mouseY = y;
 
-                if (AppPhysics.isDragging) {
+                if (AppPhysics.isDragging && touchDirectionLocked !== 'pinch') {
                     const dx = x - lastX;
                     const dy = y - lastY;
 
@@ -2578,7 +2624,7 @@
                         AppPhysics.physics.targetEarthRotX += dy * sy;
                         AppPhysics.physics.rotEarthVelX     = dy * 0.002;
                     } else if (touchDirectionLocked === 'v') {
-                        // Vertical — release drag so Lenis/native scroll takes over
+                        // Vertical â release drag so Lenis/native scroll takes over smoothly
                         AppPhysics.isDragging = false;
                     }
                 }
@@ -2586,6 +2632,7 @@
             };
 
             const onUp = () => {
+                initialPinchDist = null;
                 if (!AppPhysics.isDragging) return;
                 AppPhysics.isDragging = false;
                 touchDirectionLocked = null;
@@ -2595,14 +2642,14 @@
             const onWheel = e => {
                 if (!this._canInteract() || AppPhysics.intro.scale < 0.2) return;
                 if (e.ctrlKey) {
-                    // Pinch-to-zoom
+                    // Trackpad pinch-to-zoom (Desktop)
                     e.preventDefault();
                     gsap.killTweensOf(AppPhysics.physics);
                     AppPhysics.physics.targetZoom = Math.max(0.25, Math.min(3.0,
                         AppPhysics.physics.targetZoom - e.deltaY * 0.005
                     ));
                 } else if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-                    // Horizontal trackpad swipe → rotate carousel
+                    // Horizontal trackpad swipe â rotate carousel
                     e.preventDefault();
                     bus.emit('CAROUSEL_SCRUB', -e.deltaX * 0.005);
                 }
@@ -2614,10 +2661,15 @@
                 el.addEventListener('touchstart', onDown,   { passive: true });
                 el.addEventListener('touchmove',  onMove,   { passive: false });
                 el.addEventListener('wheel',      onWheel,  { passive: false });
+                
+                // CRITICAL FIX: Ensure touchcancel un-sticks iOS when an event disrupts the page
+                el.addEventListener('touchcancel', onUp, { passive: true });
             });
             window.addEventListener('mousemove',  onMove,  { passive: true });
             window.addEventListener('mouseup',    onUp);
             window.addEventListener('touchend',   onUp,    { passive: true });
+            // Global touchcancel to un-stick dragging universally
+            window.addEventListener('touchcancel', onUp, { passive: true });
         }
 
         _canInteract() {
@@ -2689,7 +2741,7 @@
                 },
             });
 
-            // Footer — earth retreats
+            // Footer â earth retreats
             ScrollTrigger.create({
                 trigger: '#footer',
                 start: 'top 80%',
@@ -2743,3 +2795,6 @@
     // Boot on DOM ready
     document.addEventListener('DOMContentLoaded', () => { window.app = new App(); });
     </script></body></html>
+
+
+```
