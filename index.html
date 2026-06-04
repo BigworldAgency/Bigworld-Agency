@@ -1,10 +1,147 @@
 <!DOCTYPE html><html lang="en" class="antialiased"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Bigworld | Creative Digital Agency</title>
+    <meta name="description" content="We craft digital platforms, brands, and experiences that blur the line between reality and the extraordinary.">
+    <meta name="theme-color" content="#010204">
+
+    <link rel="preload" href="https://res.cloudinary.com/dsifab7ul/video/upload/q_auto,f_auto,w_1080/Bigworld_Agency_Ad_byguwo.mp4" as="video" type="video/mp4" media="(max-width: 768px)">
+    <link rel="preload" href="https://res.cloudinary.com/dsifab7ul/video/upload/q_auto,f_auto,w_1920/Bigworld_Agency_Ad_byguwo.mp4" as="video" type="video/mp4" media="(min-width: 769px)">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Manrope', 'sans-serif'],
+                        display: ['Syne', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#010204',
+                            light: '#f2f2f2',
+                            accent: '#ff3e00',
+                            gray: '#121212'
+                        }
+                    },
+                    transitionTimingFunction: {
+                        'expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+            /* Centralised design tokens */
+            --color-bg: #010204;
+            --color-fg: #f2f2f2;
+            --color-accent: #ff3e00;
+            --overlay-blur: 24px;
+            --radius-btn: 9999px;
+        }
+
+        /* ── Resets ─────────────────────────────────────────── */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            margin: 0; padding: 0;
+            background-color: var(--color-bg);
+            color: var(--color-fg);
+            overflow-x: hidden;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            width: 100vw;
+            overscroll-behavior: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body::-webkit-scrollbar { display: none; }
+
+        /* Remove all focus rings — handled via JS / custom cursor */
+        *:focus, *:focus-visible {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        /* ── Custom Cursor (pointer-capable devices only) ───── */
+        @media (pointer: fine) { body, html { cursor: none !important; } }
+        @media (pointer: coarse), (hover: none) {
+            body, html { cursor: auto !important; }
+            #cursor { display: none !important; }
+        }
+
+        #cursor {
+            position: fixed;
+            top: 0; left: 0;
+            width: 12px; height: 12px;
+            background-color: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2147483647; /* max int — always on top */
+            mix-blend-mode: difference;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Hardware-accelerated transform only — avoids layout thrash */
+            will-change: transform;
+            transition:
+                width  0.4s var(--ease-out-expo),
+                height 0.4s var(--ease-out-expo),
+                background-color 0.4s var(--ease-out-expo),
+                backdrop-filter 0.4s var(--ease-out-expo);
+        }
+        .cursor--hover {
+            width: 60px !important;
+            height: 60px !important;
+            background-color: rgba(255,255,255,1);
+        }
+        .cursor--view {
+            width: 85px !important;
+            height: 85px !important;
+            background-color: rgba(255,255,255,0.1) !important;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.4) !important;
+            mix-blend-mode: normal !important;
+        }
+        .cursor--lens {
+            width: 0 !important;
+            height: 0 !important;
+            background-color: transparent !important;
+            border: none !important;
+        }
+        #cursor-text {
+            color: black;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .cursor--view #cursor-text { opacity: 1; color: white; }
+        .cursor--lens #cursor-text { opacity: 0 !important; }
+
+        /* ── Lenis ───────────────────────────────────────────── */
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+
         /* ── Interactive areas ───────────────────────────────── */
         button, a, .hover-target { touch-action: manipulation; }
         #sticky-work, #work-interaction {
-            touch-action: none;
             outline: none;
             user-select: none;
             -webkit-user-select: none;
@@ -19,75 +156,2210 @@
             #sticky-work { touch-action: pan-y; }
             #work-interaction { touch-action: none; } /* fullscreen overlay — scroll locked anyway */
         }
+
         /* ── Typography ──────────────────────────────────────── */
         .text-fluid-hero { font-size: clamp(2.5rem, 8vw, 6rem); }
+        .text-fluid-h1   { font-size: clamp(3rem, 10vw, 12rem); }
+
+        /* ── Overlay helper ──────────────────────────────────── */
+        .overlay-panel { scrollbar-width: none; }
+        .overlay-panel::-webkit-scrollbar { display: none; }
+
+        /* ── Mini earth ──────────────────────────────────────── */
+        .mini-earth {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background:
+                url('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_atmos_2048.jpg')
+                repeat-x;
+            background-size: auto 100%;
+            box-shadow:
+                inset -8px -8px 16px rgba(0,0,0,0.9),
+                inset 4px 4px 10px rgba(255,255,255,0.4),
+                0 0 15px rgba(255,255,255,0.15);
+            animation: spin-earth 20s linear infinite;
+            position: relative;
+        }
+        .mini-earth::after {
+            content: '';
+            position: absolute; inset: 0;
+            border-radius: 50%;
+            box-shadow: inset -4px -4px 12px rgba(0,0,0,0.8);
+            background: radial-gradient(circle at 30% 30%,
+                rgba(255,255,255,0.2) 0%,
+                rgba(255,255,255,0) 40%,
+                rgba(0,0,0,0.6) 100%);
+            pointer-events: none;
+        }
+        @keyframes spin-earth {
+            from { background-position: 0% center; }
+            to   { background-position: 200% center; }
+        }
+
+        /* ── Award logos ─────────────────────────────────────── */
+        .award-logo svg,
+        .award-logo img {
+            width: 100%; height: 100%;
+            object-fit: contain;
+            opacity: 0.85;
+            transition:
+                opacity 0.3s,
+                transform 0.4s var(--ease-out-expo);
+        }
+        .award-logo:hover svg,
+        .award-logo:hover img {
+            opacity: 1;
+            transform: scale(1.08) translateY(-4px);
+        }
+
+        /* ── Reduced-motion ──────────────────────────────────── */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style></head><body class="font-sans selection:bg-brand-accent selection:text-white">
+
+    <div id="cursor" aria-hidden="true"><span id="cursor-text">VIEW</span></div>
+
+    <div id="sr-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <nav
+        id="main-nav"
+        class="fixed top-0 left-0 w-full p-5 md:p-6 md:px-10 md:pt-8
+               flex justify-between items-start
+               z-[99999] pointer-events-none
+               transition-opacity duration-500 global-ui"
+        aria-label="Main navigation"
+    >
+        <button
+            class="magnetic nav-trigger font-display font-bold text-xl md:text-2xl
+                   tracking-tight hover-target px-2 py-0
+                   pointer-events-auto mix-blend-difference text-white"
+            aria-label="About Bigworld Agency"
+            data-target="AGENCY"
+        >BIGWORLD©</button>
+
+        <div class="menu-toggle-wrapper pointer-events-auto">
+            <button
+                class="magnetic nav-trigger flex flex-col items-center justify-center
+                       gap-1.5 hover-target"
+                aria-label="Open navigation menu"
+                aria-haspopup="dialog"
+                data-target="MENU"
+            >
+                <div class="mini-earth" aria-hidden="true"></div>
+                <span class="font-sans text-[8px] md:text-[9px] font-bold
+                             tracking-[0.2em] uppercase text-white/80 mt-1">MENU</span>
+            </button>
+        </div>
+    </nav>
+
+    <div
+        id="menu-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Global navigation"
+        class="fixed inset-0 z-[99998] opacity-0 invisible pointer-events-none
+               bg-[#010204]/60 backdrop-blur-xl
+               flex flex-col md:flex-row overflow-hidden overlay-panel"
+    >
+        <button
+            class="nav-trigger hover-target absolute top-8 right-10 z-50
+                   uppercase tracking-widest text-[10px] md:text-xs
+                   border border-white/20 rounded-full px-6 py-3
+                   hover:bg-white hover:text-black transition-colors
+                   bg-black/50 backdrop-blur-md cursor-pointer pointer-events-auto"
+            aria-label="Close menu"
+            data-target="IDLE"
+        >CLOSE</button>
+
+        <div class="w-full md:w-1/2 h-[35%] md:h-full relative overflow-hidden
+                    border-b md:border-b-0 md:border-r border-white/10
+                    flex items-center justify-center bg-black/20">
+            <p class="font-display text-4xl md:text-5xl text-center uppercase
+                      tracking-tighter leading-[0.9] drop-shadow-2xl
+                      absolute inset-0 flex items-center justify-center p-10 opacity-60 z-10">
+                You bring the product.<br>We build the universe.
+            </p>
+            <img
+                id="menu-preview-img"
+                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop"
+                class="absolute inset-0 w-full h-full object-cover opacity-0
+                       transition-opacity duration-700 ease-out mix-blend-overlay"
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                width="1200" height="800"
+            >
+        </div>
+
+        <nav
+            class="w-full md:w-1/2 h-[65%] md:h-full flex flex-col justify-center
+                   px-8 md:px-24 gap-6 md:gap-10 pointer-events-auto bg-black/20"
+            aria-label="Site sections"
+        >
+            <button
+                class="nav-trigger hover-target group flex items-end gap-4 md:gap-8
+                       menu-hover-preview"
+                data-target="WORK"
+                data-img="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1200&auto=format&fit=crop"
+                aria-label="Our Work"
+            >
+                <span class="font-sans text-sm md:text-lg text-white/30
+                             group-hover:text-brand-accent transition-colors
+                             pb-2 md:pb-4 font-bold">01</span>
+                <span class="font-display text-5xl md:text-[6rem] uppercase
+                             tracking-tighter text-white/60 group-hover:text-white
+                             transition-all duration-300 leading-none
+                             menu-link-item text-left drop-shadow-xl">Our Work</span>
+            </button>
+
+            <div class="w-full h-px bg-white/10" role="separator"></div>
+
+            <button
+                class="nav-trigger hover-target group flex items-end gap-4 md:gap-8
+                       menu-hover-preview"
+                data-target="AGENCY"
+                data-img="https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=80&w=1200&auto=format&fit=crop"
+                aria-label="About Us"
+            >
+                <span class="font-sans text-sm md:text-lg text-white/30
+                             group-hover:text-brand-accent transition-colors
+                             pb-2 md:pb-4 font-bold">02</span>
+                <span class="font-display text-5xl md:text-[6rem] uppercase
+                             tracking-tighter text-white/60 group-hover:text-white
+                             transition-all duration-300 leading-none
+                             menu-link-item text-left drop-shadow-xl">About Us</span>
+            </button>
+
+            <div class="w-full h-px bg-white/10" role="separator"></div>
+
+            <button
+                class="nav-trigger hover-target group flex items-end gap-4 md:gap-8
+                       menu-hover-preview"
+                data-target="CONTACT"
+                data-img="https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1200&auto=format&fit=crop"
+                aria-label="Contact Us"
+            >
+                <span class="font-sans text-sm md:text-lg text-white/30
+                             group-hover:text-brand-accent transition-colors
+                             pb-2 md:pb-4 font-bold">03</span>
+                <span class="font-display text-5xl md:text-[6rem] uppercase
+                             tracking-tighter text-white/60 group-hover:text-white
+                             transition-all duration-300 leading-none
+                             menu-link-item text-left drop-shadow-xl">Contact Us</span>
+            </button>
+        </nav>
+    </div>
+
+    <div
+        id="agency-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label="About Us"
+        class="fixed inset-0 z-[99995] opacity-0 invisible pointer-events-none
+               bg-[#010204]/60 backdrop-blur-xl overflow-y-auto overlay-panel"
+        data-lenis-prevent
+    >
+        <div class="sticky top-0 w-full flex justify-end p-5 md:p-10 z-50 pointer-events-none">
+            <button
+                class="nav-trigger hover-target uppercase tracking-widest text-[10px] md:text-xs
+                       border border-white/20 rounded-full px-6 py-3
+                       hover:bg-white hover:text-black transition-colors
+                       bg-black/50 backdrop-blur-md pointer-events-auto cursor-pointer"
+                aria-label="Close about page"
+                data-target="IDLE"
+            >CLOSE</button>
+        </div>
+
+        <div class="w-full max-w-[1600px] mx-auto px-6 md:px-16 pt-12 md:pt-20 pb-32
+                    flex flex-col pointer-events-auto">
+
+            <div class="reveal-elem-init flex flex-col items-start">
+                <p class="font-sans text-[10px] md:text-xs tracking-widest text-white/80
+                          uppercase mb-8 font-bold">About Us</p>
+                <h2 class="font-display text-[clamp(2.5rem,6vw,7rem)] leading-[0.9]
+                           font-bold tracking-tighter uppercase max-w-[95%] text-white
+                           drop-shadow-2xl">
+                    You bring the product.<br>
+                    <span class="text-brand-accent">We build the universe.</span><br>
+                    Pure, unignorable visual impact.
+                </h2>
+
+                <button
+                    id="more-about-btn"
+                    class="mt-12 hover-target uppercase tracking-widest text-[10px] md:text-xs
+                           font-bold border border-brand-accent text-brand-accent
+                           rounded-full px-8 py-3.5
+                           hover:bg-brand-accent hover:text-white transition-all
+                           bg-black/30 backdrop-blur-md drop-shadow-lg"
+                    aria-expanded="false"
+                    aria-controls="agency-expanded"
+                >MORE ABOUT US</button>
+            </div>
+
+            <div
+                id="agency-expanded"
+                class="hidden flex-col gap-24 md:gap-40 mt-24 md:mt-32"
+                aria-live="polite"
+            >
+                <div class="reveal-elem-expanded border-t border-white/20 pt-16">
+                    <h3 class="font-display text-4xl md:text-5xl font-bold uppercase
+                               tracking-tighter mb-6">What We Stand For</h3>
+                    <p class="font-sans text-xl md:text-3xl text-white leading-relaxed
+                              uppercase tracking-widest max-w-5xl font-medium">
+                        We don't follow trends. We build work that matters.
+                    </p>
+                </div>
+
+                <div class="reveal-elem-expanded border-t border-white/20 pt-16">
+                    <h3 class="font-display text-4xl md:text-5xl font-bold uppercase
+                               tracking-tighter mb-8">What We Do</h3>
+                    <p class="font-sans text-base md:text-lg text-white/80 leading-relaxed max-w-4xl mb-12">
+                        We’re a brand management agency that helps companies build stronger, more recognizable brands. Our work covers everything from creative development and strategy to production and execution. Over the years, we’ve partnered with brands across entertainment, food and beverage, sports, gaming, and consumer products, giving us experience in a wide range of industries. That diverse background allows us to bring fresh perspectives, proven ideas, and creative solutions from different markets to create campaigns that connect with people and help brands stand out.
+                    </p>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-6 gap-x-8">
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Research & Auditing</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Marketing Strategy</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Product Design</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Brand Identity</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Advertising</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">UI/UX Design</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Digital Design</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Social Media Design</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Graphic Design</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Packaging Design</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Art Direction</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Photography</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Video Production</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Animation</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Illustration</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Editorial Design</li>
+                        <li class="font-sans text-sm md:text-base text-white/80 uppercase tracking-widest font-semibold border-l-2 border-brand-accent pl-4">Spatial Design</li>
+                    </ul>
+                </div>
+
+                <div class="reveal-elem-expanded border-t border-white/20 pt-16">
+                    <div class="flex flex-col md:flex-row justify-between mb-16 gap-8">
+                        <h3 class="font-display text-4xl md:text-5xl font-bold uppercase
+                                   tracking-tighter md:w-1/3">Our Values</h3>
+                        <p class="font-sans text-lg md:text-xl text-white/90 leading-relaxed
+                                  tracking-wide md:w-1/2">
+                            Everything we've achieved throughout our journey has been shaped
+                            by a handful of beliefs that continue to guide the way we work.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-24">
+                        <article>
+                            <span class="font-display text-7xl md:text-8xl font-bold
+                                        text-white/30 block mb-6 leading-none"
+                                  aria-hidden="true">01</span>
+                            <h4 class="font-display text-2xl md:text-3xl font-bold uppercase
+                                       tracking-tight mb-4 text-white">Love What You Do</h4>
+                            <p class="font-sans text-sm md:text-base text-white/80
+                                      leading-relaxed tracking-wider">
+                                Passion is at the center of great work. When you genuinely enjoy
+                                what you do, dedication comes naturally and every challenge becomes
+                                an opportunity to grow.
+                            </p>
+                        </article>
+                        <article>
+                            <span class="font-display text-7xl md:text-8xl font-bold
+                                        text-white/30 block mb-6 leading-none"
+                                  aria-hidden="true">02</span>
+                            <h4 class="font-display text-2xl md:text-3xl font-bold uppercase
+                                       tracking-tight mb-4 text-white">Surround Yourself With Great People</h4>
+                            <p class="font-sans text-sm md:text-base text-white/80
+                                      leading-relaxed tracking-wider">
+                                Collaboration is strongest when built on mutual respect, trust,
+                                and shared ambition. Meaningful relationships lead to better ideas
+                                and better outcomes.
+                            </p>
+                        </article>
+                        <article>
+                            <span class="font-display text-7xl md:text-8xl font-bold
+                                        text-white/30 block mb-6 leading-none"
+                                  aria-hidden="true">03</span>
+                            <h4 class="font-display text-2xl md:text-3xl font-bold uppercase
+                                       tracking-tight mb-4 text-white">Protect The Vision</h4>
+                            <p class="font-sans text-sm md:text-base text-white/80
+                                      leading-relaxed tracking-wider">
+                                Creative integrity guides our decisions, shapes our process, and
+                                defines our results. When the vision remains clear, meaningful
+                                impact follows.
+                            </p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div
+        id="work-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Selected Works — Interactive 3D Gallery"
+        class="fixed inset-0 z-[99995] opacity-0 invisible pointer-events-none
+               flex flex-col overflow-hidden overlay-panel"
+    >
+        <div class="absolute inset-0 bg-gradient-to-b from-[#010204]/80 via-transparent
+                    to-[#010204]/80 pointer-events-none" aria-hidden="true"></div>
+
+        <div class="w-full flex justify-between p-5 md:p-10 z-50 absolute top-0 pointer-events-none">
+            <div class="flex flex-col z-10 shrink-0 drop-shadow-2xl">
+                <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tighter
+                           text-white uppercase mb-2">Selected Works</h2>
+                <p class="font-sans text-[10px] md:text-xs tracking-widest text-brand-accent
+                          uppercase font-bold">Interactive Sphere</p>
+            </div>
+            <button
+                class="nav-trigger hover-target uppercase tracking-widest text-[10px] md:text-xs
+                       border border-white/20 rounded-full px-6 py-3 h-max
+                       hover:bg-white hover:text-black transition-colors
+                       bg-black/50 backdrop-blur-md cursor-pointer pointer-events-auto"
+                aria-label="Close work gallery"
+                data-target="IDLE"
+            >CLOSE</button>
+        </div>
+
+        <div
+            id="work-interaction"
+            class="absolute inset-0 w-full h-full pointer-events-auto
+                   select-none cursor-grab active:cursor-grabbing z-[40]"
+            tabindex="0"
+            role="region"
+            aria-label="Interactive 3D Carousel. Drag to rotate, click or press Enter to view project, arrow keys to navigate."
+        >
+            <p class="absolute bottom-16 md:bottom-12 left-1/2 -translate-x-1/2 w-max
+                      text-center pointer-events-none z-10 mix-blend-difference
+                      work-explore-text opacity-0
+                      font-sans text-[10px] md:text-xs tracking-[0.3em] uppercase
+                      text-white/80 animate-pulse drop-shadow-md">
+                Drag or use arrows to explore
+            </p>
+        </div>
+    </div>
+
+    <div
+        id="contact-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Contact Information"
+        class="fixed inset-0 z-[99995] opacity-0 invisible pointer-events-none
+               flex flex-col justify-between pt-[15vh] pb-8 md:pb-10 px-6 md:px-10
+               overflow-hidden bg-[#010204]/60 backdrop-blur-xl overlay-panel"
+    >
+        <div class="w-full flex justify-end p-5 md:p-10 z-50 absolute top-0 right-0
+                    pointer-events-auto">
+            <button
+                class="nav-trigger hover-target uppercase tracking-widest text-[10px] md:text-xs
+                       border border-white/20 rounded-full px-6 py-3
+                       hover:bg-white hover:text-black transition-colors
+                       bg-black/50 backdrop-blur-md cursor-pointer"
+                aria-label="Close contact"
+                data-target="IDLE"
+            >CLOSE</button>
+        </div>
+
+        <div class="w-full max-w-[1600px] mx-auto flex flex-col items-center
+                    justify-center flex-grow pointer-events-auto drop-shadow-2xl">
+            <h2 class="font-display text-fluid-h1 leading-[0.8] font-bold tracking-tighter
+                       text-white uppercase text-center mb-6 md:mb-10">Let's Talk</h2>
+            <a
+                href="mailto:hello@bigworld.agency"
+                class="hover-target magnetic font-sans text-xl md:text-3xl text-brand-accent
+                       tracking-widest uppercase font-medium hover:text-white transition-colors"
+            >hello@bigworld.agency</a>
+        </div>
+
+        <div class="w-full max-w-[1600px] mx-auto flex flex-col md:flex-row
+                    justify-between items-center md:items-end gap-6 md:gap-0
+                    border-t border-white/20 pt-6 pointer-events-auto">
+            <p class="font-sans text-[10px] md:text-xs tracking-widest uppercase
+                      text-white/80 text-center md:text-left font-bold">
+                Operating Globally<br>&copy; 2026 Bigworld Agency
+            </p>
+        </div>
+    </div>
+
+    <div id="main-wrapper">
+        <div
+            id="webgl-container"
+            class="fixed inset-0 w-full h-full pointer-events-none z-[0] bg-brand-dark"
+            aria-hidden="true"
+        >
+            <div id="webgl-earth" class="absolute inset-0"></div>
+        </div>
+
+        <main id="main-container" class="w-full relative pointer-events-none z-[10]">
+
+            <section
+                id="hero"
+                class="h-screen w-full relative overflow-hidden flex items-start
+                       pt-[20vh] bg-transparent z-[40] pointer-events-none"
+                aria-label="Hero — Hello, we are Bigworld"
+            >
+                <video
+                    id="hero-video"
+                    autoplay loop muted playsinline preload="auto"
+                    poster="https://res.cloudinary.com/dsifab7ul/video/upload/so_0,f_jpg,q_auto,w_1920/Bigworld_Agency_Ad_byguwo.jpg"
+                    class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
+                    aria-hidden="true"
+                >
+                    <source src="https://res.cloudinary.com/dsifab7ul/video/upload/q_auto,f_auto,w_1920/Bigworld_Agency_Ad_byguwo.mp4" media="(min-width: 769px)" type="video/mp4">
+                    <source src="https://res.cloudinary.com/dsifab7ul/video/upload/q_auto,f_auto,w_1080/Bigworld_Agency_Ad_byguwo.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/30 z-0 pointer-events-none" aria-hidden="true"></div>
+
+                <div class="relative z-10 w-full px-5 md:px-10 pointer-events-none drop-shadow-2xl">
+                    <h1 class="font-display text-fluid-hero leading-[0.9] font-bold
+                               tracking-tighter text-white uppercase"
+                        style="text-shadow:0 10px 40px rgba(0,0,0,0.8)">
+                        Hello, we are<br>Bigworld.
+                    </h1>
+                </div>
+            </section>
+
+            <section
+                id="awards"
+                class="relative w-full z-[30] pt-16 pb-24 md:pt-24 md:pb-32
+                       px-5 md:px-16 pointer-events-auto dim-on-scroll bg-transparent"
+                aria-label="Awards and recognition"
+            >
+                <div class="max-w-[1600px] mx-auto drop-shadow-2xl">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-end
+                                border-b border-white/30 pb-4 mb-12 gap-6">
+                        <div class="flex items-center gap-4">
+                            <span class="font-display text-sm md:text-base font-bold text-white mt-1"
+                                  aria-hidden="true">01</span>
+                            <h2 class="font-sans text-2xl md:text-4xl font-bold tracking-tight text-white">
+                                We are award-winning creators &amp; brand builders.
+                            </h2>
+                        </div>
+                        <button
+                            class="nav-trigger font-sans text-[10px] md:text-xs font-bold
+                                   tracking-[0.2em] text-white uppercase hover-target
+                                   hover:text-brand-accent transition-colors
+                                   flex items-center gap-3
+                                   border border-white/20 rounded-full px-6 py-2.5 mb-1
+                                   bg-black/30 backdrop-blur-sm hover:bg-white/10
+                                   whitespace-nowrap"
+                            data-target="WORK"
+                            aria-label="View all projects"
+                        >
+                            ALL PROJECTS
+                            <span class="text-brand-accent text-lg leading-none" aria-hidden="true">→</span>
+                        </button>
+                    </div>
+
+                    <ul class="grid grid-cols-2 md:grid-cols-4 gap-y-16 gap-x-8 text-center
+                               items-end justify-items-center opacity-90 mt-16 list-none p-0">
+                        <li class="flex flex-col items-center gap-4 award-logo w-full">
+                            <div class="w-16 h-16 flex justify-center items-center">
+                                <img src="https://res.cloudinary.com/dsifab7ul/image/upload/Emmy_Award_Winner_Background_Removed_zsk0su.png"
+                                     alt="" aria-hidden="true"
+                                     class="object-contain w-full h-full drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
+                                     loading="lazy" width="64" height="64">
+                            </div>
+                            <p class="font-sans text-[8px] md:text-[9px] tracking-widest uppercase
+                                      font-bold text-white leading-relaxed">Emmy® Award<br>Winner</p>
+                        </li>
+                        <li class="flex flex-col items-center gap-4 award-logo w-full">
+                            <div class="w-16 h-16 flex justify-center items-center" aria-hidden="true">
+                                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+                                    <path d="M20,50 C20,20 80,20 80,50 C80,80 30,80 30,50 C30,30 70,30 70,50" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <p class="font-sans text-[8px] md:text-[9px] tracking-widest uppercase font-bold text-white leading-relaxed">Webby Award<br>Winner</p>
+                        </li>
+                        <li class="flex flex-col items-center gap-4 award-logo w-full">
+                            <div class="w-16 h-16 flex justify-center items-center" aria-hidden="true">
+                                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <circle cx="50" cy="50" r="40" fill="#0055FF"/>
+                                    <text x="50" y="58" font-family="Arial,sans-serif" font-weight="900" font-size="30" fill="#fff" text-anchor="middle">dot</text>
+                                </svg>
+                            </div>
+                            <p class="font-sans text-[8px] md:text-[9px] tracking-widest uppercase font-bold text-white leading-relaxed">Dotcomm Award<br>Winner</p>
+                        </li>
+                        <li class="flex flex-col items-center gap-4 award-logo w-full">
+                            <div class="w-16 h-16 flex justify-center items-center" aria-hidden="true">
+                                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <text x="50" y="60" font-family="'Times New Roman',serif" font-size="36" font-style="italic" font-weight="bold" fill="currentColor" text-anchor="middle">Telly</text>
+                                </svg>
+                            </div>
+                            <p class="font-sans text-[8px] md:text-[9px] tracking-widest uppercase font-bold text-white leading-relaxed">Telly Award<br>Winner</p>
+                        </li>
+                        <li class="flex flex-col items-center gap-4 award-logo w-full">
+                            <div class="w-16 h-16 flex justify-center items-center" aria-hidden="true">
+                                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <text x="50" y="45" font-family="'Times New Roman',serif" font-size="40" fill="currentColor" text-anchor="middle">AVA</text>
+                                    <text x="50" y="65" font-family="'Times New Roman',serif" font-size="18" fill="currentColor" text-anchor="middle">DIGITAL</text>
+                                    <text x="50" y="85" font-family="'Times New Roman',serif" font-size="18" fill="currentColor" text-anchor="middle">AWARDS</text>
+                                </svg>
+                            </div>
+                            <p class="font-sans text-[8px] md:text-[9px] tracking-widest uppercase font-bold text-white leading-relaxed">AVA Digital<br>Awards Winner</p>
+                        </li>
+                        <li class="flex flex-col items-center gap-4 award-logo w-full">
+                            <div class="w-16 h-16 flex justify-center items-center" aria-hidden="true">
+                                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <rect x="25" y="25" width="50" height="50" fill="none" stroke="currentColor" stroke-width="2"/>
+                                    <text x="50" y="65" font-family="'Times New Roman',serif" font-size="45" fill="currentColor" text-anchor="middle">ACI</text>
+                                    <line x1="20" y1="80" x2="80" y2="20" stroke="currentColor" stroke-width="1.5"/>
+                                </svg>
+                            </div>
+                            <p class="font-sans text-[8px] md:text-[9px] tracking-widest uppercase font-bold text-white leading-relaxed">ACI Award<br>Winner</p>
+                        </li>
+                        <li class="flex flex-col items-center gap-4 award-logo w-full">
+                            <div class="w-16 h-16 flex justify-center items-center" aria-hidden="true">
+                                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M20 50 A30 30 0 0 1 80 50 Z" fill="currentColor"/>
+                                    <path d="M40 50 L50 30 L60 50" fill="#010204"/>
+                                    <text x="50" y="70" font-family="Arial,sans-serif" font-size="7.5" fill="currentColor" text-anchor="middle" font-weight="600">WEB EXCELLENCE</text>
+                                    <text x="50" y="85" font-family="'Times New Roman',serif" font-size="16" fill="currentColor" text-anchor="middle" font-weight="bold">AWARDS</text>
+                                </svg>
+                            </div>
+                            <p class="font-sans text-[8px] md:text-[9px] tracking-widest uppercase font-bold text-white leading-relaxed">Web Excellence<br>Award Winner</p>
+                        </li>
+                        <li class="flex flex-col items-center gap-4 award-logo w-full">
+                            <div class="w-16 h-16 flex justify-center items-center" aria-hidden="true">
+                                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <text x="50" y="58" font-family="Arial,sans-serif" font-size="20" fill="currentColor" text-anchor="middle" font-weight="900" letter-spacing="-1">billboard</text>
+                                </svg>
+                            </div>
+                            <p class="font-sans text-[8px] md:text-[9px] tracking-widest uppercase font-bold text-white leading-relaxed">Billboard Best Of<br>IFA Award Winner</p>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section
+                id="showcase"
+                class="h-[120vh] relative w-full bg-transparent dim-on-scroll z-[10] pointer-events-none"
+                aria-label="Featured work showcase"
+            >
+                <div class="sticky top-0 w-full h-screen flex flex-col md:flex-row
+                            items-center justify-between px-5 md:px-16
+                            overflow-hidden pointer-events-none">
+
+                    <div class="w-full md:w-[38.2%] z-30 flex flex-col justify-center
+                                pt-24 md:pt-0 pointer-events-none mix-blend-difference
+                                drop-shadow-2xl h-[40vh] md:h-auto">
+                        <h2 class="font-display text-[clamp(2.5rem,5vw,6rem)] leading-[0.85]
+                                   font-bold tracking-tighter text-white uppercase">
+                            <div class="overflow-hidden"><div class="about-line">You bring</div></div>
+                            <div class="overflow-hidden"><div class="about-line">the product.</div></div>
+                            <div class="overflow-hidden"><div class="about-line text-brand-accent mt-4 md:mt-8">We build</div></div>
+                            <div class="overflow-hidden"><div class="about-line text-brand-accent">the universe.</div></div>
+                        </h2>
+                        <div class="overflow-hidden mt-6 md:mt-10">
+                            <p class="font-sans text-[clamp(1rem,1.5vw,1.5rem)] text-white/80
+                                      font-medium tracking-wide about-line leading-relaxed">
+                                Pure, unignorable visual impact.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div
+                        id="sticky-work"
+                        class="absolute inset-0 w-full h-full pointer-events-auto
+                               select-none cursor-grab active:cursor-grabbing z-[50]"
+                        tabindex="0"
+                        role="region"
+                        aria-label="Interactive 3D Carousel. Drag to rotate, arrow keys to navigate, Enter to view."
+                    >
+                        <p class="absolute bottom-16 md:bottom-12 left-1/2 md:left-[65%]
+                                  -translate-x-1/2 w-max text-center pointer-events-none
+                                  z-10 mix-blend-difference explore-text opacity-0
+                                  font-sans text-[10px] md:text-xs tracking-[0.3em]
+                                  uppercase text-white/80 animate-pulse drop-shadow-md">
+                            Drag or use arrows to explore
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <footer
+                id="footer"
+                class="w-full relative z-[30] pt-12 pb-12 px-5 md:px-16
+                       dim-on-scroll pointer-events-auto bg-black"
+                aria-label="Footer"
+            >
+                <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row
+                            justify-between items-start gap-12 md:gap-0
+                            border-t border-white/20 pt-16 drop-shadow-2xl">
+
+                    <div class="w-full md:w-1/2">
+                        <p class="font-display text-[15vw] md:text-[8vw] leading-[0.8]
+                                  font-bold tracking-tighter text-white uppercase
+                                  mb-4 md:mb-6 drop-shadow-lg"
+                           aria-hidden="true">Let's build.</p>
+                        <a
+                            href="mailto:hello@bigworld.agency"
+                            class="hover-target magnetic font-sans text-lg md:text-2xl
+                                   text-brand-accent tracking-widest uppercase font-medium
+                                   hover:text-white transition-colors inline-block"
+                        >hello@bigworld.agency</a>
+                    </div>
+
+                    <div class="w-full md:w-1/2 flex flex-wrap gap-12 md:gap-24
+                                md:justify-end mt-8 md:mt-0">
+                        <nav aria-label="Social links">
+                            <p class="font-sans text-[10px] tracking-[0.2em] text-white/40
+                                      uppercase mb-3 md:mb-4 font-bold">Socials</p>
+                            <ul class="flex flex-col gap-3 md:gap-4 list-none p-0">
+                                <li>
+                                    <a href="https://www.instagram.com/thebigworldagency/"
+                                       target="_blank" rel="noopener noreferrer"
+                                       class="font-sans text-xs md:text-sm tracking-widest
+                                              uppercase text-white hover:text-brand-accent
+                                              hover-target transition-colors font-semibold">
+                                        Instagram
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://x.com/BigworldAgency"
+                                       target="_blank" rel="noopener noreferrer"
+                                       class="font-sans text-xs md:text-sm tracking-widest
+                                              uppercase text-white hover:text-brand-accent
+                                              hover-target transition-colors font-semibold">
+                                        Twitter (X)
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.linkedin.com/company/bigworld-agency/about/"
+                                       target="_blank" rel="noopener noreferrer"
+                                       class="font-sans text-xs md:text-sm tracking-widest
+                                              uppercase text-white hover:text-brand-accent
+                                              hover-target transition-colors font-semibold">
+                                        LinkedIn
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <address class="not-italic flex flex-col gap-3 md:gap-4">
+                            <p class="font-sans text-[10px] tracking-[0.2em] text-white/40
+                                      uppercase mb-1 md:mb-2 font-bold">Location</p>
+                            <p class="font-sans text-xs md:text-sm tracking-widest
+                                      uppercase text-white leading-relaxed font-semibold">
+                                Los Angeles, CA<br>Operating Globally
+                            </p>
+                        </address>
+                    </div>
+                </div>
+
+                <div class="max-w-[1600px] mx-auto mt-24 md:mt-32 flex flex-col md:flex-row
+                            justify-between items-center md:items-end gap-4 md:gap-0
+                            border-t border-white/20 pt-8">
+                    <p class="font-sans text-[9px] md:text-xs tracking-widest
+                              uppercase text-white/50 font-bold">&copy; 2026 Bigworld Agency. All Rights Reserved.</p>
+                    <nav aria-label="Legal" class="flex items-center gap-6">
+                        <a href="#privacy-policy"
+                           id="footer-privacy-link"
+                           class="font-sans text-[9px] md:text-xs tracking-widest uppercase
+                                  text-white/50 font-bold hover:text-white/80 transition-colors
+                                  hover-target"
+                           onclick="document.getElementById('privacy-overlay').classList.add('is-open'); return false;">
+                            Privacy Policy
+                        </a>
+                        <span class="text-white/20 text-[9px]" aria-hidden="true">·</span>
+                        <a href="#terms-of-service"
+                           id="footer-terms-link"
+                           class="font-sans text-[9px] md:text-xs tracking-widest uppercase
+                                  text-white/50 font-bold hover:text-white/80 transition-colors
+                                  hover-target"
+                           onclick="document.getElementById('terms-overlay').classList.add('is-open'); return false;">
+                            Terms of Service
+                        </a>
+                    </nav>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <div
+        id="lightbox"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Project Details"
+        class="fixed inset-0 z-[9999999] pointer-events-none opacity-0 invisible
+               flex flex-col justify-between bg-black/60 backdrop-blur-md"
+    >
+        <h2
+            class="absolute inset-0 flex items-center justify-center overflow-hidden
+                   pointer-events-none select-none font-display font-extrabold uppercase
+                   tracking-tighter text-white/5 lightbox-bg-title whitespace-nowrap
+                   text-[25vw] leading-none translate-y-12"
+            aria-hidden="true"
+        ></h2>
+
+        <div class="w-full flex justify-between items-center px-5 md:px-10 pt-8 z-50">
+            <p class="font-sans text-[10px] md:text-xs tracking-[0.2em]
+                      text-brand-accent uppercase font-bold">Projects</p>
+            <button
+                class="lightbox-close hover-target uppercase tracking-widest
+                       text-[10px] md:text-xs border border-white/20 rounded-full
+                       px-6 py-3 hover:bg-white hover:text-black transition-colors
+                       bg-black/50 backdrop-blur-md pointer-events-auto drop-shadow-lg"
+                aria-label="Close project details"
+            >CLOSE</button>
+        </div>
+
+        <div class="absolute inset-0 flex items-center justify-center
+                    pointer-events-none z-30 pt-10">
+            <div class="w-[85vw] md:w-[65vw] h-[55vh] md:h-[70vh] relative
+                        lightbox-media-container overflow-hidden rounded-md shadow-2xl">
+                <img
+                    src=""
+                    alt="Project visual"
+                    id="lightbox-main-img"
+                    class="absolute inset-0 w-full h-full object-cover"
+                >
+            </div>
+        </div>
+
+        <div
+            id="lightbox-thumbs"
+            class="absolute right-5 md:right-10 top-1/2 -translate-y-1/2
+                   flex flex-col gap-4 z-50 pointer-events-auto"
+            role="tablist"
+            aria-label="Project images"
+        ></div>
+
+        <div
+            class="absolute bottom-0 left-0 w-full px-5 md:px-10 pb-8 z-40
+                   opacity-0 lightbox-details
+                   flex flex-col md:flex-row justify-between items-start md:items-end
+                   text-white gap-6 md:gap-0 pointer-events-auto drop-shadow-lg"
+        >
+            <dl class="flex gap-10 md:w-1/3 font-sans text-[9px] md:text-[10px]
+                       tracking-widest uppercase font-bold">
+                <dt class="text-white/60 space-y-2 flex flex-col gap-2">
+                    <span>Completed</span><span>Role</span><span>Client</span>
+                </dt>
+                <dd class="text-white space-y-2 flex flex-col gap-2">
+                    <span>2026</span>
+                    <span class="lightbox-role"></span>
+                    <span class="lightbox-client"></span>
+                </dd>
+            </dl>
+
+            <div class="md:w-1/3 flex justify-start md:justify-center items-end">
+                <a
+                    href="#"
+                    class="font-sans text-[10px] md:text-xs tracking-[0.2em] uppercase
+                           hover-target hover:text-brand-accent transition-colors
+                           flex items-center gap-2 font-bold relative
+                           after:content-[''] after:absolute after:-bottom-2 after:left-0
+                           after:w-full after:h-px after:bg-brand-accent/30
+                           hover:after:bg-brand-accent"
+                    aria-label="View live project (opens in new tab)"
+                    target="_blank" rel="noopener noreferrer"
+                >
+                    View Live
+                    <span class="text-brand-accent text-lg leading-none block -rotate-45"
+                          aria-hidden="true">→</span>
+                </a>
+            </div>
+
+            <p class="font-sans text-[10px] md:text-[11px] text-white/90 leading-relaxed
+                      max-w-xs md:text-right font-medium md:w-1/3"
+               id="lightbox-desc"
+               aria-live="polite"
+            ></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/SMAAPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/SMAAShader.js"></script>
+
+    <script>
+    'use strict';
+
+    /* ═══════════════════════════════════════════════════════════════
+       UTILITIES
+    ═══════════════════════════════════════════════════════════════ */
+
+    /** Minimal publish-subscribe event bus. */
+    class EventEmitter {
+        constructor() { this._events = Object.create(null); }
+        on(evt, cb) {
+            (this._events[evt] ??= []).push(cb);
+            return () => this.off(evt, cb); // returns unsubscribe fn
+        }
+        emit(evt, ...args) { (this._events[evt] ?? []).forEach(cb => cb(...args)); }
+        off(evt, cb) { this._events[evt] = (this._events[evt] ?? []).filter(fn => fn !== cb); }
+        destroy() { this._events = Object.create(null); }
+    }
+    const bus = new EventEmitter();
+
+    /**
+     * Tiny finite-state machine.
+     * Emits <STATE>_ENTER, <STATE>_LEAVE, and STATE_CHANGE events via the bus.
+     */
+    class StateMachine {
+        #state = 'LOADING';
+        history = [];
+
+        get current() { return this.#state; }
+
+        transition(next, payload = null) {
+            if (this.#state === next) return;
+            bus.emit(`${this.#state}_LEAVE`);
+            this.history.push(this.#state);
+            this.#state = next;
+            bus.emit(`${next}_ENTER`, payload);
+            bus.emit('STATE_CHANGE', next);
+        }
+    }
+    const stateMachine = new StateMachine();
+
+    /* ── Device / preference detection ────────────────────────── */
+    const isTouchDevice = () =>
+        window.innerWidth <= 768 ||
+        'ontouchstart' in window ||
+        navigator.maxTouchPoints > 0;
+
+    const prefersReducedMotion =
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const Context = Object.freeze({
+        isMobile: isTouchDevice(),
+        reducedMotion: prefersReducedMotion,
+    });
+
+    /* ── Shared physics state ───────────────────────────────────── */
+    const AppPhysics = {
+        isDragging: false,
+        hasDragged:  false,
+        startX: 0,
+        startY: 0,
+        mouseX: window.innerWidth  / 2,
+        mouseY: window.innerHeight / 2,
+        intro: {
+            progress: 0,
+            x: 0,
+            y: window.innerHeight * -0.25,
+            scale: 0.0001,
+            rotY: -1440,
+            rotX: 90,
+            spaceScale: 10,
+            lightBlast: 30,
+        },
+        physics: {
+            targetRotY: 0,
+            currentRotY: 0,
+            rotVelY: 0,
+            targetEarthRotX: 10,
+            currentEarthRotX: 10,
+            rotEarthVelX: 0,
+            friction: Context.isMobile ? 0.92 : 0.96,
+            targetZoom: 0.75, // Updated default sphere zoom
+            currentZoom: 0.75, // Updated default sphere zoom
+        },
+    };
+
+    /* ── Project data ───────────────────────────────────────────── */
+    const RAW_DATA = [
+        {
+            t: 'Chanel', c: 'CGI & Lighting', client: 'Chanel SA',
+            cover: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop',
+            shots: [
+                { src: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop', desc: 'Macro 100 mm. Low-key studio setup highlighting glass refraction and the amber hue of N°5.' },
+                { src: 'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop', desc: 'Backlit silhouette pass. Emphasizing the iconic architectural geometry of the bottle.' },
+                { src: 'https://images.unsplash.com/photo-1616949755610-8c9bbc08f138?auto=format&fit=crop', desc: 'Caustics study. Directional hard light generating organic water-like refractions on a monolithic plinth.' },
+            ],
+        },
+        {
+            t: 'Jack', c: 'Product Photography', client: "Jack Daniel's",
+            cover: 'https://images.unsplash.com/photo-1527281400683-1aae777175f8?auto=format&fit=crop',
+            shots: [
+                { src: 'https://images.unsplash.com/photo-1527281400683-1aae777175f8?auto=format&fit=crop', desc: 'High-speed sync. Freezing the liquid dynamics with a dual-strobe setup and amber gels.' },
+                { src: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop', desc: 'Lifestyle integration. Shallow depth of field using an 85 mm f/1.2 to isolate the rocks glass.' },
+                { src: 'https://images.unsplash.com/photo-1582222308710-1c08006d0bf7?auto=format&fit=crop', desc: 'Texture pass. Side-lighting to emphasize the embossed glass typography and condensation.' },
+            ],
+        },
+        {
+            t: 'Porsche', c: 'WebGL Configurator', client: 'Porsche AG',
+            cover: 'https://images.unsplash.com/photo-1503376713356-dd2ce20d3f23?auto=format&fit=crop',
+            shots: [
+                { src: 'https://images.unsplash.com/photo-1503376713356-dd2ce20d3f23?auto=format&fit=crop', desc: 'Front ¾ aggressive crop. Continuous softbox overhead to trace the aerodynamics of the front fascia.' },
+                { src: 'https://images.unsplash.com/photo-1611859328053-3cbc9e934ee0?auto=format&fit=crop', desc: 'Low angle rear. Accentuating the wide stance and LED light bar with specular rim lighting.' },
+                { src: 'https://images.unsplash.com/photo-1580274455191-1c62238fa333?auto=format&fit=crop', desc: 'Interior macro. Highlighting the carbon fibre weave and alcantara stitching via localised micro-LED panels.' },
+            ],
+        },
+        {
+            t: 'Fenty', c: 'Campaign Dev', client: 'Fenty Beauty',
+            cover: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop',
+            shots: [
+                { src: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop', desc: 'Top-down flatlay. High-key diffused lighting to ensure colour accuracy of the palette pigments.' },
+                { src: 'https://images.unsplash.com/photo-1629198688000-71f23e745b6e?auto=format&fit=crop', desc: 'Macro gloss study. Hard directional light creating sharp, specular highlights on the metallic applicator.' },
+                { src: 'https://images.unsplash.com/photo-1587941295254-9442a8b98eb6?auto=format&fit=crop', desc: 'Texture smear. Viscosity demonstration shot with an angled key light to reveal raw product density.' },
+            ],
+        },
+        {
+            t: 'Leica', c: 'Product Launch', client: 'Leica Camera AG',
+            cover: 'https://images.unsplash.com/photo-1516961642265-531546e84af2?auto=format&fit=crop',
+            shots: [
+                { src: 'https://images.unsplash.com/photo-1516961642265-531546e84af2?auto=format&fit=crop', desc: 'Low-key hero profile. Single strip box catching the knurled metal dials and matte black finish.' },
+                { src: 'https://images.unsplash.com/photo-1546188941-8664ec519c9b?auto=format&fit=crop', desc: 'Lens macro detail. Ring flash illuminates the glass optics without blowing the aperture markings.' },
+                { src: 'https://images.unsplash.com/photo-1502920514313-ce39f00048d9?auto=format&fit=crop', desc: 'Lifestyle in-hand. Street context using natural overcast light to emphasise rugged utility.' },
+            ],
+        },
+        {
+            t: 'Rimowa', c: 'Brand Re-ID', client: 'Rimowa',
+            cover: 'https://images.unsplash.com/photo-1553531580-652231dae097?auto=format&fit=crop',
+            shots: [
+                { src: 'https://images.unsplash.com/photo-1553531580-652231dae097?auto=format&fit=crop', desc: 'Anodised aluminium study. Hard grid-spot lighting to pop the iconic grooved texture.' },
+                { src: 'https://images.unsplash.com/photo-1596522435572-c28308be7385?auto=format&fit=crop', desc: 'Detail macro. Extreme close-up on polycarbonate corner rivets, DoF crushed to f/2.8.' },
+                { src: 'https://images.unsplash.com/photo-1574259461148-5221b2d07520?auto=format&fit=crop', desc: 'Travel context. Desaturated lifestyle composite blurring terminal transit and studio polish.' },
+            ],
+        },
+        {
+            t: 'Bang', c: 'Motion & UI', client: 'Bang & Olufsen',
+            cover: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop',
+            shots: [
+                { src: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop', desc: 'Hero floating composition. Shadowless rim lighting to detach hardware from the warm background.' },
+                { src: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop', desc: 'Material contrast. Highlighting the intersection of cold brushed steel and warm premium leather.' },
+                { src: 'https://images.unsplash.com/photo-1528148343865-51218c4a13e6?auto=format&fit=crop', desc: 'Acoustic visualisation. Slow-shutter motion blur used practically to imply sound waves.' },
+            ],
+        },
+        {
+            t: 'Nike', c: 'Global Drop', client: 'Nike HQ',
+            cover: 'https://images.unsplash.com/photo-1552346154-21d32810baa3?auto=format&fit=crop',
+            shots: [
+                { src: 'https://images.unsplash.com/photo-1552346154-21d32810baa3?auto=format&fit=crop', desc: 'Low-angle hero. Forced perspective using a 14 mm lens to exaggerate the Air Max heel unit.' },
+                { src: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop', desc: 'Material breakdown. Split-lighting emphasising the breathability of the Flyknit upper mesh.' },
+                { src: 'https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop', desc: 'Action composite. Stroboscopic sequence capturing the shoe mid-stride on raw concrete.' },
+            ],
+        },
+    ];
+
+    /* ═══════════════════════════════════════════════════════════════
+       ASSET MANAGER
+    ═══════════════════════════════════════════════════════════════ */
+    class AssetManager {
+        #textures = new Map();
+
+        constructor() {
+            this.manager = new THREE.LoadingManager();
+            this.loader   = new THREE.TextureLoader(this.manager);
+            this.loader.setCrossOrigin('anonymous');
+
+            this.manager.onError = url => console.warn('[AssetManager] Failed:', url);
+            this.manager.onLoad  = ()  => bus.emit('ASSETS_LOADED');
+        }
+
+        load(key, url, sRGB = false) {
+            if (this.#textures.has(key)) return this.#textures.get(key);
+            const tex = this.loader.load(url);
+            if (sRGB) tex.encoding = THREE.sRGBEncoding;
+            this.#textures.set(key, tex);
+            return tex;
+        }
+
+        get(key) { return this.#textures.get(key); }
+
+        destroy() {
+            this.#textures.forEach(t => t.dispose());
+            this.#textures.clear();
+        }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ENGINE (Lenis + GSAP ScrollTrigger + keyboard)
+    ═══════════════════════════════════════════════════════════════ */
+    class Engine {
+        constructor() {
+            this.lenis = new Lenis({
+                duration: Context.reducedMotion ? 0.01 : 1.5,
+                easing: t => Math.min(1, 1.001 - 2 ** (-10 * t)),
+                direction: 'vertical',
+                gestureDirection: 'vertical',
+                smooth: !Context.reducedMotion,
+                smoothTouch: false,
+                touchMultiplier: 2,
+            });
+
+            gsap.registerPlugin(ScrollTrigger);
+            this.lenis.on('scroll', ScrollTrigger.update);
+
+            this._ticker = time => this.lenis.raf(time * 1000);
+            gsap.ticker.add(this._ticker);
+            gsap.ticker.lagSmoothing(0, 0);
+
+            this._onKey = this._handleKey.bind(this);
+            window.addEventListener('keydown', this._onKey, { passive: false });
+        }
+
+        _handleKey(e) {
+            const s = stateMachine.current;
+            if (s !== 'IDLE' && s !== 'WORK') return;
+
+            const step = window.innerHeight * 0.3;
+            if (e.key === 'ArrowDown' && s === 'IDLE') { e.preventDefault(); this.lenis.scrollTo(window.scrollY + step, { duration: 1.2 }); }
+            if (e.key === 'ArrowUp'   && s === 'IDLE') { e.preventDefault(); this.lenis.scrollTo(window.scrollY - step, { duration: 1.2 }); }
+            if (e.key === 'ArrowRight') { e.preventDefault(); bus.emit('CAROUSEL_SCRUB',  0.5); }
+            if (e.key === 'ArrowLeft')  { e.preventDefault(); bus.emit('CAROUSEL_SCRUB', -0.5); }
+            if (e.key === 'Enter') {
+                const active = document.activeElement;
+                if (active?.id === 'sticky-work' || active?.id === 'work-interaction') {
+                    e.preventDefault();
+                    bus.emit('OPEN_CENTER_CARD');
+                }
+            }
+        }
+
+        destroy() {
+            gsap.ticker.remove(this._ticker);
+            window.removeEventListener('keydown', this._onKey);
+            this.lenis.destroy();
+        }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CURSOR MANAGER
+    ═══════════════════════════════════════════════════════════════ */
+    class CursorManager {
+        constructor() {
+            this._el = document.getElementById('cursor');
+            if (Context.isMobile) return;
+
+            gsap.set(this._el, { xPercent: -50, yPercent: -50 });
+            this._xTo = gsap.quickTo(this._el, 'x', { duration: 0.25, ease: 'power3' });
+            this._yTo = gsap.quickTo(this._el, 'y', { duration: 0.25, ease: 'power3' });
+
+            this._onMove = e => { this._xTo(e.clientX); this._yTo(e.clientY); };
+            window.addEventListener('mousemove', this._onMove, { passive: true });
+
+            this._bindMagnetic();
+        }
+
+        setScale(val) {
+            if (Context.isMobile || Context.reducedMotion) return;
+            gsap.to(this._el, { scale: val, duration: 0.3 });
+        }
+
+        setViewMode(active) {
+            if (Context.isMobile) return;
+            this._el.classList.toggle('cursor--view', active);
+        }
+
+        _bindMagnetic() {
+            if (Context.isMobile || Context.reducedMotion) return;
+
+            /** Magnetic pull on .magnetic elements */
+            this._magnets = [...document.querySelectorAll('.magnetic')];
+            this._magnets.forEach(el => {
+                el._mm = e => {
+                    const r = el.getBoundingClientRect();
+                    gsap.to(el, {
+                        x: (e.clientX - r.left - r.width  / 2) * 0.4,
+                        y: (e.clientY - r.top  - r.height / 2) * 0.4,
+                        duration: 0.6, ease: 'power3.out', overwrite: 'auto',
+                    });
+                };
+                el._ml = () => gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1,0.3)', overwrite: 'auto' });
+                el.addEventListener('mousemove',  el._mm);
+                el.addEventListener('mouseleave', el._ml);
+            });
+
+            /** Cursor scale on .hover-target elements */
+            this._targets = [...document.querySelectorAll('.hover-target')];
+            this._targets.forEach(el => {
+                el._he = () => this._el.classList.add('cursor--hover');
+                el._hl = () => this._el.classList.remove('cursor--hover');
+                el.addEventListener('mouseenter', el._he);
+                el.addEventListener('mouseleave', el._hl);
+            });
+        }
+
+        destroy() {
+            if (Context.isMobile) return;
+            window.removeEventListener('mousemove', this._onMove);
+            this._magnets?.forEach(el => {
+                el.removeEventListener('mousemove',  el._mm);
+                el.removeEventListener('mouseleave', el._ml);
+            });
+            this._targets?.forEach(el => {
+                el.removeEventListener('mouseenter', el._he);
+                el.removeEventListener('mouseleave', el._hl);
+            });
+        }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CUSTOM POST-PROCESSING: CINEMATIC SHADER
+       (chromatic aberration + filmic grain + shadow tint)
+    ═══════════════════════════════════════════════════════════════ */
+    const CinematicShader = {
+        uniforms: {
+            tDiffuse: { value: null },
+            uTime:    { value: 0.0 },
+            uAmount:  { value: 0.0015 },
+        },
+        vertexShader: `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `,
+        fragmentShader: `
+            uniform sampler2D tDiffuse;
+            uniform float uTime;
+            uniform float uAmount;
+            varying vec2 vUv;
+
+            float rand(vec2 p) {
+                return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+            }
+
+            void main() {
+                vec2 uv = vUv;
+                vec2 offset = uAmount * (uv - 0.5);
+
+                /* Chromatic aberration — split R/B channels */
+                float r = texture2D(tDiffuse, uv + offset).r;
+                float g = texture2D(tDiffuse, uv).g;
+                float b = texture2D(tDiffuse, uv - offset).b;
+                vec3 color = vec3(r, g, b);
+
+                /* Filmic grain */
+                color += (rand(uv + fract(uTime)) - 0.5) * 0.035;
+
+                /* Subtle gamma lift */
+                color = pow(color, vec3(1.05));
+
+                /* Cool shadow tint */
+                vec3 shadowTint = vec3(0.95, 0.98, 1.05);
+                color = mix(color, color * shadowTint,
+                    smoothstep(0.8, 0.0, dot(color, vec3(0.333))));
+
+                gl_FragColor = vec4(color, 1.0);
+            }
+        `,
+    };
+
+    /* ═══════════════════════════════════════════════════════════════
+       WEBGL CAROUSEL
+    ═══════════════════════════════════════════════════════════════ */
+    class WebGLCarousel {
+        constructor(scene, cursor, assets, camera) {
+            this.scene  = scene;
+            this.cursor = cursor;
+            this.assets = assets;
+            this.camera = camera;
+
+            this.group  = new THREE.Group();
+            this.scene.add(this.group);
+
+            this.cards      = [];
+            this.radius     = Context.isMobile ? 7.2 : 8.4;
+            this.raycaster  = new THREE.Raycaster();
+            this._mouse     = new THREE.Vector2();
+            this.hoveredCard = null;
+
+            this._buildCards();
+            this._bindPointer();
+
+            this._unsubScrub = bus.on('CAROUSEL_SCRUB', amt => {
+                gsap.killTweensOf(AppPhysics.physics);
+                AppPhysics.physics.rotVelY += amt;
+            });
+
+            this._unsubOpen = bus.on('OPEN_CENTER_CARD', () => this._openFrontCard());
+        }
+
+        /* Build card meshes ──────────────────────────────────────── */
+        _buildCards() {
+            const w = Context.isMobile ? 3.2 : 4.8;
+            const h = Context.isMobile ? 4.8 : 7.2;
+            const geo = new THREE.PlaneGeometry(w, h, 32, 32);
+            this._sharedGeo = geo; // kept for disposal
+
+            const suffix = Context.isMobile ? '&w=800&q=80' : '&w=1600&q=90';
+
+            RAW_DATA.forEach((data, i) => {
+                const angle = (i / RAW_DATA.length) * Math.PI * 2;
+                const tex   = this.assets.load(`card_${i}`, data.cover + suffix, true);
+
+                const mat = new THREE.ShaderMaterial({
+                    uniforms: {
+                        uTex:    { value: tex },
+                        uHover:  { value: 0.0 },
+                        uRadius: { value: 0.08 },
+                        uOpacity:{ value: 1.0 },
+                    },
+                    vertexShader: `
+                        varying vec2 vUv;
+                        void main() {
+                            vUv = uv;
+                            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                        }
+                    `,
+                    fragmentShader: `
+                        uniform sampler2D uTex;
+                        uniform float uHover;
+                        uniform float uRadius;
+                        uniform float uOpacity;
+                        varying vec2 vUv;
+
+                        float roundedBox(vec2 p, vec2 b, float r) {
+                            return length(max(abs(p) - b + r, 0.0)) - r;
+                        }
+
+                        void main() {
+                            vec4  tex   = texture2D(uTex, vUv);
+                            float dist  = roundedBox(vUv - 0.5, vec2(0.5), uRadius);
+                            float alpha = smoothstep(0.0, -0.005, dist);
+                            float edge  = smoothstep(-0.02, 0.0, dist) *
+                                          smoothstep(0.005, -0.005, dist);
+
+                            vec3 color  = mix(tex.rgb, vec3(1.0), edge * uHover * 0.4);
+                            vec3 luma   = vec3(dot(color, vec3(0.299, 0.587, 0.114)));
+                            color = mix(mix(luma, color, 0.7), color, uHover);
+
+                            gl_FragColor = vec4(color, alpha * uOpacity);
+                        }
+                    `,
+                    transparent: true,
+                    side: THREE.DoubleSide,
+                });
+
+                const mesh = new THREE.Mesh(geo, mat);
+                mesh.userData = {
+                    index: i,
+                    data,
+                    angle,
+                    baseRotY: angle,
+                    animState: { progress: 0 },
+                };
+                this.cards.push(mesh);
+                this.group.add(mesh);
+            });
+        }
+
+        /* Pointer events ─────────────────────────────────────────── */
+        _bindPointer() {
+            const targets = [
+                document.getElementById('sticky-work'),
+                document.getElementById('work-interaction'),
+            ].filter(Boolean);
+
+            this._onMoveHover = e => {
+                if (!this._inActiveState() || AppPhysics.isDragging || Context.isMobile) return;
+                this._mouse.set(
+                    (e.clientX / window.innerWidth)  * 2 - 1,
+                    (e.clientY / window.innerHeight) * -2 + 1
+                );
+            };
+
+            this._onClick = e => {
+                if (
+                    !this._inActiveState() ||
+                    AppPhysics.hasDragged ||
+                    Math.abs(AppPhysics.physics.rotEarthVelX) > 0.5 ||
+                    Math.abs(AppPhysics.physics.rotVelY) > 0.5
+                ) return;
+
+                this._mouse.set(
+                    (e.clientX / window.innerWidth)  * 2 - 1,
+                    (e.clientY / window.innerHeight) * -2 + 1
+                );
+                this.raycaster.setFromCamera(this._mouse, this.camera);
+                const hit = this.raycaster.intersectObjects(this.cards)[0];
+                if (hit?.object.visible) this._handleClick(hit.object);
+            };
+
+            targets.forEach(el => {
+                el.addEventListener('mousemove', this._onMoveHover, { passive: true });
+                el.addEventListener('click', this._onClick);
+            });
+            this._targets = targets;
+        }
+
+        _inActiveState() {
+            const s = stateMachine.current;
+            return s === 'IDLE' || s === 'WORK';
+        }
+
+        _handleClick(mesh) {
+            const cur  = AppPhysics.physics.targetRotY;
+            const deg  = -(mesh.userData.angle * 180 / Math.PI);
+            const diff = ((deg - cur) % 360 + 540) % 360 - 180;
+
+            AppPhysics.physics.targetRotY = cur + diff;
+            AppPhysics.physics.rotVelY    = 0;
+            this.cursor.setViewMode(false);
+            bus.emit('OPEN_LIGHTBOX', mesh.userData);
+        }
+
+        _openFrontCard() {
+            let best = null;
+            let maxZ = -Infinity;
+            for (const card of this.cards) {
+                if (!card.visible) continue;
+                const z = Math.cos(card.rotation.y + this.group.rotation.y);
+                if (z > maxZ) { maxZ = z; best = card; }
+            }
+            if (best && maxZ > 0.8) this._handleClick(best);
+        }
+
+        /* Per-frame update ───────────────────────────────────────── */
+        update(camera, phys, intro, time, earthMesh) {
+            if (!earthMesh) return;
+
+            // Sync group transform with the earth mesh
+            this.group.position.copy(earthMesh.position);
+            this.group.rotation.x = earthMesh.rotation.x;
+            this.group.rotation.y = earthMesh.rotation.y;
+            this.group.scale.copy(earthMesh.scale);
+
+            this.cards.forEach((mesh, i) => {
+                const prog  = mesh.userData.animState.progress;
+                const r     = this.radius * prog - (1 - prog) * 20;
+
+                // Tumble animation while cards are spawning in
+                const t         = (1 - prog) * Math.PI * 6 + i * 0.4;
+                const intensity = 1 - prog;
+                const dir       = i % 2 === 0 ? 1 : -1;
+                mesh.rotation.y = mesh.userData.baseRotY + Math.sin(t) * Math.PI * 2 * intensity * dir;
+                mesh.rotation.x = Math.sin(t * 2) * Math.PI * intensity;
+
+                mesh.position.set(
+                    Math.sin(mesh.userData.baseRotY) * r,
+                    mesh.position.y,
+                    Math.cos(mesh.userData.baseRotY) * r
+                );
+
+                const globalAngle = mesh.rotation.y + this.group.rotation.y;
+                const zFacing     = Math.cos(globalAngle);
+                const alpha = Math.max(0, Math.min(1, (zFacing + 0.1) * 3)) * Math.min(1, prog * 1.5);
+                mesh.material.uniforms.uOpacity.value = alpha;
+                mesh.visible = alpha > 0.05;
+            });
+
+            this.group.updateMatrixWorld(true);
+
+            // Hover detection (desktop only, when carousel is settled)
+            if (
+                !Context.isMobile &&
+                this._inActiveState() &&
+                !AppPhysics.isDragging &&
+                intro.scale > 0.4
+            ) {
+                this.raycaster.setFromCamera(this._mouse, camera);
+                const intersects =
+                    Math.abs(phys.rotVelY) < 0.2
+                        ? this.raycaster.intersectObjects(this.cards)
+                        : [];
+
+                const hit = intersects[0]?.object.visible ? intersects[0].object : null;
+
+                if (hit !== this.hoveredCard) {
+                    if (this.hoveredCard) {
+                        gsap.to(this.hoveredCard.material.uniforms.uHover, { value: 0, duration: 0.4 });
+                        gsap.to(this.hoveredCard.position, { y: 0, duration: 0.6, ease: 'power2.out' });
+                        this.cursor.setViewMode(false);
+                        // Removing gsap.killTweensOf(phys) prevents freezing inertia abruptly
+                    }
+                    this.hoveredCard = hit;
+                    if (hit) {
+                        gsap.to(hit.material.uniforms.uHover, { value: 1, duration: 0.4 });
+                        // Reduced Y pop from 0.8 to 0.4 to prevent raycast slipping
+                        gsap.to(hit.position, { y: 0.4, duration: 0.6, ease: 'back.out(1.5)' });
+                        this.cursor.setViewMode(true);
+
+                        // Removed erratic auto-rotation of the Earth when hovering a project to stop jitter
+                    }
+                }
+            }
+        }
+
+        destroy() {
+            this._unsubScrub();
+            this._unsubOpen();
+            this._targets?.forEach(el => {
+                el.removeEventListener('mousemove', this._onMoveHover);
+                el.removeEventListener('click', this._onClick);
+            });
+            this._sharedGeo.dispose();
+            this.cards.forEach(m => {
+                m.material.dispose();
+                this.group.remove(m);
+            });
+            this.scene.remove(this.group);
+        }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CINEMATIC PIPELINE (Three.js + post-processing)
+    ═══════════════════════════════════════════════════════════════ */
+    class CinematicPipeline {
+        constructor(assets) {
+            this.assets    = assets;
+            this.container = document.getElementById('webgl-earth');
+            this.scene     = new THREE.Scene();
+            this.scene.fog = new THREE.FogExp2(0x010204, 0.005);
+
+            this.camera = new THREE.PerspectiveCamera(
+                45, window.innerWidth / window.innerHeight, 0.1, 1500
+            );
+            this.camera.position.z = 20;
+
+            const dpr = Math.min(window.devicePixelRatio, Context.isMobile ? 1 : 1.5);
+            this.renderer = new THREE.WebGLRenderer({
+                alpha: true,
+                powerPreference: 'high-performance',
+                antialias: false, // SMAA handles anti-aliasing in post
+            });
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
+            this.renderer.setPixelRatio(dpr);
+            this.renderer.outputEncoding   = THREE.sRGBEncoding;
+            this.renderer.toneMapping      = THREE.ACESFilmicToneMapping;
+            this.renderer.toneMappingExposure = 1.0;
+            this.container.appendChild(this.renderer.domElement);
+
+            this._spaceGroup  = new THREE.Group();
+            this._starsUniforms = { uTime: { value: 0 } };
+
+            this._buildScene(dpr);
+            this._setupPostFX(dpr);
+
+            this._onResize = this._resize.bind(this);
+            window.addEventListener('resize', this._onResize, { passive: true });
+        }
+
+        _setupPostFX(dpr) {
+            this.composer = new THREE.EffectComposer(this.renderer);
+            this.composer.addPass(new THREE.RenderPass(this.scene, this.camera));
+
+            // SMAA (better quality anti-aliasing than FXAA for scene edges)
+            this.composer.addPass(
+                new THREE.SMAAPass(window.innerWidth * dpr, window.innerHeight * dpr)
+            );
+
+            // Bloom — tight threshold so only bright stellar regions glow
+            this.composer.addPass(
+                new THREE.UnrealBloomPass(
+                    new THREE.Vector2(window.innerWidth, window.innerHeight),
+                    0.35, 0.2, 0.85
+                )
+            );
+
+            // Film-look post pass
+            this._cinematicPass = new THREE.ShaderPass(CinematicShader);
+            this.composer.addPass(this._cinematicPass);
+        }
+
+        _buildScene(dpr) {
+            const maxAniso = Context.isMobile
+                ? 1
+                : this.renderer.capabilities.getMaxAnisotropy();
+
+            /* GPU particle galaxy ─────────────────────────────────── */
+            const count  = Context.isMobile ? 6_000 : 15_000;
+            const pos    = new Float32Array(count * 3);
+            const cols   = new Float32Array(count * 3);
+            const sizes  = new Float32Array(count);
+            const rands  = new Float32Array(count);
+
+            const palette = [0xffffff, 0xeef4ff, 0x8ab4f8, 0xffd1a3, 0x2b00ff]
+                .map(c => new THREE.Color(c));
+
+            for (let i = 0; i < count; i++) {
+                const radius     = Math.random() * 800 + 40;
+                const spinAngle  = radius * 0.015;
+                const branchAng  = (i % 3) * ((Math.PI * 2) / 3);
+                const spread     = (Math.random() - 0.5) * (800 / radius) * 25;
+
+                pos[i*3]   = Math.cos(spinAngle + branchAng) * radius + spread;
+                pos[i*3+1] = (Math.random() - 0.5) * 60 * (1 - radius / 800);
+                pos[i*3+2] = Math.sin(spinAngle + branchAng) * radius + spread;
+
+                const c    = palette[Math.floor(Math.random() * palette.length)];
+                const core = (1 - radius / 800) ** 2 * 1.5;
+                cols[i*3]   = c.r * (1 + core);
+                cols[i*3+1] = c.g * (1 + core);
+                cols[i*3+2] = c.b * (1 + core);
+
+                sizes[i] = Math.random() * (Context.isMobile ? 1.0 : 1.8) + 0.5;
+                rands[i] = Math.random();
+            }
+
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.BufferAttribute(pos,  3));
+            geo.setAttribute('color',    new THREE.BufferAttribute(cols, 3));
+            geo.setAttribute('size',     new THREE.BufferAttribute(sizes, 1));
+            geo.setAttribute('aRandom',  new THREE.BufferAttribute(rands, 1));
+            this._starsGeo = geo;
+
+            this._starsMat = new THREE.ShaderMaterial({
+                uniforms: this._starsUniforms,
+                vertexShader: `
+                    attribute float size;
+                    attribute float aRandom;
+                    varying vec3  vColor;
+                    varying float vRandom;
+                    void main() {
+                        vColor  = color;
+                        vRandom = aRandom;
+                        vec4 mvPos    = modelViewMatrix * vec4(position, 1.0);
+                        gl_PointSize  = size * (800.0 / -mvPos.z);
+                        gl_Position   = projectionMatrix * mvPos;
+                    }
+                `,
+                fragmentShader: `
+                    uniform float uTime;
+                    varying vec3  vColor;
+                    varying float vRandom;
+                    void main() {
+                        vec2  d    = gl_PointCoord.xy - 0.5;
+                        if (length(d) > 0.5) discard;
+                        float core    = pow(1.0 - length(d) * 2.0, 3.0);
+                        float twinkle = sin(uTime * 4.0 + vRandom * 100.0) * 0.4 + 0.6;
+                        gl_FragColor  = vec4(vColor * core * twinkle, core * 0.8 * twinkle);
+                    }
+                `,
+                transparent: true,
+                blending: THREE.AdditiveBlending,
+                vertexColors: true,
+                depthWrite: false,
+            });
+            this._spaceGroup.add(new THREE.Points(geo, this._starsMat));
+            this.scene.add(this._spaceGroup);
+
+            /* Physically-based Earth ─────────────────────────────── */
+            const segs = Context.isMobile ? 128 : 256;
+
+            const setTexOpts = tex => {
+                tex.anisotropy  = maxAniso;
+                tex.minFilter   = THREE.LinearMipmapLinearFilter;
+                tex.magFilter   = THREE.LinearFilter;
+            };
+
+            const base  = this.assets.load('earth_color',    'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_atmos_2048.jpg',   true);
+            const nrm   = this.assets.load('earth_normal',   'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_normal_2048.jpg');
+            const spec  = this.assets.load('earth_specular', 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_specular_2048.jpg');
+            const clds  = this.assets.load('earth_clouds',   'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_clouds_1024.png');
+            const lgts  = this.assets.load('earth_lights',   'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_lights_2048.png',  true);
+            [base, nrm, spec, clds, lgts].forEach(setTexOpts);
+
+            /* Earth surface */
+            const earthMat = new THREE.MeshStandardMaterial({
+                map: base, normalMap: nrm, roughnessMap: spec,
+                roughness: 0.5, metalness: 0.4,
+            });
+
+            // Shader injection: city lights on dark side + terminator glow
+            earthMat.onBeforeCompile = shader => {
+                shader.uniforms.tLights = { value: lgts };
+                shader.fragmentShader = 'uniform sampler2D tLights;\n' + shader.fragmentShader;
+                shader.fragmentShader = shader.fragmentShader.replace(
+                    '#include <map_fragment>',
+                    `
+                    #include <map_fragment>
+                    vec3  sunDir    = normalize(vec3(15.0, 5.0, 10.0));
+                    float intensity = dot(normalize(vNormal), sunDir);
+
+                    /* Warm terminator glow */
+                    vec3  termColor = vec3(1.0, 0.4, 0.1);
+                    float termMask  = smoothstep(-0.15, 0.15, intensity) *
+                                      smoothstep( 0.15,-0.15, intensity);
+                    diffuseColor.rgb += termColor * termMask * 0.8;
+
+                    /* City lights on the night side */
+                    vec3  cityLights = texture2D(tLights, vUv).rgb;
+                    float nightMask  = smoothstep(0.05, -0.2, intensity);
+                    diffuseColor.rgb += cityLights * nightMask * 2.5;
+                    `
+                );
+            };
+
+            this.earthMesh = new THREE.Mesh(new THREE.SphereGeometry(6, segs, segs), earthMat);
+            this.scene.add(this.earthMesh);
+
+            /* Atmosphere (backside fresnel) */
+            const atmoMat = new THREE.ShaderMaterial({
+                vertexShader: `
+                    varying vec3 vNormal; varying vec3 vViewNormal;
+                    void main() {
+                        vNormal     = normalize(normalMatrix * normal);
+                        vViewNormal = normalize((modelViewMatrix * vec4(position, 1.0)).xyz);
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                    }
+                `,
+                fragmentShader: `
+                    varying vec3 vNormal; varying vec3 vViewNormal;
+                    void main() {
+                        float fresnel = pow(1.0 - max(0.0, dot(vNormal, vViewNormal)), 3.5);
+                        vec3  color   = mix(vec3(0.05, 0.2, 0.8), vec3(0.4, 0.8, 1.0), fresnel);
+                        gl_FragColor  = vec4(color, fresnel * 1.8);
+                    }
+                `,
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                side: THREE.BackSide,
+                depthWrite: false,
+            });
+            this.earthMesh.add(new THREE.Mesh(new THREE.SphereGeometry(6.12, segs, segs), atmoMat));
+
+            /* Cloud layer */
+            this._cloudMesh = new THREE.Mesh(
+                new THREE.SphereGeometry(6.04, segs, segs),
+                new THREE.MeshLambertMaterial({ map: clds, transparent: true, opacity: 0.5, depthWrite: false })
+            );
+            this.earthMesh.add(this._cloudMesh);
+
+            /* Lighting */
+            this._ambient  = new THREE.AmbientLight(0xffffff, 0.05);
+            this._sunLight = new THREE.DirectionalLight(0xfff5e6, 3.5);
+            this._sunLight.position.set(15, 5, 10);
+            this.scene.add(this._ambient, this._sunLight);
+        }
+
+        _resize() {
+            this.camera.aspect = window.innerWidth / window.innerHeight;
+            this.camera.updateProjectionMatrix();
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
+            this.composer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        render(time, scrollOffsetPx, phys, intro, carousel) {
+            this._cinematicPass.uniforms.uTime.value = time * 0.001;
+
+            // Dynamic lighting from intro animation
+            this._sunLight.intensity = 3.5 + (intro.lightBlast ?? 0) * 0.2;
+            this._ambient.intensity  = 0.05 + (intro.lightBlast ?? 0) * 0.1;
+
+            // Subtle parallax on star field
+            this._spaceGroup.rotation.y  += Context.reducedMotion ? 0.00005 : 0.0001;
+            this._spaceGroup.scale.setScalar(intro.spaceScale ?? 1);
+            this._starsUniforms.uTime.value = time * (Context.isMobile ? 0.0008 : 0.0015);
+
+            // Cloud drift
+            this._cloudMesh.rotation.y += Context.reducedMotion ? 0.0001 : 0.0004;
+
             // Earth positioning — map CSS scroll to WebGL space
             const visH = 2 * 20 * Math.tan(((45 * Math.PI) / 180) / 2);
             const appR = Context.isMobile
-                ? window.innerWidth * 1.0
                 ? window.innerWidth * 1.4   /* bigger sphere radius on mobile */
                 : Math.max(window.innerWidth * 0.5, 800);
             const webR  = ((appR / window.innerHeight) * visH * 0.96) / 6;
             const scale = webR * intro.scale * phys.currentZoom;
+
+            this.earthMesh.scale.setScalar(scale);
+            this.earthMesh.position.set(
+                (intro.x / window.innerHeight) * visH,
+                -((intro.y + scrollOffsetPx) / window.innerHeight) * visH,
+                0
+            );
+            this.earthMesh.rotation.y = (phys.currentRotY + intro.rotY) * (Math.PI / 180);
+            this.earthMesh.rotation.x = (phys.currentEarthRotX + intro.rotX) * (Math.PI / 180);
+
+            if (carousel) carousel.update(this.camera, phys, intro, time, this.earthMesh);
+            this.composer.render();
+        }
+
+        destroy() {
+            window.removeEventListener('resize', this._onResize);
+            this.scene.traverse(obj => {
+                if (obj.isMesh || obj.isPoints) {
+                    obj.geometry?.dispose();
+                    const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+                    mats.forEach(m => m?.dispose());
+                }
+            });
+            this.composer.renderTarget1.dispose();
+            this.composer.renderTarget2.dispose();
+            this.renderer.dispose();
+            this.container.innerHTML = '';
+        }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       UI MANAGER
+    ═══════════════════════════════════════════════════════════════ */
+    class UIManager {
+        constructor(engine) {
+            this.engine     = engine;
+            this._lightbox  = document.getElementById('lightbox');
+            this._wrapper   = document.getElementById('main-wrapper');
+            this._announcer = document.getElementById('sr-announcer');
+            this._focusTrap = null;
+            this._prevFocus = null;
+
+            this._wireStateBus();
+            this._bindNavigation();
+            this._bindLightboxClose();
+        }
+
+        /* Accessibility helpers ─────────────────────────────────── */
+        _announce(msg) {
+            if (this._announcer) this._announcer.textContent = msg;
+        }
+
+        _trapFocus(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            this._prevFocus = document.activeElement;
+
+            const focusable = el.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            if (!focusable.length) return;
+
+            const first = focusable[0];
+            const last  = focusable[focusable.length - 1];
+
+            this._focusTrap = e => {
+                if (e.key !== 'Tab') return;
+                if (e.shiftKey) {
+                    if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+                } else {
+                    if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+                }
+            };
+            document.addEventListener('keydown', this._focusTrap);
+            setTimeout(() => first.focus(), 100);
+        }
+
+        _releaseFocus() {
+            if (this._focusTrap) {
+                document.removeEventListener('keydown', this._focusTrap);
+                this._focusTrap = null;
+            }
+            this._prevFocus?.focus?.();
+        }
+
+        _lockScroll() { this.engine.lenis.stop(); }
+        _unlockScroll() { this.engine.lenis.start(); }
+
+        /* State bus wiring ─────────────────────────────────────── */
+        _wireStateBus() {
+            /* ── LIGHTBOX ── */
+            bus.on('OPEN_LIGHTBOX', userData => stateMachine.transition('LIGHTBOX', userData));
+
+            bus.on('LIGHTBOX_ENTER', userData => {
+                this._lockScroll();
+                gsap.to('.global-ui', { autoAlpha: 0, duration: 0.3 });
+                gsap.to('#work-overlay', { autoAlpha: 0, duration: 0.3 });
+                this._wrapper.setAttribute('inert', '');
+
+                // Populate lightbox
+                const bgTitle = this._lightbox.querySelector('.lightbox-bg-title');
+                bgTitle.textContent = userData.data.t;
+                this._lightbox.querySelector('.lightbox-role').textContent   = userData.data.c;
+                this._lightbox.querySelector('.lightbox-client').textContent = userData.data.client;
+
+                const mainImg = document.getElementById('lightbox-main-img');
+                const descEl  = document.getElementById('lightbox-desc');
+                const thumbsEl = document.getElementById('lightbox-thumbs');
+                thumbsEl.innerHTML = '';
+
+                const imgQ   = Context.isMobile ? '&w=1200&q=85' : '&w=2000&q=90';
+                const thumbQ = '&w=200&q=60';
+
+                mainImg.src    = userData.data.shots[0].src + imgQ;
+                mainImg.alt    = `${userData.data.t} — shot 1`;
+                descEl.textContent = userData.data.shots[0].desc;
+
+                userData.data.shots.forEach((shot, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = [
+                        'w-12 h-12 md:w-16 md:h-16 rounded-md overflow-hidden border-2',
+                        'transition-all hover-target',
+                        idx === 0
+                            ? 'border-brand-accent scale-110'
+                            : 'border-transparent opacity-50 hover:opacity-100',
+                    ].join(' ');
+                    btn.setAttribute('role', 'tab');
+                    btn.setAttribute('aria-selected', idx === 0 ? 'true' : 'false');
+                    btn.setAttribute('aria-label', `View shot ${idx + 1}`);
+
+                    const img = document.createElement('img');
+                    img.src   = shot.src + thumbQ;
+                    img.alt   = '';
+                    img.className = 'w-full h-full object-cover pointer-events-none';
+                    img.loading = 'lazy';
+                    btn.appendChild(img);
+
+                    btn.addEventListener('click', () => {
+                        thumbsEl.querySelectorAll('button').forEach(b => {
+                            b.classList.replace('border-brand-accent', 'border-transparent');
+                            b.classList.add('opacity-50');
+                            b.classList.remove('scale-110');
+                            b.setAttribute('aria-selected', 'false');
+                        });
+                        btn.classList.replace('border-transparent', 'border-brand-accent');
+                        btn.classList.remove('opacity-50');
+                        btn.classList.add('scale-110');
+                        btn.setAttribute('aria-selected', 'true');
+
+                        gsap.to(mainImg, {
+                            opacity: 0, scale: 0.95, duration: 0.3,
+                            onComplete: () => {
+                                mainImg.src = shot.src + imgQ;
+                                mainImg.alt = `${userData.data.t} — shot ${idx + 1}`;
+                                descEl.textContent = shot.desc;
+                                gsap.to(mainImg, { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' });
+                            },
+                        });
+                    });
+                    thumbsEl.appendChild(btn);
+                });
+
+                gsap.timeline()
+                    .fromTo(this._lightbox,             { autoAlpha: 0 },                        { autoAlpha: 1, duration: 0.6, ease: 'expo.inOut' })
+                    .fromTo('.lightbox-bg-title',        { opacity: 0, scale: 0.9 },             { opacity: 1, scale: 1, duration: 1.0, ease: 'expo.out' },         '-=0.2')
+                    .fromTo('.lightbox-media-container', { scale: 1.05, opacity: 0, y: 40 },     { scale: 1, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, '-=0.6')
+                    .fromTo('#lightbox-main-img',        { scale: 1.15 },                        { scale: 1, duration: 1.5, ease: 'expo.out' },                   '-=1.0')
+                    .fromTo('#lightbox-thumbs button',   { x: 20, opacity: 0 },                  { x: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: 'power2.out' }, '-=0.8')
+                    .fromTo('.lightbox-details',         { y: 20, opacity: 0 },                  { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out' },         '-=0.8');
+
+                this._announce(`Viewing project: ${userData.data.t}`);
+                this._trapFocus('lightbox');
+            });
+
+            bus.on('LIGHTBOX_LEAVE', () => {
+                gsap.timeline({
+                    onComplete: () => {
+                        gsap.set(this._lightbox, { autoAlpha: 0 });
+                        document.getElementById('lightbox-thumbs').innerHTML = '';
+                    },
+                })
+                .to(['.lightbox-details', '#lightbox-thumbs button'], { opacity: 0, y: 10, duration: 0.4, stagger: 0.05, ease: 'power2.in' })
+                .to('.lightbox-media-container', { scale: 0.98, opacity: 0, duration: 0.5, ease: 'expo.inOut' }, '-=0.3')
+                .to('.lightbox-bg-title',        { opacity: 0, scale: 0.95, duration: 0.5, ease: 'power2.in' }, '-=0.4')
+                .to(this._lightbox,              { autoAlpha: 0, duration: 0.5 },                               '-=0.3');
+            });
+
+            /* ── MENU ── */
+            bus.on('MENU_ENTER', () => {
+                this._lockScroll();
+                gsap.to('#main-nav', { autoAlpha: 0, duration: 0.3 });
+                gsap.to('#menu-overlay', { autoAlpha: 1, duration: 0.6, ease: 'expo.inOut' });
+                gsap.fromTo('.menu-link-item',
+                    { y: 50, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'expo.out', delay: 0.2 }
+                );
+                this._wrapper.setAttribute('inert', '');
+                this._trapFocus('menu-overlay');
+            });
+            bus.on('MENU_LEAVE', () => {
+                gsap.to('#menu-overlay', { autoAlpha: 0, duration: 0.5, ease: 'expo.inOut' });
+            });
+
+            /* ── AGENCY ── */
+            bus.on('AGENCY_ENTER', () => {
+                this._lockScroll();
+                gsap.to('#main-nav',      { autoAlpha: 0, duration: 0.3 });
+                gsap.to('#agency-overlay',{ autoAlpha: 1, duration: 0.8, ease: 'expo.inOut' });
+
+                // Reset expanded state
+                const overlay  = document.getElementById('agency-overlay');
+                const expanded = document.getElementById('agency-expanded');
+                const moreBtn  = document.getElementById('more-about-btn');
+                overlay.scrollTop = 0;
+                expanded.classList.add('hidden');
+                expanded.classList.remove('flex');
+                moreBtn.style.display = 'inline-block';
+                moreBtn.setAttribute('aria-expanded', 'false');
+
+                gsap.fromTo('.reveal-elem-init',
+                    { y: 40, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 1.0, ease: 'power3.out', delay: 0.3 }
+                );
+                this._wrapper.setAttribute('inert', '');
+                this._trapFocus('agency-overlay');
+            });
+            bus.on('AGENCY_LEAVE', () => {
+                gsap.to('#agency-overlay', { autoAlpha: 0, duration: 0.5, ease: 'expo.inOut' });
+            });
+
+            /* ── WORK ── */
+            bus.on('WORK_ENTER', () => {
+                this._lockScroll();
+                gsap.to('#main-nav', { autoAlpha: 0, duration: 0.3 });
+                gsap.to('#main-container', { autoAlpha: 0, duration: 0.6 });
+                gsap.to('#work-overlay',   { autoAlpha: 1, duration: 0.8, ease: 'expo.inOut' });
+
                 const isDesktop = window.innerWidth > 768;
                 gsap.to(AppPhysics.intro, {
-                    scale: isDesktop ? 0.55 : 0.38,
                     scale: isDesktop ? 0.55 : 0.52,
                     x: 0, y: 0, rotY: 0, rotX: -15, spaceScale: 1, lightBlast: 0,
                     duration: 1.5, ease: 'expo.out', overwrite: 'auto',
                 });
+
+                app.carousel.cards.forEach((mesh, i) => {
+                    gsap.to(mesh.userData.animState, {
+                        progress: 1,
+                        duration: 1.6,
+                        delay: Context.reducedMotion ? 0 : 0.2 + i * 0.04,
+                        ease: 'expo.out',
+                        overwrite: 'auto',
+                    });
+                });
+
+                gsap.to('.work-explore-text', { opacity: 1, duration: 1, delay: 1.0 });
+                this._wrapper.setAttribute('inert', '');
+                this._trapFocus('work-overlay');
+            });
+
+            bus.on('WORK_LEAVE', () => {
+                gsap.to('#work-overlay',   { autoAlpha: 0, duration: 0.5, ease: 'expo.inOut' });
+                gsap.to('.work-explore-text', { opacity: 0, duration: 0.3 });
+                gsap.to('#main-container', { autoAlpha: 1, duration: 0.6 });
+
+                const scrollY  = window.scrollY;
+                const awards   = document.getElementById('awards');
+                const footer   = document.getElementById('footer');
+
+                const zoneStart = awards ? awards.offsetTop - window.innerHeight : 0;
+                const zoneEnd   = footer ? footer.offsetTop - window.innerHeight * 0.5 : Infinity;
+
+                if (scrollY < zoneStart) {
+                    gsap.to(AppPhysics.intro, {
+                        scale: 0.0001, x: 0, y: -window.innerHeight * 0.25,
+                        rotY: -1440, rotX: 90, spaceScale: 10, lightBlast: 30,
+                        duration: 1.5, ease: 'power3.inOut', overwrite: 'auto',
+                    });
+                    app.carousel.cards.forEach(m =>
+                        gsap.to(m.userData.animState, { progress: 0, duration: 0.5, ease: 'power3.in', overwrite: 'auto' })
+                    );
+                } else if (scrollY > zoneEnd) {
+                    gsap.to(AppPhysics.intro, { scale: 0.01, rotY: 180, duration: 1.5, ease: 'power3.inOut', overwrite: 'auto' });
+                    app.carousel.cards.forEach(m =>
+                        gsap.to(m.userData.animState, { progress: 0, duration: 0.5, ease: 'power3.in', overwrite: 'auto' })
+                    );
+                } else {
                     // FALLBACK: When user closes the modal while parked in the active zones
                     const desktop = window.innerWidth > 768;
                     gsap.to(AppPhysics.intro, {
-                        scale: desktop ? 0.55 : 0.38,
                         scale: desktop ? 0.55 : 0.52,
                         x: desktop ? window.innerWidth * 0.15 : 0,
-                        y: desktop ? 0 : window.innerHeight * 0.2,
                         y: desktop ? 0 : window.innerHeight * 0.18,
                         rotY: 0, rotX: -15, spaceScale: 1, lightBlast: 0,
                         duration: 1.5, ease: 'expo.out', overwrite: 'auto',
                     });
+                }
+
+                setTimeout(() => {
+                    this._unlockScroll();
+                    ScrollTrigger.update();
+                }, 100);
+            });
+
+            /* ── CONTACT ── */
+            bus.on('CONTACT_ENTER', () => {
+                this._lockScroll();
+                gsap.to('#main-nav',        { autoAlpha: 0, duration: 0.3 });
+                gsap.to('#contact-overlay', { autoAlpha: 1, duration: 0.8, ease: 'expo.inOut' });
+                this._wrapper.setAttribute('inert', '');
+                this._trapFocus('contact-overlay');
+            });
+            bus.on('CONTACT_LEAVE', () => {
+                gsap.to('#contact-overlay', { autoAlpha: 0, duration: 0.5, ease: 'expo.inOut' });
+            });
+
+            /* ── IDLE (return home) ── */
+            bus.on('IDLE_ENTER', () => {
+                const prev = stateMachine.history.at(-1);
+                if (prev !== 'WORK') this._unlockScroll();
+
+                gsap.to('.global-ui', { autoAlpha: 1, duration: 0.4, delay: 0.3 });
+                gsap.to('#main-nav',  { autoAlpha: 1, duration: 0.4, delay: 0.3 });
+
+                // Restore interactivity carefully — LIGHTBOX→WORK edge case
+                const prevPrev = stateMachine.history.at(-2);
+                if (prev !== 'LIGHTBOX' || prevPrev !== 'WORK') {
+                    this._wrapper.removeAttribute('inert');
+                } else {
+                    // Was: LIGHTBOX on top of WORK — keep wrapper inert (WORK handles it)
+                    this._wrapper.setAttribute('inert', '');
+                }
+
+                this._releaseFocus();
+            });
+        }
+
+        /* Nav button wiring ────────────────────────────────────── */
+        _bindNavigation() {
+            document.querySelectorAll('.nav-trigger').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    e.preventDefault();
+                    const target = btn.dataset.target;
+                    if (!target) return;
+
+                    if (target === 'IDLE') {
+                        if (stateMachine.current === 'IDLE') {
+                            this.engine.lenis.scrollTo(0, { duration: 1.5 });
+                        } else {
+                            stateMachine.transition('IDLE');
+                        }
+                        return;
+                    }
+                    if (stateMachine.current === target) return; // already here
+                    stateMachine.transition(target);
+                });
+            });
+
+            // Menu preview images
+            const previewImg = document.getElementById('menu-preview-img');
+            document.querySelectorAll('.menu-hover-preview').forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    const url = item.dataset.img;
+                    if (url && previewImg) { previewImg.src = url; previewImg.style.opacity = '0.6'; }
+                });
+                item.addEventListener('mouseleave', () => {
+                    if (previewImg) previewImg.style.opacity = '0';
+                });
+            });
+
+            // "More About Us" expansion
+            const moreBtn  = document.getElementById('more-about-btn');
+            const expanded = document.getElementById('agency-expanded');
+            moreBtn?.addEventListener('click', () => {
+                moreBtn.style.display = 'none';
+                moreBtn.setAttribute('aria-expanded', 'true');
+                expanded.classList.remove('hidden');
+                expanded.classList.add('flex');
+                gsap.fromTo(
+                    expanded.querySelectorAll('.reveal-elem-expanded'),
+                    { y: 40, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 1.0, stagger: 0.1, ease: 'power3.out' }
+                );
+            });
+        }
+
+        /* Lightbox close ───────────────────────────────────────── */
+        _bindLightboxClose() {
+            const closeBtn = this._lightbox.querySelector('.lightbox-close');
+
+            const close = () => {
+                if (stateMachine.current !== 'LIGHTBOX') return;
+                const prev = stateMachine.history.at(-1);
+                stateMachine.transition(prev === 'WORK' ? 'WORK' : 'IDLE');
+            };
+
+            closeBtn.addEventListener('click', close);
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && stateMachine.current === 'LIGHTBOX') close();
+            });
+        }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       APP — entry point, wires everything together
+    ═══════════════════════════════════════════════════════════════ */
+    class App {
+        constructor() {
+            this.assets   = new AssetManager();
+            this.engine   = new Engine();
+            this.cursor   = new CursorManager();
+            this.ui       = new UIManager(this.engine);
+            this.webgl    = null;
+            this.carousel = null;
+
+            this._init();
+        }
+
+        _init() {
+            stateMachine.transition('IDLE');
+            this.webgl    = new CinematicPipeline(this.assets);
+            this.carousel = new WebGLCarousel(this.webgl.scene, this.cursor, this.assets, this.webgl.camera);
+
+            this._setupScrollTriggers();
+            this._bindPhysicsInput();
+
+            // Main render loop
+            gsap.ticker.add(time => {
+                const stickyEl = document.getElementById('sticky-work');
+                const rawOffset = stickyEl?.getBoundingClientRect().top ?? 0;
+                const offset    = stateMachine.current === 'WORK' ? 0 : rawOffset;
+
+                const s = stateMachine.current;
+                if (s === 'IDLE' || s === 'WORK') {
+                    const phys = AppPhysics.physics;
+                    if (!AppPhysics.isDragging) {
+                        phys.targetRotY    += phys.rotVelY;
+                        phys.targetEarthRotX += phys.rotEarthVelX;
+
+                        // Auto-rotate unless hovering a card
+                        if (!this.carousel.hoveredCard) phys.targetRotY -= 0.1;
+
+                        phys.rotVelY      *= phys.friction;
+                        phys.rotEarthVelX *= phys.friction;
+                    }
+
+                    // Clamp X-tilt
+                    phys.targetEarthRotX = Math.max(-60, Math.min(60, phys.targetEarthRotX));
+
+                    // Spring towards target
+                    phys.currentRotY      += (phys.targetRotY      - phys.currentRotY)      * 0.25;
+                    phys.currentEarthRotX += (phys.targetEarthRotX - phys.currentEarthRotX) * 0.25;
+                    phys.currentZoom      += (phys.targetZoom       - phys.currentZoom)      * 0.1;
+                }
+
+                this.webgl.render(time, offset, AppPhysics.physics, AppPhysics.intro, this.carousel);
+            });
+        }
+
+        _bindPhysicsInput() {
+            const containers = [
+                document.getElementById('sticky-work'),
+                document.getElementById('work-interaction'),
             ].filter(Boolean);
+
             let lastX = 0, lastY = 0;
             // Track initial touch direction to decide whether to intercept
             let touchStartX = 0, touchStartY = 0;
             let touchDirectionLocked = null; // 'h' | 'v' | null
+
             const onDown = e => {
                 if (!this._canInteract() || AppPhysics.intro.scale < 0.2) return;
                 if (e.target.closest?.('.nav-trigger')) return;
+
                 gsap.killTweensOf(AppPhysics.physics);
                 AppPhysics.isDragging = true;
                 AppPhysics.hasDragged = false;
-                AppPhysics.startX = lastX = e.clientX ?? e.touches?.[0].clientX ?? 0;
-                AppPhysics.startY = lastY = e.clientY ?? e.touches?.[0].clientY ?? 0;
-                this.cursor.setScale(0.6);
                 touchDirectionLocked = null;
+
                 const cx = e.clientX ?? e.touches?.[0].clientX ?? 0;
                 const cy = e.clientY ?? e.touches?.[0].clientY ?? 0;
                 AppPhysics.startX = lastX = touchStartX = cx;
                 AppPhysics.startY = lastY = touchStartY = cy;
                 if (!Context.isMobile) this.cursor.setScale(0.6);
             };
+
             const onMove = e => {
                 if (!this._canInteract()) return;
-                const x = e.clientX ?? e.touches?.[0].clientX ?? lastX;
-                const y = e.clientY ?? e.touches?.[0].clientY ?? lastY;
                 const touch = e.touches?.[0];
                 const x = e.clientX ?? touch?.clientX ?? lastX;
                 const y = e.clientY ?? touch?.clientY ?? lastY;
                 AppPhysics.mouseX = x;
                 AppPhysics.mouseY = y;
+
                 if (AppPhysics.isDragging) {
-                    if (Math.abs(x - AppPhysics.startX) > 8 || Math.abs(y - AppPhysics.startY) > 8)
-                        AppPhysics.hasDragged = true;
                     const dx = x - lastX;
                     const dy = y - lastY;
-                    const sx = Context.isMobile ? 0.15 : 0.10;
-                    const sy = Context.isMobile ? 0.12 : 0.08;
-                    AppPhysics.physics.targetRotY    += dx * sx;
-                    AppPhysics.physics.rotVelY        = dx * 0.004;
-                    AppPhysics.physics.targetEarthRotX += dy * sy;
-                    AppPhysics.physics.rotEarthVelX   = dy * 0.002;
+
                     if (Context.isMobile && touchDirectionLocked === null) {
                         // Lock direction after first meaningful movement
                         const totalDX = Math.abs(x - touchStartX);
@@ -96,14 +2368,18 @@
                             touchDirectionLocked = totalDX > totalDY * 1.2 ? 'h' : 'v';
                         }
                     }
+
                     // On mobile, only rotate if horizontal drag confirmed
                     const shouldRotate = !Context.isMobile || touchDirectionLocked === 'h';
+
                     if (shouldRotate) {
                         if (e.cancelable) e.preventDefault(); // prevent scroll only on horizontal drag
                         if (Math.abs(x - AppPhysics.startX) > 8 || Math.abs(y - AppPhysics.startY) > 8)
                             AppPhysics.hasDragged = true;
+
                         const sx = Context.isMobile ? 0.15 : 0.10;
                         const sy = Context.isMobile ? 0.12 : 0.08;
+
                         AppPhysics.physics.targetRotY      += dx * sx;
                         AppPhysics.physics.rotVelY          = dx * 0.004;
                         AppPhysics.physics.targetEarthRotX += dy * sy;
@@ -115,14 +2391,30 @@
                 }
                 lastX = x; lastY = y;
             };
+
             const onUp = () => {
                 if (!AppPhysics.isDragging) return;
                 AppPhysics.isDragging = false;
-                this.cursor.setScale(1);
                 touchDirectionLocked = null;
                 if (!Context.isMobile) this.cursor.setScale(1);
             };
+
             const onWheel = e => {
+                if (!this._canInteract() || AppPhysics.intro.scale < 0.2) return;
+                if (e.ctrlKey) {
+                    // Pinch-to-zoom
+                    e.preventDefault();
+                    gsap.killTweensOf(AppPhysics.physics);
+                    AppPhysics.physics.targetZoom = Math.max(0.25, Math.min(3.0,
+                        AppPhysics.physics.targetZoom - e.deltaY * 0.005
+                    ));
+                } else if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                    // Horizontal trackpad swipe → rotate carousel
+                    e.preventDefault();
+                    bus.emit('CAROUSEL_SCRUB', -e.deltaX * 0.005);
+                }
+            };
+
             containers.forEach(el => {
                 el.addEventListener('mousedown',  onDown);
                 // passive: false so we can call preventDefault on horizontal swipes
@@ -132,30 +2424,409 @@
             });
             window.addEventListener('mousemove',  onMove,  { passive: true });
             window.addEventListener('mouseup',    onUp);
-            window.addEventListener('touchmove',  onMove,  { passive: true });
-            window.addEventListener('touchend',   onUp);
             window.addEventListener('touchend',   onUp,    { passive: true });
         }
+
         _canInteract() {
+            const s = stateMachine.current;
+            return s === 'IDLE' || s === 'WORK';
+        }
+
+        _setupScrollTriggers() {
+            // Hero fade as awards section enters
+            gsap.to('#hero', {
+                opacity: 0, scale: 0.95,
+                scrollTrigger: {
+                    trigger: '#awards',
+                    start: 'top 100%', end: 'top 20%',
+                    scrub: true,
+                },
+            });
+
+            // Earth/Carousel entrance (starts earlier behind awards)
+            ScrollTrigger.create({
+                trigger: '#awards',
+                start: 'top 90%',
                 onEnter: () => {
                     const desktop = window.innerWidth > 768;
                     gsap.to(AppPhysics.intro, {
-                        scale: desktop ? 0.55 : 0.38,
                         scale: desktop ? 0.55 : 0.52,
                         x: desktop ? window.innerWidth * 0.15 : 0,
-                        y: desktop ? 0 : window.innerHeight * 0.2,
                         y: desktop ? 0 : window.innerHeight * 0.18,
                         rotY: 0, rotX: -15, spaceScale: 1, lightBlast: 0,
                         duration: Context.reducedMotion ? 0.1 : 2.4,
                         ease: 'expo.out', overwrite: 'auto',
+                    });
+                    this.carousel.cards.forEach((m, i) =>
+                        gsap.to(m.userData.animState, {
+                            progress: 1,
+                            duration: 1.6,
+                            delay: Context.reducedMotion ? 0 : 0.4 + i * 0.04,
+                            ease: 'expo.out', overwrite: 'auto',
+                        })
+                    );
+                },
+                onLeaveBack: () => {
+                    gsap.to(AppPhysics.intro, {
+                        scale: 0.0001, x: 0, y: -window.innerHeight * 0.25,
+                        rotY: -1440, rotX: 90, spaceScale: 10, lightBlast: 30,
+                        duration: Context.reducedMotion ? 0.1 : 1.5,
+                        ease: 'power3.inOut', overwrite: 'auto',
+                    });
+                    this.carousel.cards.forEach(m =>
+                        gsap.to(m.userData.animState, { progress: 0, duration: 0.4, ease: 'power3.in', overwrite: 'auto' })
+                    );
+                },
+            });
+
+            // Showcase text animations
+            ScrollTrigger.create({
+                trigger: '#showcase',
+                start: 'top 75%',
+                onEnter: () => {
+                    gsap.fromTo('.about-line',
+                        { yPercent: 100, opacity: 0 },
+                        { yPercent: 0, opacity: 1, duration: 1.2, stagger: 0.08, ease: 'expo.out', overwrite: 'auto' }
+                    );
+                    gsap.to('.explore-text', { opacity: 1, duration: 1, delay: 1.0, overwrite: 'auto' });
+                },
+                onLeaveBack: () => {
+                    gsap.to('.about-line', { yPercent: 100, opacity: 0, duration: 0.5, overwrite: 'auto' });
+                    gsap.to('.explore-text', { opacity: 0, duration: 0.5, overwrite: 'auto' });
+                },
+            });
+
+            // Footer — earth retreats
+            ScrollTrigger.create({
+                trigger: '#footer',
+                start: 'top 80%',
+                onEnter: () => {
+                    gsap.to(AppPhysics.intro, { scale: 0.01, rotY: 180, duration: 1.5, ease: 'power3.inOut', overwrite: 'auto' });
+                    this.carousel.cards.forEach(m =>
+                        gsap.to(m.userData.animState, { progress: 0, duration: 1.0, ease: 'power3.inOut', overwrite: 'auto' })
+                    );
+                    gsap.to('.explore-text', { opacity: 0, duration: 0.5, overwrite: 'auto' });
+                },
                 onLeaveBack: () => {
                     const desktop = window.innerWidth > 768;
                     gsap.to(AppPhysics.intro, {
-                        scale: desktop ? 0.55 : 0.38, rotY: 0,
                         scale: desktop ? 0.55 : 0.52, rotY: 0,
                         duration: 2.0, ease: 'power4.out', overwrite: 'auto',
                     });
                     this.carousel.cards.forEach((m, i) =>
+                        gsap.to(m.userData.animState, {
+                            progress: 1, duration: 2.0, delay: i * 0.05,
+                            ease: 'elastic.out(1,0.7)', overwrite: 'auto',
+                        })
+                    );
+                    gsap.to('.explore-text', { opacity: 1, duration: 1, delay: 0.2, overwrite: 'auto' });
+                },
+            });
+
+            // Global nav dim when over content sections
+            gsap.utils.toArray('.dim-on-scroll').forEach(section => {
+                ScrollTrigger.create({
+                    trigger: section,
+                    start: 'top 80%', end: 'bottom 20%',
+                    onEnter:      () => gsap.to('.global-ui', { opacity: 0.1, duration: 0.4, overwrite: 'auto' }),
+                    onLeave:      () => gsap.to('.global-ui', { opacity: 1,   duration: 0.4, overwrite: 'auto' }),
+                    onEnterBack:  () => gsap.to('.global-ui', { opacity: 0.1, duration: 0.4, overwrite: 'auto' }),
+                    onLeaveBack:  () => gsap.to('.global-ui', { opacity: 1,   duration: 0.4, overwrite: 'auto' }),
+                });
+            });
+        }
+
+        destroy() {
+            bus.destroy();
+            this.engine.destroy();
+            this.cursor.destroy();
+            this.webgl?.destroy();
+            this.carousel?.destroy();
+            this.assets.destroy();
+            ScrollTrigger.getAll().forEach(t => t.kill());
+        }
+    }
+
+    // Boot on DOM ready
+    document.addEventListener('DOMContentLoaded', () => { window.app = new App(); });
+    </script>
+
+    <!-- ── Privacy Policy Overlay ─────────────────────────────── -->
+    <div
+        id="privacy-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Privacy Policy"
+        class="fixed inset-0 z-[9999999] opacity-0 invisible pointer-events-none
+               flex flex-col bg-[#010204]/95 backdrop-blur-xl transition-all duration-500 overlay-panel"
+        data-lenis-prevent
+    >
+        <div class="sticky top-0 w-full flex justify-between items-center
+                    px-6 md:px-16 py-6 border-b border-white/10 bg-[#010204]/80
+                    backdrop-blur-md z-10">
+            <p class="font-display text-lg md:text-xl font-bold uppercase
+                      tracking-tighter text-white">Privacy Policy</p>
+            <button
+                id="privacy-close"
+                class="hover-target uppercase tracking-widest text-[10px] md:text-xs
+                       border border-white/20 rounded-full px-6 py-3
+                       hover:bg-white hover:text-black transition-colors
+                       bg-black/50 backdrop-blur-md cursor-pointer text-white"
+                aria-label="Close Privacy Policy"
+            >CLOSE</button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto px-6 md:px-16 py-12 max-w-[900px] mx-auto w-full">
+            <p class="font-sans text-[10px] md:text-xs tracking-widest uppercase
+                      text-white/40 font-bold mb-8">Effective Date: January 1, 2026</p>
+
+            <div class="flex flex-col gap-10 font-sans text-sm md:text-base text-white/70
+                        leading-relaxed">
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Overview</h2>
+                    <p>Bigworld Agency ("Bigworld," "we," "us," or "our") operates this website
+                       at bigworld.agency. This Privacy Policy describes how we handle information
+                       in connection with your use of our website. We are committed to protecting
+                       your privacy. This site is a portfolio and contact destination — we do not
+                       collect, store, sell, or share any personal data.</p>
+                </section>
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Information We Do Not Collect</h2>
+                    <p>We do not use cookies, tracking pixels, analytics scripts, or any other
+                       technology to collect information about you or your device. We do not
+                       maintain user accounts or require registration to access this site.
+                       No personal data is gathered passively through your visit.</p>
+                </section>
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Contact Submissions</h2>
+                    <p>If you choose to contact us via our email address
+                       (hello@bigworld.agency), any information you voluntarily provide in
+                       that message — such as your name, email address, and project details —
+                       is used solely to respond to your inquiry. We do not store this
+                       information in any database and do not use it for marketing purposes.</p>
+                </section>
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Third-Party Links</h2>
+                    <p>This website may contain links to third-party platforms (such as
+                       Instagram, X/Twitter, and LinkedIn). Once you leave our site, this
+                       Privacy Policy no longer applies. We encourage you to review the privacy
+                       policies of any third-party services you visit.</p>
+                </section>
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Children's Privacy</h2>
+                    <p>This website is not directed to individuals under the age of 13. We do
+                       not knowingly collect any information from children.</p>
+                </section>
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Changes to This Policy</h2>
+                    <p>We may update this Privacy Policy from time to time. Any changes will
+                       be reflected on this page with a revised effective date. Continued use
+                       of the site following any changes constitutes your acceptance of the
+                       updated policy.</p>
+                </section>
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Contact</h2>
+                    <p>Questions about this Privacy Policy? Reach us at
+                       <a href="mailto:hello@bigworld.agency"
+                          class="text-brand-accent hover:text-white transition-colors">
+                           hello@bigworld.agency
+                       </a>.
+                    </p>
+                </section>
+
+            </div>
+
+            <p class="font-sans text-[9px] md:text-xs tracking-widest uppercase
+                      text-white/30 font-bold mt-16 pb-8">
+                &copy; 2026 Bigworld Agency. All Rights Reserved.
+            </p>
+        </div>
+    </div>
+
+    <!-- ── Terms of Service Overlay ───────────────────────────── -->
+    <div
+        id="terms-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Terms of Service"
+        class="fixed inset-0 z-[9999999] opacity-0 invisible pointer-events-none
+               flex flex-col bg-[#010204]/95 backdrop-blur-xl transition-all duration-500 overlay-panel"
+        data-lenis-prevent
+    >
+        <div class="sticky top-0 w-full flex justify-between items-center
+                    px-6 md:px-16 py-6 border-b border-white/10 bg-[#010204]/80
+                    backdrop-blur-md z-10">
+            <p class="font-display text-lg md:text-xl font-bold uppercase
+                      tracking-tighter text-white">Terms of Service</p>
+            <button
+                id="terms-close"
+                class="hover-target uppercase tracking-widest text-[10px] md:text-xs
+                       border border-white/20 rounded-full px-6 py-3
+                       hover:bg-white hover:text-black transition-colors
+                       bg-black/50 backdrop-blur-md cursor-pointer text-white"
+                aria-label="Close Terms of Service"
+            >CLOSE</button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto px-6 md:px-16 py-12 max-w-[900px] mx-auto w-full">
+            <p class="font-sans text-[10px] md:text-xs tracking-widest uppercase
+                      text-white/40 font-bold mb-8">Effective Date: January 1, 2026</p>
+
+            <div class="flex flex-col gap-10 font-sans text-sm md:text-base text-white/70
+                        leading-relaxed">
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Acceptance of Terms</h2>
+                    <p>By accessing and using the Bigworld Agency website (bigworld.agency),
+                       you agree to be bound by these Terms of Service. If you do not agree
+                       with any part of these terms, please do not use this website.</p>
+                </section>
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Use of This Website</h2>
+                    <p>This website is provided for informational and portfolio purposes only.
+                       You agree to use this site only for lawful purposes and in a manner that
+                       does not infringe upon the rights of others. You may not use this site
+                       to transmit any harmful, offensive, or unlawful material.</p>
+                </section>
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Intellectual Property</h2>
+                    <p>All content on this website — including but not limited to text,
+                       graphics, logos, images, video, and design work — is the exclusive
+                       property of Bigworld Agency or its respective clients and is protected
+                       by applicable intellectual property laws. You may not reproduce,
+                       distribute, or create derivative works from any content on this site
+                       without our prior written consent.</p>
+                </section>
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Client Work & Portfolio</h2>
+                    <p>Work displayed in our portfolio is showcased with the permission of
+                       our clients or under the terms of our service agreements. Client names,
+                       trademarks, and brand identities remain the property of their respective
+                       owners and are used here solely for portfolio attribution purposes.</p>
+                </section>
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Disclaimer of Warranties</h2>
+                    <p>This website is provided on an "as is" and "as available" basis without
+                       warranties of any kind, express or implied. Bigworld Agency makes no
+                       representations regarding the accuracy, completeness, or reliability of
+                       any content on this site.</p>
+                </section>
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Limitation of Liability</h2>
+                    <p>To the fullest extent permitted by law, Bigworld Agency shall not be
+                       liable for any direct, indirect, incidental, special, or consequential
+                       damages arising out of your access to or use of (or inability to use)
+                       this website.</p>
+                </section>
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Third-Party Links</h2>
+                    <p>This site may link to external websites. Bigworld Agency has no control
+                       over the content or practices of third-party sites and assumes no
+                       responsibility for them.</p>
+                </section>
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Governing Law</h2>
+                    <p>These Terms of Service shall be governed by and construed in accordance
+                       with the laws of the State of California, United States, without regard
+                       to its conflict of law provisions.</p>
+                </section>
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Changes to These Terms</h2>
+                    <p>We reserve the right to modify these Terms of Service at any time.
+                       Changes take effect immediately upon posting to this page. Your continued
+                       use of the site following any modification constitutes acceptance of the
+                       updated terms.</p>
+                </section>
+
+                <section>
+                    <h2 class="font-display text-xl md:text-2xl font-bold uppercase
+                               tracking-tight text-white mb-4">Contact</h2>
+                    <p>Questions about these Terms? Contact us at
+                       <a href="mailto:hello@bigworld.agency"
+                          class="text-brand-accent hover:text-white transition-colors">
+                           hello@bigworld.agency
+                       </a>.
+                    </p>
+                </section>
+
+            </div>
+
+            <p class="font-sans text-[9px] md:text-xs tracking-widest uppercase
+                      text-white/30 font-bold mt-16 pb-8">
+                &copy; 2026 Bigworld Agency. All Rights Reserved.
+            </p>
+        </div>
+    </div>
+
+    <script>
+    /* ── Legal overlay open / close ──────────────────────────── */
+    (function () {
+        function openLegal(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
+            el.classList.add('opacity-100');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLegal(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.classList.add('opacity-0', 'invisible', 'pointer-events-none');
+            el.classList.remove('opacity-100');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Open via footer links
+            var privacyLink = document.getElementById('footer-privacy-link');
+            var termsLink   = document.getElementById('footer-terms-link');
+            if (privacyLink) privacyLink.addEventListener('click', function (e) { e.preventDefault(); openLegal('privacy-overlay'); });
+            if (termsLink)   termsLink.addEventListener('click',   function (e) { e.preventDefault(); openLegal('terms-overlay'); });
+
+            // Close buttons
+            var privacyClose = document.getElementById('privacy-close');
+            var termsClose   = document.getElementById('terms-close');
+            if (privacyClose) privacyClose.addEventListener('click', function () { closeLegal('privacy-overlay'); });
+            if (termsClose)   termsClose.addEventListener('click',   function () { closeLegal('terms-overlay'); });
+
+            // Close on Escape
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    closeLegal('privacy-overlay');
+                    closeLegal('terms-overlay');
+                }
+            });
         });
     }());
     </script></body></html>
