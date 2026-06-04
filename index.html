@@ -1464,14 +1464,14 @@
         mouseX: window.innerWidth  / 2,
         mouseY: window.innerHeight / 2,
         intro: {
-            progress: 0,
-            x: 0,
-            y: window.innerHeight * -0.25,
-            scale: 0.0001,
-            rotY: -1440,
-            rotX: 90,
-            spaceScale: 10,
-            lightBlast: 30,
+            progress: 1,
+            x: Context.isMobile ? 0 : window.innerWidth * 0.25,
+            y: Context.isMobile ? window.innerHeight * 0.18 : window.innerHeight * 0.25,
+            scale: Context.isMobile ? 0.52 : 0.45,
+            rotY: 0,
+            rotX: -15,
+            spaceScale: 1,
+            lightBlast: 0,
         },
         physics: {
             targetRotY: 0,
@@ -2835,14 +2835,15 @@
                 const zoneEnd   = footer ? footer.offsetTop - window.innerHeight * 0.5 : Infinity;
 
                 if (scrollY < zoneStart) {
+                    const desktop = window.innerWidth > 768;
                     gsap.to(AppPhysics.intro, {
-                        scale: 0.0001, x: 0, y: -window.innerHeight * 0.25,
-                        rotY: -1440, rotX: 90, spaceScale: 10, lightBlast: 30,
+                        scale: desktop ? 0.45 : 0.52,
+                        x: desktop ? window.innerWidth * 0.25 : 0,
+                        y: desktop ? window.innerHeight * 0.25 : window.innerHeight * 0.18,
+                        rotY: 0, rotX: -15, spaceScale: 1, lightBlast: 0,
                         duration: 1.5, ease: 'power3.inOut', overwrite: 'auto',
                     });
-                    app.carousel.cards.forEach(m =>
-                        gsap.to(m.userData.animState, { progress: 0, duration: 0.5, ease: 'power3.in', overwrite: 'auto' })
-                    );
+                    // Leave cards visible
                 } else if (scrollY > zoneEnd) {
                     gsap.to(AppPhysics.intro, { scale: 0.01, rotY: 180, duration: 1.5, ease: 'power3.inOut', overwrite: 'auto' });
                     app.carousel.cards.forEach(m =>
@@ -3214,15 +3215,16 @@
                     );
                 },
                 onLeaveBack: () => {
+                    const desktop = window.innerWidth > 768;
                     gsap.to(AppPhysics.intro, {
-                        scale: 0.0001, x: 0, y: -window.innerHeight * 0.25,
-                        rotY: -1440, rotX: 90, spaceScale: 10, lightBlast: 30,
+                        scale: desktop ? 0.45 : 0.52,
+                        x: desktop ? window.innerWidth * 0.25 : 0,
+                        y: desktop ? window.innerHeight * 0.25 : window.innerHeight * 0.18,
+                        rotY: 0, rotX: -15, spaceScale: 1, lightBlast: 0,
                         duration: Context.reducedMotion ? 0.1 : 1.5,
                         ease: 'power3.inOut', overwrite: 'auto',
                     });
-                    this.carousel.cards.forEach(m =>
-                        gsap.to(m.userData.animState, { progress: 0, duration: 0.4, ease: 'power3.in', overwrite: 'auto' })
-                    );
+                    // Leave cards visible
                 },
             });
 
