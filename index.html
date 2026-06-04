@@ -1589,6 +1589,7 @@
                     `,
                     transparent: true,
                     side: THREE.DoubleSide,
+                    depthWrite: false,
                 });
 
                 const mesh = new THREE.Mesh(geo, mat);
@@ -1769,11 +1770,11 @@
             );
             this.camera.position.z = 20;
 
-            const dpr = Math.min(window.devicePixelRatio, Context.isMobile ? 1 : 1.5);
+            const dpr = Math.min(window.devicePixelRatio, 2);
             this.renderer = new THREE.WebGLRenderer({
                 alpha: true,
                 powerPreference: 'high-performance',
-                antialias: false, // SMAA handles anti-aliasing in post
+                antialias: true,
             });
             this.renderer.setSize(window.innerWidth, window.innerHeight);
             this.renderer.setPixelRatio(dpr);
