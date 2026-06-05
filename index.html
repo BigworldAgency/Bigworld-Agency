@@ -186,7 +186,7 @@
         }
 
         /* ══════════════════════════════════════════════════════════
-           PREMIUM CASE STUDY LIGHTBOX
+            PREMIUM CASE STUDY LIGHTBOX
         ══════════════════════════════════════════════════════════ */
 
         /* Scrollable case study panel */
@@ -2793,8 +2793,10 @@
 
                     const isDesktop = window.innerWidth > 768;
                     gsap.to(AppPhysics.intro, {
-                        scale: isDesktop ? 0.55 : 0.52,
-                        x: 0, y: 0, rotY: 0, rotX: -15, spaceScale: 1, lightBlast: 0,
+                        scale: isDesktop ? 0.65 : 0.45,
+                        x: isDesktop ? window.innerWidth * 0.15 : 0,
+                        y: isDesktop ? 0 : window.innerHeight * 0.2,
+                        rotY: 0, rotX: -15, spaceScale: 1, lightBlast: 0,
                         duration: 0.8, ease: 'power2.out', overwrite: 'auto',
                     });
 
@@ -2853,9 +2855,9 @@
                     // FALLBACK: When user closes the modal while parked in the active zones
                     const desktop = window.innerWidth > 768;
                     gsap.to(AppPhysics.intro, {
-                        scale: desktop ? 0.55 : 0.52,
-                        x: desktop ? window.innerWidth * 0.35 : 0,
-                        y: desktop ? window.innerHeight * 0.45 : window.innerHeight * 0.18,
+                        scale: desktop ? 0.65 : 0.45,
+                        x: desktop ? window.innerWidth * 0.15 : 0,
+                        y: desktop ? 0 : window.innerHeight * 0.2,
                         rotY: 0, rotX: -15, spaceScale: 1, lightBlast: 0,
                         duration: 1.5, ease: 'expo.out', overwrite: 'auto',
                     });
@@ -3034,13 +3036,6 @@
 
                 const s = stateMachine.current;
                 
-                // Sphere background animation tied to scroll (desktop only)
-                let ty = 0;
-                if (!Context.isMobile && (!window.stateMachine || s === 'IDLE')) {
-                    ty = Math.max(-window.scrollY * 0.4, -window.innerHeight * 0.35);
-                    AppPhysics.intro.y += (ty - AppPhysics.intro.y) * 0.05;
-                }
-
                 if (s === 'IDLE' || s === 'WORK') {
                     const phys = AppPhysics.physics;
                     if (!AppPhysics.isDragging) {
@@ -3198,9 +3193,9 @@
                 onEnter: () => {
                     const desktop = window.innerWidth > 768;
                     gsap.to(AppPhysics.intro, {
-                        scale: desktop ? 0.55 : 0.52,
-                        x: desktop ? window.innerWidth * 0.35 : 0,
-                        y: desktop ? window.innerHeight * 0.45 : window.innerHeight * 0.18,
+                        scale: desktop ? 0.65 : 0.45,
+                        x: desktop ? window.innerWidth * 0.15 : 0,
+                        y: desktop ? 0 : window.innerHeight * 0.2,
                         rotY: 0, rotX: -15, spaceScale: 1, lightBlast: 0,
                         duration: Context.reducedMotion ? 0.1 : 2.4,
                         ease: 'expo.out', overwrite: 'auto',
@@ -3259,7 +3254,10 @@
                 onLeaveBack: () => {
                     const desktop = window.innerWidth > 768;
                     gsap.to(AppPhysics.intro, {
-                        scale: desktop ? 0.55 : 0.52, rotY: 0,
+                        scale: desktop ? 0.65 : 0.45,
+                        x: desktop ? window.innerWidth * 0.15 : 0,
+                        y: desktop ? 0 : window.innerHeight * 0.2,
+                        rotY: 0,
                         duration: 2.0, ease: 'power4.out', overwrite: 'auto',
                     });
                     this.carousel.cards.forEach((m, i) =>
